@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>English Trainer IELTS | Inglés desde Español</title>
+  <meta name="description" content="Entrenador de inglés desde español con tiempos verbales, escritura IELTS, corrección asistida, multiple choice y apuntes personales." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="top-navbar">
+    <div class="brand">
+      <div class="brand-icon">EN</div>
+      <div>
+        <h1>English Trainer</h1>
+        <p>IELTS Path · Inglés desde español</p>
+      </div>
+    </div>
+
+    <nav class="top-nav">
+      <a href="#inicio" class="nav-link active">Inicio</a>
+      <a href="#tiempos" class="nav-link">Tiempos verbales</a>
+      <a href="#estructura" class="nav-link">Estructura</a>
+      <a href="#writing" class="nav-link">Writing IELTS</a>
+      <a href="#examen" class="nav-link">Multiple Choice</a>
+      <a href="#biblioteca" class="nav-link">Párrafos</a>
+      <a href="#apuntes" class="nav-link">Apuntes</a>
+    </nav>
+  </header>
+
+  <main class="main-content">
+    <section id="inicio" class="section hero-section reveal">
+      <div class="hero-copy">
+        <span class="eyebrow">IELTS Training Dashboard</span>
+        <h2>Entrená inglés con foco en <span>estructura, escritura y precisión</span></h2>
+        <p>
+          Estudiá tiempos verbales, practicá párrafos tipo IELTS, recibí feedback orientativo
+          como si fuera de un entrenador y resolvé exámenes multiple choice de 10 preguntas.
+        </p>
+        <div class="hero-actions">
+          <a href="#tiempos" class="primary-btn">Estudiar tiempos</a>
+          <a href="#writing" class="secondary-btn">Practicar writing</a>
+          <a href="#apuntes" class="ghost-btn">Guardar apuntes</a>
+        </div>
+      </div>
+
+      <div class="hero-panel">
+        <div class="hero-stat"><strong id="totalTenses">0</strong><span>Tiempos verbales</span></div>
+        <div class="hero-stat"><strong>100</strong><span>Exámenes distintos</span></div>
+        <div class="hero-stat"><strong id="savedParagraphsCount">0</strong><span>Párrafos guardados</span></div>
+        <div class="hero-stat"><strong id="savedNotesCount">0</strong><span>Apuntes guardados</span></div>
+        <div class="hero-stat wide-stat"><strong id="quizScorePreview">0%</strong><span>Último resultado</span></div>
+      </div>
+    </section>
+
+    <section id="tiempos" class="section reveal">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">Mapa gramatical</span>
+          <h3>Tiempos verbales principales</h3>
+          <p>Seleccioná un tiempo verbal para ver su estructura, uso, ejemplos y aplicación en escritura IELTS.</p>
+        </div>
+        <div class="search-box">
+          <input type="text" id="tenseSearch" placeholder="Buscar: present, future, perfect..." />
+        </div>
+      </div>
+      <div id="tenseGrid" class="tense-grid"></div>
+    </section>
+
+    <section id="estructura" class="section reveal">
+      <div class="section-header compact">
+        <div>
+          <span class="eyebrow">Estructura sintáctica y semántica</span>
+          <h3 id="detailTitle">Seleccioná un tiempo verbal</h3>
+          <p id="detailSummary">Al elegir un tiempo verbal, acá vas a ver formación, usos y ejemplos.</p>
+        </div>
+        <span id="detailLevel" class="level-pill">Nivel</span>
+      </div>
+
+      <div class="detail-layout">
+        <div class="structure-card">
+          <h4>Estructura</h4>
+          <div class="structure-list">
+            <article><span>Afirmativa</span><p id="affirmativeStructure">—</p></article>
+            <article><span>Negativa</span><p id="negativeStructure">—</p></article>
+            <article><span>Pregunta</span><p id="questionStructure">—</p></article>
+          </div>
+        </div>
+        <div class="usage-card">
+          <h4>Usos principales</h4>
+          <ul id="usageList"></ul>
+        </div>
+        <div class="examples-card">
+          <h4>Ejemplos claros</h4>
+          <div id="examplesList" class="examples-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="writing" class="section reveal">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">Writing IELTS</span>
+          <h3>Consignas de escritura y corrección asistida</h3>
+          <p>Elegí nivel IELTS, generá una consigna, escribí tu párrafo y recibí una devolución más humana.</p>
+        </div>
+      </div>
+
+      <div class="writing-layout">
+        <aside class="prompt-card">
+          <label for="ieltsLevel">Dificultad IELTS</label>
+          <select id="ieltsLevel">
+            <option value="4">Band 4-5 · Básico</option>
+            <option value="6" selected>Band 6 · Intermedio</option>
+            <option value="7">Band 7 · Intermedio alto</option>
+            <option value="8">Band 8-9 · Avanzado</option>
+          </select>
+
+          <label for="practiceTense">Tiempo verbal recomendado</label>
+          <select id="practiceTense"></select>
+
+          <div class="prompt-box">
+            <span>Consigna IELTS</span>
+            <p id="practicePrompt">Seleccioná una dificultad para generar una consigna.</p>
+          </div>
+
+          <button id="newPromptBtn" class="secondary-btn full-btn" type="button">Nueva consigna</button>
+          <a href="#apuntes" class="ghost-btn full-btn notes-shortcut">Guardar apuntes varios</a>
+        </aside>
+
+        <section class="writing-card">
+          <div class="writing-top">
+            <label for="practiceText">Tu respuesta en inglés</label>
+            <span id="wordCounter">0 palabras</span>
+          </div>
+          <textarea id="practiceText" placeholder="Write your IELTS paragraph here..."></textarea>
+          <div class="writing-tools">
+            <button id="clearTextBtn" class="ghost-btn" type="button">Limpiar</button>
+            <button id="saveParagraphBtn" class="secondary-btn" type="button">Guardar párrafo</button>
+            <button id="aiCorrectBtn" class="primary-btn" type="button">Corregir con IA Coach</button>
+          </div>
+        </section>
+      </div>
+      <div id="aiFeedback" class="ai-feedback hidden"></div>
+    </section>
+
+    <section id="examen" class="section reveal">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">Evaluación</span>
+          <h3>Multiple choice · 10 preguntas</h3>
+          <p>Cada examen tiene 10 preguntas. Podés cambiar entre 100 exámenes distintos.</p>
+        </div>
+        <button id="resetQuizBtn" class="secondary-btn" type="button">Reiniciar examen</button>
+      </div>
+
+      <div class="quiz-toolbar">
+        <label>Examen: <select id="examSelector"></select></label>
+        <span id="quizProgress">0/10 respondidas</span>
+      </div>
+
+      <div id="quizContainer" class="quiz-container"></div>
+
+      <div class="quiz-actions">
+        <button id="submitQuizBtn" class="primary-btn" type="button">Corregir examen</button>
+        <div id="quizResult" class="quiz-result"></div>
+      </div>
+    </section>
+
+    <section id="biblioteca" class="section reveal">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">Biblioteca personal</span>
+          <h3>Párrafos guardados</h3>
+          <p>Acá quedan tus prácticas de writing. Podés revisar y borrar textos individualmente.</p>
+        </div>
+        <button id="clearParagraphsBtn" class="danger-btn" type="button">Borrar todos</button>
+      </div>
+      <div id="savedParagraphsList" class="saved-list"></div>
+    </section>
+
+    <section id="apuntes" class="section reveal">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">Notebook</span>
+          <h3>Apuntes varios</h3>
+          <p>Guardá textos largos, vocabulario, reglas gramaticales, correcciones o cualquier material.</p>
+        </div>
+        <button id="clearNotesBtn" class="danger-btn" type="button">Borrar todos</button>
+      </div>
+
+      <div class="notes-layout">
+        <div class="notes-editor">
+          <input type="text" id="noteTitle" placeholder="Título del apunte: Present Perfect, conectores IELTS, vocabulario..." />
+          <textarea id="noteText" placeholder="Pegá o escribí acá todo el texto que quieras guardar como apunte..."></textarea>
+          <div class="notes-actions">
+            <button id="saveNoteBtn" class="primary-btn" type="button">Guardar apunte</button>
+            <button id="clearNoteEditorBtn" class="ghost-btn" type="button">Limpiar editor</button>
+          </div>
+        </div>
+        <div id="notesList" class="notes-list"></div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>English Trainer IELTS · Proyecto de práctica para aprendizaje de inglés</p>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
