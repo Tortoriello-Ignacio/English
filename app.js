@@ -310,7 +310,7 @@ const ieltsPrompts = {
     "Discuss the relationship between long-term motivation and measurable progress in language acquisition.",
     "Evaluate whether international exams such as IELTS measure real communicative competence effectively."
   ]
-};
+];
 
 const tenseGrid = document.getElementById("tenseGrid");
 const tenseSearch = document.getElementById("tenseSearch");
@@ -335,7 +335,7 @@ const saveParagraphBtn = document.getElementById("saveParagraphBtn");
 const aiCorrectBtn = document.getElementById("aiCorrectBtn");
 const aiFeedback = document.getElementById("aiFeedback");
 
-const examSelector = document.getElementById("examSelector");
+// examSelector is declared later; removed duplicate declaration
 const quizContainer = document.getElementById("quizContainer");
 const submitQuizBtn = document.getElementById("submitQuizBtn");
 const resetQuizBtn = document.getElementById("resetQuizBtn");
@@ -1104,6 +1104,21 @@ examSelector.addEventListener("change", renderQuiz);
 quizContainer.addEventListener("change", updateQuizProgress);
 submitQuizBtn.addEventListener("click", submitQuiz);
 resetQuizBtn.addEventListener("click", resetQuiz);
+
+// Manejo inteligente de los accesos directos a la sección de Apuntes Varios
+document.querySelectorAll(".notes-shortcut-trigger").forEach(trigger => {
+  trigger.addEventListener("click", (e) => {
+    e.preventDefault();
+    const targetSection = document.getElementById("apuntes");
+    if (targetSection) {
+      targetSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      // Ejecuta un sutil retardo para esperar el desplazamiento antes de hacer foco en el input
+      setTimeout(() => {
+        noteTitle.focus();
+      }, 600);
+    }
+  });
+});
 
 window.addEventListener("scroll", () => {
   setActiveLink();
