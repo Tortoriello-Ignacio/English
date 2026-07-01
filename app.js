@@ -84,7 +84,7 @@ const tenses = [
       "Contexto narrativo"
     ],
     examples: [
-      ["At midnight we were driving home.", "A medianoche estábamos manejando a casa."],
+      ["At midnight we were driving home.", "A midnight we were driving home.", "A medianoche estábamos manejando a casa."],
       ["I was studying all day yesterday.", "Estuve estudiando todo el día ayer."],
       ["He wasn’t working.", "Él no estaba trabajando."]
     ],
@@ -277,7 +277,7 @@ const tenses = [
       question: "Will + subject + have been + verb + ing?"
     },
     uses: [
-      "Duración hasta un punto futuro",
+      "Duración hasta un point futuro",
       "Continuidad",
       "Proyección avanzada"
     ],
@@ -310,7 +310,7 @@ const ieltsPrompts = {
     "Discuss the relationship between long-term motivation and measurable progress in language acquisition.",
     "Evaluate whether international exams such as IELTS measure real communicative competence effectively."
   ]
-];
+};
 
 const tenseGrid = document.getElementById("tenseGrid");
 const tenseSearch = document.getElementById("tenseSearch");
@@ -335,7 +335,7 @@ const saveParagraphBtn = document.getElementById("saveParagraphBtn");
 const aiCorrectBtn = document.getElementById("aiCorrectBtn");
 const aiFeedback = document.getElementById("aiFeedback");
 
-// examSelector is declared later; removed duplicate declaration
+const examSelector = document.getElementById("examSelector");
 const quizContainer = document.getElementById("quizContainer");
 const submitQuizBtn = document.getElementById("submitQuizBtn");
 const resetQuizBtn = document.getElementById("resetQuizBtn");
@@ -1112,7 +1112,6 @@ document.querySelectorAll(".notes-shortcut-trigger").forEach(trigger => {
     const targetSection = document.getElementById("apuntes");
     if (targetSection) {
       targetSection.scrollIntoView({ behavior: "smooth", block: "start" });
-      // Ejecuta un sutil retardo para esperar el desplazamiento antes de hacer foco en el input
       setTimeout(() => {
         noteTitle.focus();
       }, 600);
