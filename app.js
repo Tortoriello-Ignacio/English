@@ -1,10 +1,8 @@
 /* =========================================================
    ENGLISH TRAINER IELTS - APP.JS
+   v8 full features: progreso, niveles, vocabulario, flashcards,
+   filtros, quick practice, exportaciones y feedback guardable.
 ========================================================= */
-
-/* =========================
-   DATOS: TIEMPOS Y CONDICIONALES
-========================= */
 
 const tenses = [
   {
@@ -1169,6 +1167,81 @@ const ieltsPrompts = {
   ]
 };
 
+const modePrompts = {
+  task1: [
+    "Describe the information in a simple chart about students learning online. Focus on comparison and trends.",
+    "Summarize a process explaining how a habit becomes part of a daily routine.",
+    "Describe changes in language learning habits over a ten-year period."
+  ],
+  task2: ieltsPrompts[6],
+  free: [
+    "Write a free paragraph about your current goals in English.",
+    "Write about something you want to improve this month.",
+    "Explain why consistency matters when learning a language."
+  ],
+  translation: [
+    "Translate this idea into English and expand it: Si practicás todos los días, vas a mejorar más rápido.",
+    "Translate and expand: Aunque estudiar gramática es importante, también hay que practicar escritura.",
+    "Translate and expand: Si hubiera tenido más tiempo, habría escrito una respuesta mejor."
+  ],
+  rewrite: [
+    "Rewrite a simple idea in a more academic style: English is very important for work.",
+    "Rewrite this in a more formal way: Technology helps students learn better.",
+    "Rewrite this with better vocabulary: People need to study a lot to improve."
+  ]
+};
+
+const quickSentences = [
+  {
+    topic: "Third Conditional",
+    es: "Si hubiera estudiado más, habría aprobado el examen.",
+    answer: "If I had studied more, I would have passed the exam.",
+    keywords: ["if", "had studied", "would have passed"]
+  },
+  {
+    topic: "First Conditional",
+    es: "Si llueve mañana, me quedaré en casa.",
+    answer: "If it rains tomorrow, I will stay at home.",
+    keywords: ["if", "rains", "will stay"]
+  },
+  {
+    topic: "Second Conditional",
+    es: "Si tuviera más tiempo, practicaría inglés todos los días.",
+    answer: "If I had more time, I would practice English every day.",
+    keywords: ["if", "had", "would practice"]
+  },
+  {
+    topic: "Present Perfect",
+    es: "He estudiado inglés durante dos meses.",
+    answer: "I have studied English for two months.",
+    keywords: ["have studied", "for two months"]
+  },
+  {
+    topic: "Modal verbs",
+    es: "Deberías repasar los phrasal verbs antes del examen.",
+    answer: "You should review phrasal verbs before the exam.",
+    keywords: ["should", "review", "before"]
+  },
+  {
+    topic: "Future Perfect",
+    es: "Para fin de año, habré mejorado mi escritura.",
+    answer: "By the end of the year, I will have improved my writing.",
+    keywords: ["will have improved", "by the end"]
+  },
+  {
+    topic: "Despite",
+    es: "A pesar de la dificultad, siguió practicando.",
+    answer: "Despite the difficulty, he kept practicing.",
+    keywords: ["despite", "kept practicing"]
+  },
+  {
+    topic: "Used to",
+    es: "Antes solía estudiar por la noche.",
+    answer: "I used to study at night.",
+    keywords: ["used to", "study"]
+  }
+];
+
 /* =========================
    ELEMENTOS
 ========================= */
@@ -1187,6 +1260,7 @@ const questionStructure = document.getElementById("questionStructure");
 const usageList = document.getElementById("usageList");
 const examplesList = document.getElementById("examplesList");
 
+const practiceMode = document.getElementById("practiceMode");
 const ieltsLevel = document.getElementById("ieltsLevel");
 const practiceTense = document.getElementById("practiceTense");
 const practicePrompt = document.getElementById("practicePrompt");
@@ -1217,7 +1291,6 @@ const notesList = document.getElementById("notesList");
 
 const timerToggleBtn = document.getElementById("timerToggleBtn");
 const timerPanel = document.getElementById("timerPanel");
-const timerCloseBtn = document.getElementById("timerCloseBtn");
 const timerDisplay = document.getElementById("timerDisplay");
 const timerProgressRing = document.getElementById("timerProgressRing");
 const customMinutes = document.getElementById("customMinutes");
@@ -1225,6 +1298,45 @@ const customTimerBtn = document.getElementById("customTimerBtn");
 const startTimerBtn = document.getElementById("startTimerBtn");
 const pauseTimerBtn = document.getElementById("pauseTimerBtn");
 const resetTimerBtn = document.getElementById("resetTimerBtn");
+
+const quickTopic = document.getElementById("quickTopic");
+const quickPrompt = document.getElementById("quickPrompt");
+const quickAnswer = document.getElementById("quickAnswer");
+const quickFeedback = document.getElementById("quickFeedback");
+const newQuickBtn = document.getElementById("newQuickBtn");
+const checkQuickBtn = document.getElementById("checkQuickBtn");
+const showQuickAnswerBtn = document.getElementById("showQuickAnswerBtn");
+
+const vocabWord = document.getElementById("vocabWord");
+const vocabMeaning = document.getElementById("vocabMeaning");
+const vocabExample = document.getElementById("vocabExample");
+const vocabCategory = document.getElementById("vocabCategory");
+const saveVocabBtn = document.getElementById("saveVocabBtn");
+const vocabSearch = document.getElementById("vocabSearch");
+const vocabFilter = document.getElementById("vocabFilter");
+const vocabList = document.getElementById("vocabList");
+
+const phrasalSearch = document.getElementById("phrasalSearch");
+const phrasalFilter = document.getElementById("phrasalFilter");
+const modalSearch = document.getElementById("modalSearch");
+
+const flashcardSource = document.getElementById("flashcardSource");
+const flashcard = document.getElementById("flashcard");
+const flashcardType = document.getElementById("flashcardType");
+const flashcardFront = document.getElementById("flashcardFront");
+const flashcardBack = document.getElementById("flashcardBack");
+const flashcardExample = document.getElementById("flashcardExample");
+const flashcardStats = document.getElementById("flashcardStats");
+const flipCardBtn = document.getElementById("flipCardBtn");
+const knownCardBtn = document.getElementById("knownCardBtn");
+const hardCardBtn = document.getElementById("hardCardBtn");
+const repeatCardBtn = document.getElementById("repeatCardBtn");
+const nextCardBtn = document.getElementById("nextCardBtn");
+
+const exportNotesBtn = document.getElementById("exportNotesBtn");
+const exportParagraphsBtn = document.getElementById("exportParagraphsBtn");
+const exportProgressBtn = document.getElementById("exportProgressBtn");
+const exportVocabBtn = document.getElementById("exportVocabBtn");
 
 const revealElements = document.querySelectorAll(".reveal");
 const navLinks = document.querySelectorAll("[data-dashboard-link]");
@@ -1236,10 +1348,21 @@ const navLinks = document.querySelectorAll("[data-dashboard-link]");
 let selectedTenseId = tenses[0].id;
 let paragraphs = JSON.parse(localStorage.getItem("englishTrainerParagraphs")) || [];
 let notes = JSON.parse(localStorage.getItem("englishTrainerNotes")) || [];
+let vocabulary = JSON.parse(localStorage.getItem("englishTrainerVocabulary")) || [];
 let studySeconds = Number(localStorage.getItem("englishTrainerStudySeconds")) || 0;
+let weeklySeconds = Number(localStorage.getItem("englishTrainerWeeklySeconds")) || 0;
 let examsCompleted = Number(localStorage.getItem("englishTrainerExamsCompleted")) || 0;
 let scoreHistory = JSON.parse(localStorage.getItem("englishTrainerScoreHistory")) || [];
+let topicStats = JSON.parse(localStorage.getItem("englishTrainerTopicStats")) || {};
+let activityLog = JSON.parse(localStorage.getItem("englishTrainerActivityLog")) || [];
+let lastActivity = localStorage.getItem("englishTrainerLastActivity") || "";
 let currentQuiz = [];
+let currentQuickIndex = 0;
+let latestCorrectionText = "";
+let currentFlashcards = [];
+let flashcardIndex = 0;
+let flashcardShowingBack = false;
+let flashcardCount = Number(localStorage.getItem("englishTrainerFlashcardCount")) || 0;
 
 let timerSecondsLeft = 0;
 let timerInitialSeconds = 0;
@@ -1247,7 +1370,7 @@ let timerInterval = null;
 let timerPaused = false;
 
 /* =========================
-   VISTAS / PESTAÑAS
+   VISTAS / NAVEGACIÓN
 ========================= */
 
 function openResources(tab = "apuntes") {
@@ -1263,12 +1386,9 @@ function openDashboard(sectionId = "inicio") {
   resourcesView.hidden = true;
   dashboardView.hidden = false;
   setResourceNavActive(null);
-
   requestAnimationFrame(() => {
     const target = document.getElementById(sectionId) || document.getElementById("inicio");
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
     setActiveLink();
   });
 }
@@ -1280,13 +1400,10 @@ function setResourceNavActive(tab) {
 }
 
 function activateResourceTab(tab) {
-  document.querySelectorAll(".resource-tab").forEach((button) => {
-    button.classList.toggle("active", button.dataset.tab === tab);
-  });
-
   document.querySelectorAll(".resource-pane").forEach((pane) => {
     pane.classList.toggle("active-pane", pane.id === `tab-${tab}`);
   });
+  setResourceNavActive(tab);
 }
 
 document.addEventListener("click", (event) => {
@@ -1300,30 +1417,47 @@ document.addEventListener("click", (event) => {
 
   const resourceButton = event.target.closest("[data-resource]");
   if (resourceButton) {
+    event.preventDefault();
     openResources(resourceButton.dataset.resource);
-    return;
-  }
-
-  const dashboardButton = event.target.closest("[data-go-dashboard]");
-  if (dashboardButton) {
-    openDashboard("inicio");
-    return;
-  }
-
-  const resourceTab = event.target.closest(".resource-tab");
-  if (resourceTab) {
-    activateResourceTab(resourceTab.dataset.tab);
   }
 });
 
 /* =========================
-   PROGRESO
+   PROGRESO / NIVELES
 ========================= */
+
+function logActivity(label) {
+  const today = new Date().toISOString().slice(0, 10);
+  lastActivity = label;
+  localStorage.setItem("englishTrainerLastActivity", label);
+
+  activityLog.push({ label, date: today, at: new Date().toLocaleString("es-AR") });
+  activityLog = activityLog.slice(-60);
+  localStorage.setItem("englishTrainerActivityLog", JSON.stringify(activityLog));
+  updateProgress();
+}
+
+function getStudyStreak() {
+  const dates = [...new Set(activityLog.map((item) => item.date))].sort().reverse();
+  if (!dates.length) return 0;
+
+  let streak = 0;
+  const cursor = new Date();
+  for (let i = 0; i < 60; i++) {
+    const iso = cursor.toISOString().slice(0, 10);
+    if (dates.includes(iso)) {
+      streak++;
+      cursor.setDate(cursor.getDate() - 1);
+    } else {
+      break;
+    }
+  }
+  return streak;
+}
 
 function formatStudyTime(seconds) {
   const minutes = Math.floor(seconds / 60);
   if (minutes < 60) return `${minutes}m`;
-
   const hours = Math.floor(minutes / 60);
   const rest = minutes % 60;
   return rest ? `${hours}h ${rest}m` : `${hours}h`;
@@ -1331,33 +1465,91 @@ function formatStudyTime(seconds) {
 
 function getAverageScore() {
   if (!scoreHistory.length) return 0;
-  const total = scoreHistory.reduce((acc, item) => acc + item, 0);
-  return Math.round(total / scoreHistory.length);
+  return Math.round(scoreHistory.reduce((acc, item) => acc + item, 0) / scoreHistory.length);
+}
+
+function getLevelInfo() {
+  const avg = getAverageScore();
+  const hours = studySeconds / 3600;
+  const writings = paragraphs.length;
+
+  let level = "A2+";
+  let band = "4.5 → 5.0";
+  let progress = 25;
+
+  if (avg >= 50 || hours >= 2 || writings >= 2) {
+    level = "B1";
+    band = "5.0 → 5.5";
+    progress = 42;
+  }
+  if (avg >= 65 || hours >= 6 || writings >= 6) {
+    level = "B1+";
+    band = "5.5 → 6.0";
+    progress = 58;
+  }
+  if (avg >= 75 || hours >= 12 || writings >= 12) {
+    level = "B2";
+    band = "6.0 → 6.5";
+    progress = 74;
+  }
+  if (avg >= 85 || hours >= 25 || writings >= 25) {
+    level = "B2+";
+    band = "6.5 → 7.0";
+    progress = 88;
+  }
+
+  return { level, band, progress };
+}
+
+function statPercent(topic) {
+  const stat = topicStats[topic];
+  if (!stat || !stat.total) return 0;
+  return Math.round((stat.correct / stat.total) * 100);
 }
 
 function updateProgress() {
   const studyMinutes = Math.floor(studySeconds / 60);
+  const weeklyMinutes = Math.floor(weeklySeconds / 60);
   const avgScore = getAverageScore();
+  const streak = getStudyStreak();
+  const level = getLevelInfo();
 
-  document.getElementById("studyTimeText").textContent = formatStudyTime(studySeconds);
-  document.getElementById("studyTimeBar").style.width = `${Math.min((studyMinutes / 600) * 100, 100)}%`;
+  setText("studyTimeText", formatStudyTime(studySeconds));
+  setWidth("studyTimeBar", Math.min((studyMinutes / 600) * 100, 100));
 
-  document.getElementById("grammarCountText").textContent = tenses.length;
+  setText("grammarCountText", tenses.length);
 
-  document.getElementById("examsCountText").textContent = examsCompleted;
-  document.getElementById("examProgressBar").style.width = `${Math.min((examsCompleted / 100) * 100, 100)}%`;
+  setText("streakText", `${streak}`);
+  setWidth("streakBar", Math.min((streak / 14) * 100, 100));
 
-  document.getElementById("savedParagraphsCount").textContent = paragraphs.length;
-  document.getElementById("paragraphProgressBar").style.width = `${Math.min((paragraphs.length / 20) * 100, 100)}%`;
+  setText("savedParagraphsCount", paragraphs.length);
+  setWidth("paragraphProgressBar", Math.min((paragraphs.length / 20) * 100, 100));
 
-  document.getElementById("avgScoreText").textContent = `${avgScore}%`;
-  document.getElementById("avgScoreBar").style.width = `${avgScore}%`;
+  setText("avgScoreText", `${avgScore}%`);
+  setWidth("avgScoreBar", avgScore);
+
+  setText("weeklyGoalText", `${formatStudyTime(weeklySeconds)} / 5h`);
+  setWidth("weeklyGoalBar", Math.min((weeklyMinutes / 300) * 100, 100));
+
+  setText("levelText", level.level);
+  setText("levelProgressText", `Camino IELTS: Band ${level.band}`);
+  setWidth("levelBar", level.progress);
+
+  setText("lastActivityText", lastActivity || "Sin actividad todavía");
+
+  setText("statGrammar", `${statPercent("grammar")}%`);
+  setText("statConditionals", `${statPercent("conditionals")}%`);
+  setText("statPhrasals", `${statPercent("phrasals")}%`);
+  setText("statModals", `${statPercent("modals")}%`);
+  setText("statWriting", paragraphs.length);
 }
 
 setInterval(() => {
   if (!document.hidden) {
     studySeconds += 15;
+    weeklySeconds += 15;
     localStorage.setItem("englishTrainerStudySeconds", String(studySeconds));
+    localStorage.setItem("englishTrainerWeeklySeconds", String(weeklySeconds));
     updateProgress();
   }
 }, 15000);
@@ -1366,18 +1558,6 @@ setInterval(() => {
    TIMER DIGITAL
 ========================= */
 
-function openTimerPanel() {
-  if (timerPanel) {
-    timerPanel.classList.add("open");
-  }
-}
-
-function closeTimerPanel() {
-  if (timerPanel) {
-    timerPanel.classList.remove("open");
-  }
-}
-
 function toggleTimerPanel() {
   if (!timerPanel) return;
   timerPanel.classList.toggle("open");
@@ -1385,28 +1565,22 @@ function toggleTimerPanel() {
 
 function setTimer(minutes) {
   const mins = Number(minutes);
-
   if (!mins || mins < 1) {
     alert("Ingresá una cantidad válida de minutos.");
     return;
   }
 
   clearInterval(timerInterval);
-
   timerInitialSeconds = mins * 60;
   timerSecondsLeft = timerInitialSeconds;
   timerPaused = false;
   timerInterval = null;
 
-  if (pauseTimerBtn) {
-    pauseTimerBtn.textContent = "Pausar";
-  }
-
+  if (pauseTimerBtn) pauseTimerBtn.textContent = "Pausar";
   if (startTimerBtn) {
     startTimerBtn.textContent = "Start";
     startTimerBtn.disabled = false;
   }
-
   updateTimerUI();
 }
 
@@ -1415,15 +1589,10 @@ function startTimer() {
     alert("Primero elegí 5, 10, 15 minutos o seteá una cantidad personalizada.");
     return;
   }
-
   if (timerInterval) return;
 
   timerPaused = false;
-
-  if (pauseTimerBtn) {
-    pauseTimerBtn.textContent = "Pausar";
-  }
-
+  if (pauseTimerBtn) pauseTimerBtn.textContent = "Pausar";
   if (startTimerBtn) {
     startTimerBtn.textContent = "En curso";
     startTimerBtn.disabled = true;
@@ -1431,24 +1600,21 @@ function startTimer() {
 
   timerInterval = setInterval(() => {
     if (timerPaused) return;
-
     timerSecondsLeft -= 1;
     updateTimerUI();
 
     if (timerSecondsLeft <= 0) {
       clearInterval(timerInterval);
       timerInterval = null;
-
       studySeconds += timerInitialSeconds;
+      weeklySeconds += timerInitialSeconds;
       localStorage.setItem("englishTrainerStudySeconds", String(studySeconds));
-
-      updateProgress();
-
+      localStorage.setItem("englishTrainerWeeklySeconds", String(weeklySeconds));
+      logActivity(`Sesión de estudio: ${Math.round(timerInitialSeconds / 60)} minutos`);
       if (startTimerBtn) {
         startTimerBtn.textContent = "Start";
         startTimerBtn.disabled = false;
       }
-
       alert("¡Tiempo cumplido! Excelente sesión de estudio.");
     }
   }, 1000);
@@ -1458,108 +1624,101 @@ function updateTimerUI() {
   const remaining = Math.max(timerSecondsLeft, 0);
   const minutes = Math.floor(remaining / 60);
   const seconds = remaining % 60;
+  if (timerDisplay) timerDisplay.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 
-  if (timerDisplay) {
-    timerDisplay.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-  }
-
-  const progress = timerInitialSeconds
-    ? (timerInitialSeconds - remaining) / timerInitialSeconds
-    : 0;
-
+  const progress = timerInitialSeconds ? (timerInitialSeconds - remaining) / timerInitialSeconds : 0;
   const degrees = Math.round(progress * 360);
-
-  if (timerProgressRing) {
-    timerProgressRing.style.setProperty("--timer-progress", `${degrees}deg`);
-  }
+  if (timerProgressRing) timerProgressRing.style.setProperty("--timer-progress", `${degrees}deg`);
 }
 
-if (timerToggleBtn) {
-  timerToggleBtn.addEventListener("click", toggleTimerPanel);
-}
+if (timerToggleBtn) timerToggleBtn.addEventListener("click", toggleTimerPanel);
 
 document.querySelectorAll(".preset-btn").forEach((button) => {
-  button.addEventListener("click", () => {
-    setTimer(button.dataset.minutes);
-  });
+  button.addEventListener("click", () => setTimer(button.dataset.minutes));
 });
 
-if (customTimerBtn) {
-  customTimerBtn.addEventListener("click", () => {
-    setTimer(customMinutes.value);
-  });
-}
-
-if (startTimerBtn) {
-  startTimerBtn.addEventListener("click", startTimer);
-}
+if (customTimerBtn) customTimerBtn.addEventListener("click", () => setTimer(customMinutes.value));
+if (startTimerBtn) startTimerBtn.addEventListener("click", startTimer);
 
 if (pauseTimerBtn) {
   pauseTimerBtn.addEventListener("click", () => {
     if (!timerInterval) return;
-
     timerPaused = !timerPaused;
     pauseTimerBtn.textContent = timerPaused ? "Continuar" : "Pausar";
-
-    if (startTimerBtn) {
-      startTimerBtn.textContent = timerPaused ? "Pausado" : "En curso";
-    }
+    if (startTimerBtn) startTimerBtn.textContent = timerPaused ? "Pausado" : "En curso";
   });
 }
 
 if (resetTimerBtn) {
   resetTimerBtn.addEventListener("click", () => {
     clearInterval(timerInterval);
-
     timerInterval = null;
     timerSecondsLeft = 0;
     timerInitialSeconds = 0;
     timerPaused = false;
-
-    if (pauseTimerBtn) {
-      pauseTimerBtn.textContent = "Pausar";
-    }
-
+    if (pauseTimerBtn) pauseTimerBtn.textContent = "Pausar";
     if (startTimerBtn) {
       startTimerBtn.textContent = "Start";
       startTimerBtn.disabled = false;
     }
-
     updateTimerUI();
   });
 }
 
 /* =========================
-   TABLAS
+   TABLAS / FILTROS
 ========================= */
 
 function renderTables() {
-  document.getElementById("phrasalTableBody").innerHTML = phrasalVerbs.map(([verb, meaning, example]) => `
+  renderPhrasalTable();
+  renderModalsTable();
+}
+
+function phrasalCategory(row) {
+  const text = row.join(" ").toLowerCase();
+  if (/(study|work|company|meeting|homework|argument|evidence|lesson|application|role|information|plan|issue)/.test(text)) return "study";
+  if (/(home|jacket|milk|friend|party|car|bus|phone|room|groceries|noise)/.test(text)) return "daily";
+  if (/(policy|research|significant|academic|evidence|issue|solution|method)/.test(text)) return "academic";
+  return "all";
+}
+
+function renderPhrasalTable() {
+  const body = document.getElementById("phrasalTableBody");
+  if (!body) return;
+
+  const query = (phrasalSearch?.value || "").toLowerCase().trim();
+  const filter = phrasalFilter?.value || "all";
+
+  const rows = phrasalVerbs.filter((row) => {
+    const matchesQuery = row.join(" ").toLowerCase().includes(query);
+    const category = phrasalCategory(row);
+    const matchesFilter = filter === "all" || category === filter;
+    return matchesQuery && matchesFilter;
+  });
+
+  body.innerHTML = rows.map(([verb, meaning, example]) => `
     <tr>
       <td>${escapeHTML(verb)}</td>
       <td>${escapeHTML(meaning)}</td>
       <td><em>${escapeHTML(example)}</em></td>
     </tr>
   `).join("");
+}
 
-  document.getElementById("modalsTableBody").innerHTML = modalVerbs.map(([word, meaning]) => `
+function renderModalsTable() {
+  const body = document.getElementById("modalsTableBody");
+  if (!body) return;
+
+  const query = (modalSearch?.value || "").toLowerCase().trim();
+
+  const rows = modalVerbs.filter((row) => row.join(" ").toLowerCase().includes(query));
+
+  body.innerHTML = rows.map(([word, meaning]) => `
     <tr>
       <td>${escapeHTML(word)}</td>
       <td>${escapeHTML(meaning)}</td>
     </tr>
   `).join("");
-
-  const conditionalsBody = document.getElementById("conditionalsTableBody");
-  if (conditionalsBody) {
-    conditionalsBody.innerHTML = conditionalsRows.map(([type, structure, use, example]) => `
-      <tr>
-        <td>${escapeHTML(type)}</td>
-        <td>${escapeHTML(structure)}</td>
-        <td>${escapeHTML(use)}</td>
-        <td><em>${escapeHTML(example)}</em></td>
-      </tr>
-    `).join("");
-  }
 }
 
 /* =========================
@@ -1567,20 +1726,19 @@ function renderTables() {
 ========================= */
 
 function renderTenseCards(filter = "") {
+  if (!tenseGrid) return;
   tenseGrid.innerHTML = "";
 
   const query = filter.toLowerCase().trim();
-
-  const filtered = tenses.filter((tense) => {
-    return tense.name.toLowerCase().includes(query)
-      || tense.level.toLowerCase().includes(query)
-      || tense.summary.toLowerCase().includes(query);
-  });
+  const filtered = tenses.filter((tense) => (
+    tense.name.toLowerCase().includes(query)
+    || tense.level.toLowerCase().includes(query)
+    || tense.summary.toLowerCase().includes(query)
+  ));
 
   filtered.forEach((tense) => {
     const card = document.createElement("article");
     card.className = `tense-card ${tense.id === selectedTenseId ? "active" : ""}`;
-
     card.innerHTML = `
       <div>
         <h4>${escapeHTML(tense.name)}</h4>
@@ -1588,15 +1746,13 @@ function renderTenseCards(filter = "") {
       </div>
       <span class="level-tag">${escapeHTML(tense.level)}</span>
     `;
-
     card.addEventListener("click", () => {
       selectedTenseId = tense.id;
-      renderTenseCards(tenseSearch.value);
+      renderTenseCards(tenseSearch?.value || "");
       renderTenseDetail(tense.id);
       setPracticeTense(tense.id);
-      document.getElementById("estructura").scrollIntoView({ behavior: "smooth", block: "start" });
+      document.getElementById("estructura")?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
-
     tenseGrid.appendChild(card);
   });
 }
@@ -1605,46 +1761,48 @@ function renderTenseDetail(tenseId) {
   const tense = tenses.find((item) => item.id === tenseId);
   if (!tense) return;
 
-  detailTitle.textContent = tense.name;
-  detailSummary.textContent = tense.summary;
-  detailLevel.textContent = tense.level;
+  setText("detailTitle", tense.name);
+  setText("detailSummary", tense.summary);
+  setText("detailLevel", tense.level);
+  setText("affirmativeStructure", tense.structures.affirmative);
+  setText("negativeStructure", tense.structures.negative);
+  setText("questionStructure", tense.structures.question);
 
-  affirmativeStructure.textContent = tense.structures.affirmative;
-  negativeStructure.textContent = tense.structures.negative;
-  questionStructure.textContent = tense.structures.question;
-
-  usageList.innerHTML = tense.uses.map((use) => `<li>${escapeHTML(use)}</li>`).join("");
-
-  examplesList.innerHTML = tense.examples.map(([english, spanish]) => `
-    <article class="example-item">
-      <strong>${escapeHTML(english)}</strong>
-      <span>${escapeHTML(spanish)}</span>
-    </article>
-  `).join("");
+  if (usageList) usageList.innerHTML = tense.uses.map((use) => `<li>${escapeHTML(use)}</li>`).join("");
+  if (examplesList) {
+    examplesList.innerHTML = tense.examples.map(([english, spanish]) => `
+      <article class="example-item">
+        <strong>${escapeHTML(english)}</strong>
+        <span>${escapeHTML(spanish)}</span>
+      </article>
+    `).join("");
+  }
 }
 
 function renderPracticeOptions() {
-  practiceTense.innerHTML = tenses.map((tense) => {
-    return `<option value="${tense.id}">${escapeHTML(tense.name)}</option>`;
-  }).join("");
-
+  if (!practiceTense) return;
+  practiceTense.innerHTML = tenses.map((tense) => `<option value="${tense.id}">${escapeHTML(tense.name)}</option>`).join("");
   setPracticeTense(selectedTenseId);
 }
 
 function setPracticeTense(tenseId) {
   const tense = tenses.find((item) => item.id === tenseId);
-  if (!tense) return;
-
+  if (!tense || !practiceTense) return;
   practiceTense.value = tense.id;
   generatePrompt();
 }
 
 function generatePrompt() {
-  const level = ieltsLevel.value;
-  const tense = tenses.find((item) => item.id === practiceTense.value);
-  const prompts = ieltsPrompts[level];
-  const prompt = prompts[Math.floor(Math.random() * prompts.length)];
+  if (!practicePrompt) return;
 
+  const mode = practiceMode?.value || "task2";
+  const level = ieltsLevel?.value || "6";
+  const tense = tenses.find((item) => item.id === practiceTense?.value) || tenses[0];
+
+  let prompts = modePrompts[mode] || ieltsPrompts[level] || ieltsPrompts[6];
+  if (mode === "task2") prompts = ieltsPrompts[level] || ieltsPrompts[6];
+
+  const prompt = prompts[Math.floor(Math.random() * prompts.length)];
   practicePrompt.textContent = `${prompt} Try to include: ${tense.name}.`;
 }
 
@@ -1657,24 +1815,24 @@ function getWords(text) {
 }
 
 function updateWordCounter() {
+  if (!practiceText || !wordCounter) return;
   const words = getWords(practiceText.value);
   wordCounter.textContent = `${words.length} palabra${words.length === 1 ? "" : "s"}`;
 }
 
 function saveParagraph() {
+  if (!practiceText) return;
   const text = practiceText.value.trim();
-
   if (!text) {
     alert("Escribí un texto antes de guardarlo.");
     return;
   }
 
-  const tense = tenses.find((item) => item.id === practiceTense.value);
-
+  const tense = tenses.find((item) => item.id === practiceTense?.value);
   paragraphs.unshift({
     id: createId(),
-    title: `Writing practice · ${tense.name}`,
-    tense: tense.name,
+    title: `Writing practice · ${tense ? tense.name : "General"}`,
+    tense: tense ? tense.name : "General",
     date: new Date().toLocaleDateString("es-AR"),
     text
   });
@@ -1683,12 +1841,12 @@ function saveParagraph() {
   practiceText.value = "";
   updateWordCounter();
   renderParagraphs();
-  updateProgress();
+  logActivity(`Writing guardado · ${tense ? tense.name : "General"}`);
 }
 
 function runAICorrection() {
+  if (!practiceText || !aiFeedback) return;
   const text = practiceText.value.trim();
-
   if (!text) {
     alert("Escribí un párrafo antes de corregirlo.");
     return;
@@ -1697,12 +1855,7 @@ function runAICorrection() {
   const words = getWords(text);
   const lower = text.toLowerCase();
   const sentences = text.split(/[.!?]+/).filter((sentence) => sentence.trim().length > 0);
-
-  const connectors = [
-    "however", "therefore", "moreover", "although", "because", "while",
-    "whereas", "in addition", "for example", "as a result", "on the other hand"
-  ];
-
+  const connectors = ["however", "therefore", "moreover", "although", "because", "while", "whereas", "in addition", "for example", "as a result", "on the other hand"];
   const foundConnectors = connectors.filter((connector) => lower.includes(connector));
   const issues = detectCommonIssues(text);
 
@@ -1717,8 +1870,8 @@ function runAICorrection() {
   band -= issues.length * 0.25;
   band = Math.max(4, Math.min(8.5, Math.round(band * 2) / 2));
 
-  const intro = createCoachIntro(band);
   const corrected = createCorrectedVersion(text);
+  latestCorrectionText = `Feedback IA Coach\n\nTexto original:\n${text}\n\nBand estimado: ${band}\n\nCorrecciones:\n${issues.length ? issues.join(" ") : "No se detectaron errores frecuentes graves."}\n\nVersión orientativa:\n${corrected}`;
 
   const strengths = [
     words.length >= 80
@@ -1732,7 +1885,7 @@ function runAICorrection() {
   aiFeedback.classList.remove("hidden");
   aiFeedback.innerHTML = `
     <h4>Feedback de IA Coach</h4>
-    <p class="coach-message">${intro}</p>
+    <p class="coach-message">${createCoachIntro(band)}</p>
 
     <div class="ai-feedback-grid">
       <div class="band-score">
@@ -1742,75 +1895,60 @@ function runAICorrection() {
 
       <div class="feedback-list">
         <article>
-          <strong>Lo que está funcionando</strong>
+          <strong>1. Impresión general</strong>
           <p>${strengths.join(" ")}</p>
         </article>
-
         <article>
-          <strong>Correcciones importantes</strong>
+          <strong>2. Correcciones frase por frase</strong>
           <p>${issues.length ? issues.join(" ") : "No detecté errores frecuentes graves. El próximo paso es mejorar precisión, variedad y naturalidad."}</p>
         </article>
-
         <article>
-          <strong>Próximo objetivo</strong>
+          <strong>3. Vocabulario alternativo</strong>
+          <p>Podés variar palabras simples usando: significant, essential, likely, therefore, despite, as a result, to some extent.</p>
+        </article>
+        <article>
+          <strong>4. Próximo objetivo</strong>
           <p>Agregá una oración inicial clara, desarrollá una razón principal con un ejemplo y cerrá el párrafo reforzando tu idea.</p>
         </article>
       </div>
     </div>
 
     <div class="corrected-box">
-      <strong>Versión corregida orientativa</strong>
+      <strong>5. Versión mejorada orientativa</strong>
       <p>${escapeHTML(corrected)}</p>
+      <button id="saveCorrectionBtn" class="secondary-btn correction-save-btn" type="button">Guardar corrección</button>
     </div>
   `;
+
+  document.getElementById("saveCorrectionBtn")?.addEventListener("click", () => {
+    saveNote("Corrección IA Coach", latestCorrectionText);
+    logActivity("Corrección IA guardada");
+    alert("Corrección guardada en Apuntes.");
+  });
+
+  logActivity("Writing corregido con IA Coach");
 }
 
 function createCoachIntro(band) {
-  if (band >= 7) {
-    return "Leí tu párrafo y la impresión general es buena: se entiende la idea, hay control razonable de la estructura y ya empezás a sonar más natural. Para llevarlo a un nivel más alto, trabajaría en precisión, vocabulario menos repetitivo y una conclusión más contundente.";
-  }
-
-  if (band >= 6) {
-    return "Tu párrafo comunica la idea principal, que es lo más importante al principio. Todavía se nota que algunas frases podrían ordenarse mejor y que faltan conectores o ejemplos para que el texto sea más convincente. Estás en una base intermedia sobre la cual se puede construir muy bien.";
-  }
-
+  if (band >= 7) return "Leí tu párrafo y la impresión general es buena: se entiende la idea, hay control razonable de la estructura y ya empezás a sonar más natural. Para llevarlo a un nivel más alto, trabajaría en precisión, vocabulario menos repetitivo y una conclusión más contundente.";
+  if (band >= 6) return "Tu párrafo comunica la idea principal, que es lo más importante al principio. Todavía se nota que algunas frases podrían ordenarse mejor y que faltan conectores o ejemplos para que el texto sea más convincente.";
   return "Tu texto tiene una intención clara, pero todavía necesita más estructura. Primero armá una oración principal clara, después una explicación simple, luego un ejemplo y finalmente una frase de cierre.";
 }
 
 function detectCommonIssues(text) {
   const issues = [];
-
-  if (/\bi am agree\b/i.test(text)) {
-    issues.push("No se dice “I am agree”; la forma correcta es “I agree”.");
-  }
-
-  if (/\bpeople is\b/i.test(text)) {
-    issues.push("“People” normalmente funciona como plural: usá “people are”.");
-  }
-
-  if (/\bhe have\b/i.test(text)) {
-    issues.push("Con he/she/it corresponde “has”, no “have”.");
-  }
-
-  if (/\bshe go\b/i.test(text)) {
-    issues.push("En Present Simple con she corresponde “she goes”.");
-  }
-
+  if (/\bi am agree\b/i.test(text)) issues.push("No se dice “I am agree”; la forma correcta es “I agree”.");
+  if (/\bpeople is\b/i.test(text)) issues.push("“People” normalmente funciona como plural: usá “people are”.");
+  if (/\bhe have\b/i.test(text)) issues.push("Con he/she/it corresponde “has”, no “have”.");
+  if (/\bshe go\b/i.test(text)) issues.push("En Present Simple con she corresponde “she goes”.");
   const veryImportantMatches = text.match(/\bvery important\b/gi);
-  if (veryImportantMatches && veryImportantMatches.length > 1) {
-    issues.push("Repetís “very important”; podés variar con “essential”, “crucial” o “highly relevant”.");
-  }
-
-  if (!/[.!?]$/.test(text.trim())) {
-    issues.push("El párrafo debería cerrar con puntuación final.");
-  }
-
+  if (veryImportantMatches && veryImportantMatches.length > 1) issues.push("Repetís “very important”; podés variar con “essential”, “crucial” o “highly relevant”.");
+  if (!/[.!?]$/.test(text.trim())) issues.push("El párrafo debería cerrar con puntuación final.");
   return issues;
 }
 
 function createCorrectedVersion(text) {
   let corrected = text.trim();
-
   const replacements = [
     [/\bi am agree\b/gi, "I agree"],
     [/\bpeople is\b/gi, "people are"],
@@ -1824,14 +1962,10 @@ function createCorrectedVersion(text) {
     corrected = corrected.replace(pattern, replacement);
   });
 
-  if (!/[.!?]$/.test(corrected)) {
-    corrected += ".";
-  }
-
+  if (!/[.!?]$/.test(corrected)) corrected += ".";
   if (getWords(corrected).length < 80) {
     corrected += " For example, this situation can affect people’s opportunities, habits and long-term progress. Therefore, it is important to develop a clear opinion and support it with specific reasons.";
   }
-
   return corrected;
 }
 
@@ -1840,7 +1974,41 @@ function hasComplexSentence(text) {
 }
 
 /* =========================
-   APUNTES Y PÁRRAFOS
+   PRÁCTICA RÁPIDA
+========================= */
+
+function renderQuickPractice() {
+  const item = quickSentences[currentQuickIndex % quickSentences.length];
+  setText("quickTopic", item.topic);
+  setText("quickPrompt", item.es);
+  if (quickAnswer) quickAnswer.value = "";
+  if (quickFeedback) quickFeedback.innerHTML = "";
+}
+
+function checkQuickPractice(showAnswer = false) {
+  const item = quickSentences[currentQuickIndex % quickSentences.length];
+  const answer = (quickAnswer?.value || "").toLowerCase();
+  const matched = item.keywords.filter((kw) => answer.includes(kw.toLowerCase()));
+  const score = Math.round((matched.length / item.keywords.length) * 100);
+
+  if (!quickFeedback) return;
+
+  if (showAnswer) {
+    quickFeedback.innerHTML = `<strong>Respuesta modelo:</strong><p>${escapeHTML(item.answer)}</p>`;
+    return;
+  }
+
+  quickFeedback.innerHTML = `
+    <strong>${score >= 70 ? "Bien encaminado" : "A revisar"}</strong>
+    <p>Coincidencia estructural aproximada: ${score}%. ${score >= 70 ? "La estructura principal está presente." : "Revisá el tiempo verbal, auxiliar o condicional."}</p>
+    <p><em>Modelo:</em> ${escapeHTML(item.answer)}</p>
+  `;
+
+  logActivity(`Práctica rápida · ${item.topic}`);
+}
+
+/* =========================
+   APUNTES / PÁRRAFOS / VOCABULARIO
 ========================= */
 
 function saveNote(title, text) {
@@ -1856,8 +2024,8 @@ function saveNote(title, text) {
 }
 
 function saveNoteFromEditor() {
-  const title = noteTitle.value.trim() || "Apunte personal";
-  const text = noteText.value.trim();
+  const title = noteTitle?.value.trim() || "Apunte personal";
+  const text = noteText?.value.trim() || "";
 
   if (!text) {
     alert("Escribí o pegá un texto antes de guardarlo.");
@@ -1867,11 +2035,11 @@ function saveNoteFromEditor() {
   saveNote(title, text);
   noteTitle.value = "";
   noteText.value = "";
+  logActivity(`Apunte guardado · ${title}`);
 }
 
 function renderNotes() {
-  notesList.innerHTML = "";
-
+  if (!notesList) return;
   if (!notes.length) {
     notesList.innerHTML = `<div class="empty-state">Todavía no guardaste apuntes.</div>`;
     return;
@@ -1885,9 +2053,7 @@ function renderNotes() {
           <span>${escapeHTML(note.date)}</span>
         </div>
       </div>
-
       <p>${escapeHTML(note.text)}</p>
-
       <div class="item-actions">
         <button class="small-danger-btn" type="button" data-delete-note="${note.id}">Borrar apunte</button>
       </div>
@@ -1896,8 +2062,7 @@ function renderNotes() {
 }
 
 function renderParagraphs() {
-  savedParagraphsList.innerHTML = "";
-
+  if (!savedParagraphsList) return;
   if (!paragraphs.length) {
     savedParagraphsList.innerHTML = `<div class="empty-state">Todavía no guardaste párrafos.</div>`;
     return;
@@ -1911,12 +2076,60 @@ function renderParagraphs() {
           <span>${escapeHTML(paragraph.date)} · ${escapeHTML(paragraph.tense)}</span>
         </div>
       </div>
-
       <p>${escapeHTML(paragraph.text)}</p>
-
       <div class="item-actions">
         <button class="small-danger-btn" type="button" data-delete-paragraph="${paragraph.id}">Borrar párrafo</button>
       </div>
+    </article>
+  `).join("");
+}
+
+function saveVocabulary() {
+  const word = vocabWord?.value.trim() || "";
+  const meaning = vocabMeaning?.value.trim() || "";
+  const example = vocabExample?.value.trim() || "";
+  const category = vocabCategory?.value || "IELTS";
+
+  if (!word || !meaning) {
+    alert("Completá al menos palabra/frase y significado.");
+    return;
+  }
+
+  vocabulary.unshift({ id: createId(), word, meaning, example, category, date: new Date().toLocaleDateString("es-AR") });
+  localStorage.setItem("englishTrainerVocabulary", JSON.stringify(vocabulary));
+
+  vocabWord.value = "";
+  vocabMeaning.value = "";
+  vocabExample.value = "";
+  renderVocabulary();
+  buildFlashcards();
+  logActivity(`Vocabulario agregado · ${word}`);
+}
+
+function renderVocabulary() {
+  if (!vocabList) return;
+
+  const query = (vocabSearch?.value || "").toLowerCase().trim();
+  const filter = vocabFilter?.value || "all";
+
+  const rows = vocabulary.filter((item) => {
+    const matchesQuery = `${item.word} ${item.meaning} ${item.example}`.toLowerCase().includes(query);
+    const matchesFilter = filter === "all" || item.category === filter;
+    return matchesQuery && matchesFilter;
+  });
+
+  if (!rows.length) {
+    vocabList.innerHTML = `<div class="empty-state">Todavía no hay vocabulario guardado con ese filtro.</div>`;
+    return;
+  }
+
+  vocabList.innerHTML = rows.map((item) => `
+    <article class="vocab-item">
+      <span>${escapeHTML(item.category)}</span>
+      <strong>${escapeHTML(item.word)}</strong>
+      <p>${escapeHTML(item.meaning)}</p>
+      <small>${escapeHTML(item.example || "Sin ejemplo todavía.")}</small>
+      <button class="small-danger-btn" type="button" data-delete-vocab="${item.id}">Borrar</button>
     </article>
   `).join("");
 }
@@ -1934,13 +2147,75 @@ function deleteParagraph(id) {
   updateProgress();
 }
 
+function deleteVocabulary(id) {
+  vocabulary = vocabulary.filter((item) => item.id !== id);
+  localStorage.setItem("englishTrainerVocabulary", JSON.stringify(vocabulary));
+  renderVocabulary();
+  buildFlashcards();
+}
+
+/* =========================
+   FLASHCARDS
+========================= */
+
+function buildFlashcards() {
+  const source = flashcardSource?.value || "phrasals";
+
+  if (source === "modals") {
+    currentFlashcards = modalVerbs.map(([front, back]) => ({ type: "Modal / auxiliar", front, back, example: "" }));
+  } else if (source === "vocabulario") {
+    currentFlashcards = vocabulary.map((item) => ({ type: item.category, front: item.word, back: item.meaning, example: item.example }));
+  } else {
+    currentFlashcards = phrasalVerbs.map(([front, back, example]) => ({ type: "Phrasal verb", front, back, example }));
+  }
+
+  flashcardIndex = 0;
+  flashcardShowingBack = false;
+  renderFlashcard();
+}
+
+function renderFlashcard() {
+  if (!flashcardFront) return;
+
+  if (!currentFlashcards.length) {
+    setText("flashcardType", "Sin tarjetas");
+    setText("flashcardFront", "Agregá vocabulario o cambiá la fuente");
+    setText("flashcardBack", "");
+    setText("flashcardExample", "");
+    if (flashcard) flashcard.classList.remove("show-back");
+    return;
+  }
+
+  const card = currentFlashcards[flashcardIndex % currentFlashcards.length];
+  setText("flashcardType", card.type);
+  setText("flashcardFront", card.front);
+  setText("flashcardBack", card.back);
+  setText("flashcardExample", card.example || "Sin ejemplo.");
+  if (flashcard) flashcard.classList.toggle("show-back", flashcardShowingBack);
+  setText("flashcardStats", `${flashcardCount} repasadas`);
+}
+
+function nextFlashcard() {
+  if (!currentFlashcards.length) return;
+  flashcardIndex = (flashcardIndex + 1) % currentFlashcards.length;
+  flashcardShowingBack = false;
+  renderFlashcard();
+}
+
+function recordFlashcard(result) {
+  flashcardCount += 1;
+  localStorage.setItem("englishTrainerFlashcardCount", String(flashcardCount));
+  logActivity(`Flashcard · ${result}`);
+  nextFlashcard();
+}
+
 /* =========================
    EXÁMENES
 ========================= */
 
 function renderExamSelector() {
+  if (!examSelector) return;
   examSelector.innerHTML = "";
-
   for (let i = 1; i <= 100; i++) {
     const option = document.createElement("option");
     option.value = String(i);
@@ -1951,96 +2226,29 @@ function renderExamSelector() {
 
 function generateQuestionBank() {
   const templates = [
-    {
-      question: "Choose the correct Present Simple sentence.",
-      correct: "She studies every morning.",
-      wrong: ["She study every morning.", "She is study every morning.", "She studying every morning."]
-    },
-    {
-      question: "Choose the correct Present Continuous sentence.",
-      correct: "They are working now.",
-      wrong: ["They working now.", "They are work now.", "They work yesterday."]
-    },
-    {
-      question: "Choose the correct Past Simple sentence.",
-      correct: "I visited London last year.",
-      wrong: ["I visit London last year.", "I have visited London yesterday.", "I was visit London."]
-    },
-    {
-      question: "Choose the correct Past Continuous sentence.",
-      correct: "I was reading when he called.",
-      wrong: ["I read when he was called.", "I was read when he called.", "I reading when he called."]
-    },
-    {
-      question: "Choose the correct Present Perfect sentence.",
-      correct: "We have finished the project.",
-      wrong: ["We has finished the project.", "We have finish the project.", "We finished the project tomorrow."]
-    },
-    {
-      question: "Choose the correct Going to sentence.",
-      correct: "It is going to rain.",
-      wrong: ["It going to rain.", "It is going rain.", "It will going to rain."]
-    },
-    {
-      question: "Choose the correct Zero Conditional sentence.",
-      correct: "If you heat water, it boils.",
-      wrong: ["If you heat water, it will boils.", "If you heated water, it boils.", "If water heat, it boils."]
-    },
-    {
-      question: "Choose the correct First Conditional sentence.",
-      correct: "If it rains, I will stay home.",
-      wrong: ["If it will rain, I stay home.", "If it rained, I will stay home.", "If it rains, I would stayed home."]
-    },
-    {
-      question: "Choose the correct Second Conditional sentence.",
-      correct: "If I had money, I would travel.",
-      wrong: ["If I have money, I would travel.", "If I had money, I will travel.", "If I had money, I would travelled."]
-    },
-    {
-      question: "Choose the correct Third Conditional sentence.",
-      correct: "If I had studied, I would have passed.",
-      wrong: ["If I studied, I would have passed.", "If I had studied, I would pass.", "If I have studied, I would have passed."]
-    },
-    {
-      question: "Which connector shows contrast?",
-      correct: "However",
-      wrong: ["Therefore", "Moreover", "For example"]
-    },
-    {
-      question: "Which connector introduces a result?",
-      correct: "Therefore",
-      wrong: ["Although", "Whereas", "Despite"]
-    },
-    {
-      question: "Which option is more academic?",
-      correct: "This issue is significant.",
-      wrong: ["This thing is very good.", "This stuff is nice.", "This is super cool."]
-    },
-    {
-      question: "Choose the correct Future Perfect sentence.",
-      correct: "I will have finished by Monday.",
-      wrong: ["I will finishing by Monday.", "I have finish by Monday.", "I finished by Monday tomorrow."]
-    },
-    {
-      question: "Choose the best IELTS-style opening.",
-      correct: "It is widely believed that education plays a crucial role in society.",
-      wrong: ["Education is good thing.", "I will talk about education.", "Nowadays education very important."]
-    }
+    { topic: "grammar", question: "Choose the correct Present Simple sentence.", correct: "She studies every morning.", wrong: ["She study every morning.", "She is study every morning.", "She studying every morning."] },
+    { topic: "grammar", question: "Choose the correct Present Continuous sentence.", correct: "They are working now.", wrong: ["They working now.", "They are work now.", "They work yesterday."] },
+    { topic: "grammar", question: "Choose the correct Past Simple sentence.", correct: "I visited London last year.", wrong: ["I visit London last year.", "I have visited London yesterday.", "I was visit London."] },
+    { topic: "grammar", question: "Choose the correct Present Perfect sentence.", correct: "We have finished the project.", wrong: ["We has finished the project.", "We have finish the project.", "We finished the project tomorrow."] },
+    { topic: "grammar", question: "Choose the correct Going to sentence.", correct: "It is going to rain.", wrong: ["It going to rain.", "It is going rain.", "It will going to rain."] },
+    { topic: "conditionals", question: "Choose the correct Zero Conditional sentence.", correct: "If you heat water, it boils.", wrong: ["If you heat water, it will boils.", "If you heated water, it boils.", "If water heat, it boils."] },
+    { topic: "conditionals", question: "Choose the correct First Conditional sentence.", correct: "If it rains, I will stay home.", wrong: ["If it will rain, I stay home.", "If it rained, I will stay home.", "If it rains, I would stayed home."] },
+    { topic: "conditionals", question: "Choose the correct Second Conditional sentence.", correct: "If I had money, I would travel.", wrong: ["If I have money, I would travel.", "If I had money, I will travel.", "If I had money, I would travelled."] },
+    { topic: "conditionals", question: "Choose the correct Third Conditional sentence.", correct: "If I had studied, I would have passed.", wrong: ["If I studied, I would have passed.", "If I had studied, I would pass.", "If I have studied, I would have passed."] },
+    { topic: "phrasals", question: "Which phrasal verb means 'rendirse'?", correct: "give up", wrong: ["look for", "turn down", "set up"] },
+    { topic: "phrasals", question: "Which phrasal verb means 'posponer'?", correct: "put off", wrong: ["take off", "bring up", "get in"] },
+    { topic: "modals", question: "Choose the correct advice sentence.", correct: "You should practice every day.", wrong: ["You must to practice every day.", "You should to practice every day.", "You can to practice every day."] },
+    { topic: "modals", question: "Which modal expresses obligation?", correct: "must", wrong: ["might", "could", "would rather"] },
+    { topic: "grammar", question: "Which connector shows contrast?", correct: "However", wrong: ["Therefore", "Moreover", "For example"] },
+    { topic: "grammar", question: "Which option is more academic?", correct: "This issue is significant.", wrong: ["This thing is very good.", "This stuff is nice.", "This is super cool."] }
   ];
 
   const bank = [];
-
   for (let i = 0; i < 1000; i++) {
     const template = templates[i % templates.length];
     const options = seededShuffle([template.correct, ...template.wrong], i + 17);
-
-    bank.push({
-      question: template.question,
-      options,
-      answer: options.indexOf(template.correct)
-    });
+    bank.push({ topic: template.topic, question: template.question, options, answer: options.indexOf(template.correct) });
   }
-
   return bank;
 }
 
@@ -2052,20 +2260,19 @@ function getExamQuestions(examNumber) {
 
 function seededShuffle(array, seed) {
   const result = [...array];
-
   for (let i = result.length - 1; i > 0; i--) {
     seed = (seed * 9301 + 49297) % 233280;
     const random = seed / 233280;
     const j = Math.floor(random * (i + 1));
     [result[i], result[j]] = [result[j], result[i]];
   }
-
   return result;
 }
 
 function renderQuiz() {
+  if (!quizContainer || !examSelector) return;
   quizContainer.innerHTML = "";
-  quizResult.textContent = "";
+  if (quizResult) quizResult.textContent = "";
 
   const examNumber = Number(examSelector.value || 1);
   currentQuiz = getExamQuestions(examNumber);
@@ -2088,21 +2295,24 @@ function renderQuiz() {
 }
 
 function updateQuizProgress() {
-  const answered = currentQuiz.filter((_, index) => {
-    return document.querySelector(`input[name="question-${index}"]:checked`);
-  }).length;
-
+  if (!quizProgress) return;
+  const answered = currentQuiz.filter((_, index) => document.querySelector(`input[name="question-${index}"]:checked`)).length;
   quizProgress.textContent = `${answered}/10 respondidas`;
 }
 
 function submitQuiz() {
   let correct = 0;
+  const localTopicStats = {};
 
   currentQuiz.forEach((question, index) => {
     const questionElement = document.querySelector(`.quiz-question[data-index="${index}"]`);
     const selected = document.querySelector(`input[name="question-${index}"]:checked`);
+    if (!questionElement) return;
 
     questionElement.classList.remove("correct", "incorrect");
+
+    localTopicStats[question.topic] = localTopicStats[question.topic] || { correct: 0, total: 0 };
+    localTopicStats[question.topic].total += 1;
 
     if (!selected) {
       questionElement.classList.add("incorrect");
@@ -2111,6 +2321,7 @@ function submitQuiz() {
 
     if (Number(selected.value) === question.answer) {
       correct += 1;
+      localTopicStats[question.topic].correct += 1;
       questionElement.classList.add("correct");
     } else {
       questionElement.classList.add("incorrect");
@@ -2118,44 +2329,101 @@ function submitQuiz() {
   });
 
   const percentage = Math.round((correct / currentQuiz.length) * 100);
-  quizResult.textContent = `${correct}/10 correctas · ${percentage}%`;
+  if (quizResult) quizResult.textContent = `${correct}/10 correctas · ${percentage}%`;
 
   examsCompleted += 1;
   scoreHistory.push(percentage);
 
+  Object.entries(localTopicStats).forEach(([topic, stat]) => {
+    topicStats[topic] = topicStats[topic] || { correct: 0, total: 0 };
+    topicStats[topic].correct += stat.correct;
+    topicStats[topic].total += stat.total;
+  });
+
   localStorage.setItem("englishTrainerExamsCompleted", String(examsCompleted));
   localStorage.setItem("englishTrainerScoreHistory", JSON.stringify(scoreHistory));
+  localStorage.setItem("englishTrainerTopicStats", JSON.stringify(topicStats));
 
-  updateProgress();
+  logActivity(`Examen completado · ${percentage}%`);
 }
 
 /* =========================
-   NAV / ANIMACIONES / HELPERS
+   EXPORTACIONES
 ========================= */
 
-function setActiveLink() {
-  if (dashboardView.hidden) return;
+function downloadText(filename, content) {
+  const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
 
+function exportNotes() {
+  const text = notes.map((n) => `# ${n.title}\n${n.date}\n\n${n.text}`).join("\n\n---\n\n");
+  downloadText("english-trainer-apuntes.txt", text || "Sin apuntes guardados.");
+}
+
+function exportParagraphs() {
+  const text = paragraphs.map((p) => `# ${p.title}\n${p.date} · ${p.tense}\n\n${p.text}`).join("\n\n---\n\n");
+  downloadText("english-trainer-writings.txt", text || "Sin writings guardados.");
+}
+
+function exportProgress() {
+  const payload = {
+    studySeconds,
+    weeklySeconds,
+    examsCompleted,
+    averageScore: getAverageScore(),
+    paragraphs: paragraphs.length,
+    vocabulary: vocabulary.length,
+    flashcardsReviewed: flashcardCount,
+    level: getLevelInfo(),
+    topicStats,
+    lastActivity,
+    activityLog
+  };
+  downloadText("english-trainer-progreso.json", JSON.stringify(payload, null, 2));
+}
+
+function exportVocabulary() {
+  const text = vocabulary.map((v) => `# ${v.word}\nCategoría: ${v.category}\nSignificado: ${v.meaning}\nEjemplo: ${v.example || "-"}`).join("\n\n---\n\n");
+  downloadText("english-trainer-vocabulario.txt", text || "Sin vocabulario guardado.");
+}
+
+/* =========================
+   HELPERS / EVENTOS
+========================= */
+
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = value;
+}
+
+function setWidth(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.style.width = `${Math.max(0, Math.min(value, 100))}%`;
+}
+
+function setActiveLink() {
+  if (!dashboardView || dashboardView.hidden) return;
   let current = "inicio";
 
   document.querySelectorAll("#dashboardView main section[id]").forEach((section) => {
-    if (window.scrollY >= section.offsetTop - 160) {
-      current = section.id;
-    }
+    if (window.scrollY >= section.offsetTop - 160) current = section.id;
   });
 
-  navLinks.forEach((link) => {
-    link.classList.toggle("active", link.getAttribute("href") === `#${current}`);
-  });
-
+  navLinks.forEach((link) => link.classList.toggle("active", link.getAttribute("href") === `#${current}`));
   setResourceNavActive(null);
 }
 
 function revealOnScroll() {
   revealElements.forEach((element) => {
-    if (element.getBoundingClientRect().top < window.innerHeight - 80) {
-      element.classList.add("visible");
-    }
+    if (element.getBoundingClientRect().top < window.innerHeight - 80) element.classList.add("visible");
   });
 }
 
@@ -2164,74 +2432,104 @@ function createId() {
 }
 
 function escapeHTML(text) {
-  return String(text)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;");
+  return String(text).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 }
 
-/* =========================
-   EVENTOS
-========================= */
+function bindEvents() {
+  tenseSearch?.addEventListener("input", () => renderTenseCards(tenseSearch.value));
+  practiceMode?.addEventListener("change", generatePrompt);
+  ieltsLevel?.addEventListener("change", generatePrompt);
+  practiceTense?.addEventListener("change", generatePrompt);
+  newPromptBtn?.addEventListener("click", generatePrompt);
+  practiceText?.addEventListener("input", updateWordCounter);
 
-tenseSearch.addEventListener("input", () => renderTenseCards(tenseSearch.value));
-ieltsLevel.addEventListener("change", generatePrompt);
-practiceTense.addEventListener("change", generatePrompt);
-newPromptBtn.addEventListener("click", generatePrompt);
-practiceText.addEventListener("input", updateWordCounter);
+  clearTextBtn?.addEventListener("click", () => {
+    practiceText.value = "";
+    updateWordCounter();
+    aiFeedback?.classList.add("hidden");
+  });
 
-clearTextBtn.addEventListener("click", () => {
-  practiceText.value = "";
-  updateWordCounter();
-  aiFeedback.classList.add("hidden");
-});
+  saveParagraphBtn?.addEventListener("click", saveParagraph);
+  aiCorrectBtn?.addEventListener("click", runAICorrection);
 
-saveParagraphBtn.addEventListener("click", saveParagraph);
-aiCorrectBtn.addEventListener("click", runAICorrection);
+  newQuickBtn?.addEventListener("click", () => {
+    currentQuickIndex = (currentQuickIndex + 1) % quickSentences.length;
+    renderQuickPractice();
+  });
+  checkQuickBtn?.addEventListener("click", () => checkQuickPractice(false));
+  showQuickAnswerBtn?.addEventListener("click", () => checkQuickPractice(true));
 
-saveNoteBtn.addEventListener("click", saveNoteFromEditor);
+  saveNoteBtn?.addEventListener("click", saveNoteFromEditor);
+  clearNoteEditorBtn?.addEventListener("click", () => {
+    noteTitle.value = "";
+    noteText.value = "";
+  });
 
-clearNoteEditorBtn.addEventListener("click", () => {
-  noteTitle.value = "";
-  noteText.value = "";
-});
+  clearNotesBtn?.addEventListener("click", () => {
+    if (!confirm("¿Seguro que querés borrar todos los apuntes?")) return;
+    notes = [];
+    localStorage.removeItem("englishTrainerNotes");
+    renderNotes();
+  });
 
-clearNotesBtn.addEventListener("click", () => {
-  if (!confirm("¿Seguro que querés borrar todos los apuntes?")) return;
-  notes = [];
-  localStorage.removeItem("englishTrainerNotes");
-  renderNotes();
-});
+  clearParagraphsBtn?.addEventListener("click", () => {
+    if (!confirm("¿Seguro que querés borrar todos los párrafos guardados?")) return;
+    paragraphs = [];
+    localStorage.removeItem("englishTrainerParagraphs");
+    renderParagraphs();
+    updateProgress();
+  });
 
-clearParagraphsBtn.addEventListener("click", () => {
-  if (!confirm("¿Seguro que querés borrar todos los párrafos guardados?")) return;
-  paragraphs = [];
-  localStorage.removeItem("englishTrainerParagraphs");
-  renderParagraphs();
-  updateProgress();
-});
+  notesList?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-delete-note]");
+    if (button) deleteNote(button.dataset.deleteNote);
+  });
 
-notesList.addEventListener("click", (event) => {
-  const button = event.target.closest("[data-delete-note]");
-  if (button) deleteNote(button.dataset.deleteNote);
-});
+  savedParagraphsList?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-delete-paragraph]");
+    if (button) deleteParagraph(button.dataset.deleteParagraph);
+  });
 
-savedParagraphsList.addEventListener("click", (event) => {
-  const button = event.target.closest("[data-delete-paragraph]");
-  if (button) deleteParagraph(button.dataset.deleteParagraph);
-});
+  saveVocabBtn?.addEventListener("click", saveVocabulary);
+  vocabSearch?.addEventListener("input", renderVocabulary);
+  vocabFilter?.addEventListener("change", renderVocabulary);
+  vocabList?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-delete-vocab]");
+    if (button) deleteVocabulary(button.dataset.deleteVocab);
+  });
 
-examSelector.addEventListener("change", renderQuiz);
-quizContainer.addEventListener("change", updateQuizProgress);
-submitQuizBtn.addEventListener("click", submitQuiz);
-resetQuizBtn.addEventListener("click", renderQuiz);
+  phrasalSearch?.addEventListener("input", renderPhrasalTable);
+  phrasalFilter?.addEventListener("change", renderPhrasalTable);
+  modalSearch?.addEventListener("input", renderModalsTable);
 
-window.addEventListener("scroll", () => {
-  setActiveLink();
-  revealOnScroll();
-});
+  flashcardSource?.addEventListener("change", buildFlashcards);
+  flipCardBtn?.addEventListener("click", () => {
+    flashcardShowingBack = !flashcardShowingBack;
+    renderFlashcard();
+  });
+  knownCardBtn?.addEventListener("click", () => recordFlashcard("Lo sabía"));
+  hardCardBtn?.addEventListener("click", () => recordFlashcard("Me costó"));
+  repeatCardBtn?.addEventListener("click", () => recordFlashcard("Repetir después"));
+  nextCardBtn?.addEventListener("click", nextFlashcard);
+
+  examSelector?.addEventListener("change", renderQuiz);
+  quizContainer?.addEventListener("change", updateQuizProgress);
+  submitQuizBtn?.addEventListener("click", submitQuiz);
+  resetQuizBtn?.addEventListener("click", renderQuiz);
+
+  exportNotesBtn?.addEventListener("click", exportNotes);
+  exportParagraphsBtn?.addEventListener("click", exportParagraphs);
+  exportProgressBtn?.addEventListener("click", exportProgress);
+  exportVocabBtn?.addEventListener("click", exportVocabulary);
+
+  window.addEventListener("scroll", () => {
+    setActiveLink();
+    revealOnScroll();
+  });
+}
 
 window.addEventListener("load", () => {
+  bindEvents();
   renderTables();
   renderTenseCards();
   renderTenseDetail(selectedTenseId);
@@ -2240,6 +2538,9 @@ window.addEventListener("load", () => {
   renderQuiz();
   renderNotes();
   renderParagraphs();
+  renderVocabulary();
+  buildFlashcards();
+  renderQuickPractice();
   updateProgress();
   updateTimerUI();
   setActiveLink();
