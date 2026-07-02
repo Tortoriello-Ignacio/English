@@ -3878,3 +3878,67 @@ background:
 .quick-practice-card #quickTopic:empty::before {
   content: "Tiempo verbal: práctica";
 }
+
+
+/* =========================================================
+   TIMER + PRACTICE V20
+   Timer circular sin aguja; consumo desde arriba.
+   Pastilla de tiempo verbal simple y siempre visible.
+========================================================= */
+
+#timerProgressRing.circle-timer-card .circle-consume-hand,
+#timerProgressRing.circle-timer-card .circle-pivot {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+#timerProgressRing.circle-timer-card .circle-timer-orb {
+  background:
+    conic-gradient(
+      from -90deg,
+      rgba(13, 13, 13, 0.88) 0deg var(--timer-elapsed),
+      rgba(var(--accent-rgb), 0.96) var(--timer-elapsed) 360deg
+    ) !important;
+}
+
+#timerProgressRing.circle-timer-card .circle-timer-orb::after {
+  background:
+    radial-gradient(circle at 38% 28%, rgba(255,255,255,0.20), transparent 10%),
+    radial-gradient(circle at 50% 52%, rgba(255,255,255,0.045), transparent 42%),
+    linear-gradient(145deg, rgba(255,255,255,0.075), transparent 48%) !important;
+}
+
+#timerProgressRing.circle-timer-card .circle-timer-caption {
+  color: rgba(168, 162, 158, 0.70) !important;
+}
+
+.quick-topic-pill,
+#quickTopic.quick-topic-pill,
+#quickTopic.level-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  min-height: 34px !important;
+  padding: 0 14px !important;
+  margin-bottom: 18px !important;
+  border-radius: 999px !important;
+  color: var(--accent-soft) !important;
+  background: rgba(var(--accent-rgb), 0.13) !important;
+  border: 1px solid rgba(var(--accent-rgb), 0.24) !important;
+  font-size: 0.76rem !important;
+  font-weight: 950 !important;
+  letter-spacing: 0.075em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  line-height: 1 !important;
+  opacity: 1 !important;
+  overflow: visible !important;
+}
+
+.quick-practice-card #quickTopic:empty::before {
+  content: "Present Simple";
+}

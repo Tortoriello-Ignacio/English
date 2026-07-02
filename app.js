@@ -5039,3 +5039,309 @@ setTimeout(() => {
 
   renderQuickPracticeTopicV19(item || {});
 }, 0);
+
+
+/* =========================================================
+   TIMER + PRACTICE V20
+   - Timer circular sin aguja.
+   - El consumo comienza desde las 12 y avanza en sentido horario.
+   - Práctica: 17 estructuras exactas, sin "Tiempo verbal: práctica".
+   - Cada nueva oración cambia de estructura dentro de un ciclo mezclado.
+========================================================= */
+
+function ensureCircleTimerMarkupV20() {
+  const ring = document.getElementById("timerProgressRing");
+  if (!ring) return;
+
+  ring.classList.remove("digital-timer-card", "hourglass-timer-card");
+  ring.classList.add("circle-timer-card");
+
+  ring.innerHTML = `
+    <div class="circle-timer-time">
+      <span id="timerDisplay" class="timer-display">00:00</span>
+      <small>sesión de foco</small>
+    </div>
+
+    <div class="circle-timer-orb" aria-hidden="true">
+      <div class="circle-timer-face">
+        <span class="circle-inner-glow"></span>
+      </div>
+    </div>
+
+    <p class="circle-timer-caption">El relleno se consume desde arriba.</p>
+  `;
+}
+
+ensureHourglassTimerMarkup = ensureCircleTimerMarkupV20;
+ensureCircleTimerMarkupV18 = ensureCircleTimerMarkupV20;
+
+updateTimerUI = function updateCircleTimerUIV20() {
+  const remaining = Math.max(timerSecondsLeft, 0);
+  const minutes = Math.floor(remaining / 60);
+  const seconds = remaining % 60;
+
+  const ring = document.getElementById("timerProgressRing");
+  if (ring && !ring.querySelector(".circle-timer-orb")) {
+    ensureCircleTimerMarkupV20();
+  }
+
+  const timerDisplayEl = document.getElementById("timerDisplay");
+  const timerRingEl = document.getElementById("timerProgressRing");
+
+  if (timerDisplayEl) {
+    timerDisplayEl.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  }
+
+  const progress = timerInitialSeconds
+    ? (timerInitialSeconds - remaining) / timerInitialSeconds
+    : 0;
+
+  const elapsedDegrees = Math.max(0, Math.min(360, progress * 360));
+
+  if (timerRingEl) {
+    timerRingEl.style.setProperty("--timer-elapsed", `${elapsedDegrees}deg`);
+    timerRingEl.style.setProperty("--timer-progress-ratio", String(progress));
+  }
+};
+
+const quickPracticeTopicsV20 = [
+  "Present Simple",
+  "Present Continuous",
+  "Past Simple",
+  "Past Continuous",
+  "Present Perfect",
+  "Present Perfect Continuous",
+  "Past Perfect",
+  "Past Perfect Continuous",
+  "Future Simple",
+  "Going To",
+  "Future Continuous",
+  "Future Perfect",
+  "Future Perfect Continuous",
+  "Zero Conditional",
+  "First Conditional",
+  "Second Conditional",
+  "Third Conditional"
+];
+
+const quickPracticeBlueprintsV20 = {
+  "Present Simple": [
+    ["Yo estudio inglés todos los días.", "I study English every day.", ["I study English every day.", "I practise English every day.", "I practice English every day."], ["study", "english", "every day"]],
+    ["Nosotros repasamos vocabulario cada mañana.", "We review vocabulary every morning.", ["We review vocabulary every morning.", "We revise vocabulary every morning.", "We go over vocabulary every morning."], ["review", "vocabulary"]],
+    ["Ellos trabajan en un laboratorio público.", "They work in a public laboratory.", ["They work in a public laboratory.", "They work at a public laboratory.", "They work in a public lab."], ["they", "work", "laboratory"]]
+  ],
+  "Present Continuous": [
+    ["Yo estoy escribiendo una respuesta ahora.", "I am writing an answer now.", ["I am writing an answer now.", "I'm writing an answer now.", "I am currently writing an answer."], ["writing", "now"]],
+    ["Nosotros estamos practicando para el IELTS esta semana.", "We are practicing for the IELTS this week.", ["We are practicing for the IELTS this week.", "We are preparing for the IELTS this week.", "We're practising for the IELTS this week."], ["are", "practicing", "ielts"]],
+    ["Ella está leyendo las instrucciones con atención.", "She is reading the instructions carefully.", ["She is reading the instructions carefully.", "She is checking the instructions carefully."], ["is", "reading", "instructions"]]
+  ],
+  "Past Simple": [
+    ["Yo terminé el informe ayer.", "I finished the report yesterday.", ["I finished the report yesterday.", "I completed the report yesterday."], ["finished", "report", "yesterday"]],
+    ["Ellos visitaron el laboratorio la semana pasada.", "They visited the laboratory last week.", ["They visited the laboratory last week.", "They went to the laboratory last week."], ["visited", "last week"]],
+    ["Nosotros aprendimos muchas palabras nuevas.", "We learned many new words.", ["We learned many new words.", "We learnt many new words."], ["learned", "words"]]
+  ],
+  "Past Continuous": [
+    ["Yo estaba leyendo cuando me llamaste.", "I was reading when you called me.", ["I was reading when you called me.", "I was studying when you called me."], ["was", "reading", "called"]],
+    ["Ellos estaban trabajando mientras nosotros esperábamos.", "They were working while we were waiting.", ["They were working while we were waiting.", "They were working while we waited."], ["were", "working", "waiting"]],
+    ["Nosotros estábamos repasando antes del examen.", "We were reviewing before the exam.", ["We were reviewing before the exam.", "We were revising before the exam.", "We were studying before the exam."], ["were", "reviewing", "exam"]]
+  ],
+  "Present Perfect": [
+    ["Yo he terminado el ejercicio.", "I have finished the exercise.", ["I have finished the exercise.", "I've finished the exercise.", "I have completed the exercise."], ["have", "finished"]],
+    ["Nosotros hemos visitado ese lugar varias veces.", "We have visited that place several times.", ["We have visited that place several times.", "We've been to that place several times."], ["have", "visited"]],
+    ["Ella ha mejorado mucho este mes.", "She has improved a lot this month.", ["She has improved a lot this month.", "She's improved a lot this month.", "She has gotten much better this month."], ["has", "improved"]]
+  ],
+  "Present Perfect Continuous": [
+    ["Yo he estado estudiando durante dos horas.", "I have been studying for two hours.", ["I have been studying for two hours.", "I've been studying for two hours.", "I have been practicing for two hours."], ["have", "been", "studying"]],
+    ["Ella ha estado trabajando toda la mañana.", "She has been working all morning.", ["She has been working all morning.", "She's been working all morning."], ["has", "been", "working"]],
+    ["Nosotros hemos estado practicando desde temprano.", "We have been practicing since early morning.", ["We have been practicing since early morning.", "We've been practising since early morning.", "We have been training since early morning."], ["have", "been", "practicing"]]
+  ],
+  "Past Perfect": [
+    ["Yo ya había terminado cuando empezó la clase.", "I had already finished when the class started.", ["I had already finished when the class started.", "I had already completed it when the class started."], ["had", "finished"]],
+    ["Ellos habían salido antes de que llegáramos.", "They had left before we arrived.", ["They had left before we arrived.", "They had gone before we arrived."], ["had", "left"]],
+    ["Nosotros habíamos leído el texto antes del examen.", "We had read the text before the exam.", ["We had read the text before the exam.", "We had gone through the text before the exam."], ["had", "read"]]
+  ],
+  "Past Perfect Continuous": [
+    ["Yo había estado practicando durante horas.", "I had been practicing for hours.", ["I had been practicing for hours.", "I had been studying for hours.", "I had been training for hours."], ["had", "been", "practicing"]],
+    ["La empresa había estado trabajando durante meses.", "The company had been working for months.", ["The company had been working for months.", "The company had been developing the project for months."], ["had", "been", "working"]],
+    ["Nosotros habíamos estado esperando desde las ocho.", "We had been waiting since eight o'clock.", ["We had been waiting since eight o'clock.", "We had been waiting since eight."], ["had", "been", "waiting"]]
+  ],
+  "Future Simple": [
+    ["Yo te ayudaré después de la clase.", "I will help you after class.", ["I will help you after class.", "I'll help you after class.", "I will assist you after class."], ["will", "help"]],
+    ["Ellos enviarán el correo mañana.", "They will send the email tomorrow.", ["They will send the email tomorrow.", "They'll send the email tomorrow."], ["will", "send"]],
+    ["Nosotros revisaremos las respuestas luego.", "We will review the answers later.", ["We will review the answers later.", "We'll check the answers later.", "We will go over the answers later."], ["will", "review"]]
+  ],
+  "Going To": [
+    ["Yo voy a empezar un curso nuevo.", "I am going to start a new course.", ["I am going to start a new course.", "I'm going to begin a new course."], ["going", "to", "start"]],
+    ["Nosotros vamos a practicar speaking esta noche.", "We are going to practice speaking tonight.", ["We are going to practice speaking tonight.", "We're going to practise speaking tonight."], ["going", "to", "practice"]],
+    ["Ella va a presentar el proyecto mañana.", "She is going to present the project tomorrow.", ["She is going to present the project tomorrow.", "She's going to present the project tomorrow."], ["going", "to", "present"]]
+  ],
+  "Future Continuous": [
+    ["Yo estaré trabajando mañana a esta hora.", "I will be working at this time tomorrow.", ["I will be working at this time tomorrow.", "I'll be working at this time tomorrow."], ["will", "be", "working"]],
+    ["Nosotros estaremos viajando el viernes.", "We will be travelling on Friday.", ["We will be travelling on Friday.", "We will be traveling on Friday.", "We'll be travelling on Friday."], ["will", "be", "travelling"]],
+    ["Ellos estarán estudiando durante la tarde.", "They will be studying during the afternoon.", ["They will be studying during the afternoon.", "They'll be studying in the afternoon."], ["will", "be", "studying"]]
+  ],
+  "Future Perfect": [
+    ["Yo habré terminado el documento para mañana.", "I will have finished the document by tomorrow.", ["I will have finished the document by tomorrow.", "I'll have finished the document by tomorrow.", "I will have completed the document by tomorrow."], ["will", "have", "finished"]],
+    ["Nosotros habremos llegado antes de las ocho.", "We will have arrived before eight o'clock.", ["We will have arrived before eight o'clock.", "We'll have arrived before eight."], ["will", "have", "arrived"]],
+    ["Ellos habrán resuelto el problema para la próxima semana.", "They will have solved the problem by next week.", ["They will have solved the problem by next week.", "They will have fixed the problem by next week."], ["will", "have", "solved"]]
+  ],
+  "Future Perfect Continuous": [
+    ["Yo habré estado estudiando durante un año.", "I will have been studying for a year.", ["I will have been studying for a year.", "I'll have been studying for a year.", "I will have been learning for a year."], ["will", "have", "been", "studying"]],
+    ["Nosotros habremos estado trabajando durante diez horas.", "We will have been working for ten hours.", ["We will have been working for ten hours.", "We'll have been working for ten hours."], ["will", "have", "been", "working"]],
+    ["Ella habrá estado practicando durante meses.", "She will have been practicing for months.", ["She will have been practicing for months.", "She'll have been practising for months.", "She will have been training for months."], ["will", "have", "been", "practicing"]]
+  ],
+  "Zero Conditional": [
+    ["Si calentás agua, hierve.", "If you heat water, it boils.", ["If you heat water, it boils.", "Water boils if you heat it."], ["if", "heat", "boils"]],
+    ["Si no dormís bien, te sentís cansado.", "If you don't sleep well, you feel tired.", ["If you don't sleep well, you feel tired.", "You feel tired if you don't sleep well."], ["if", "sleep", "feel"]],
+    ["Si practicás todos los días, mejorás.", "If you practice every day, you improve.", ["If you practice every day, you improve.", "You improve if you practice every day."], ["if", "practice", "improve"]]
+  ],
+  "First Conditional": [
+    ["Si llueve mañana, nos quedaremos en casa.", "If it rains tomorrow, we will stay at home.", ["If it rains tomorrow, we will stay at home.", "If it rains tomorrow, we'll stay home.", "We will stay at home if it rains tomorrow."], ["if", "rains", "will"]],
+    ["Si terminás temprano, te llamaré.", "If you finish early, I will call you.", ["If you finish early, I will call you.", "If you finish early, I'll call you."], ["if", "finish", "will"]],
+    ["Si practicamos más, mejoraremos rápido.", "If we practice more, we will improve quickly.", ["If we practice more, we will improve quickly.", "If we practise more, we'll improve quickly."], ["if", "practice", "will"]]
+  ],
+  "Second Conditional": [
+    ["Si tuviera más tiempo, viajaría más.", "If I had more time, I would travel more.", ["If I had more time, I would travel more.", "I would travel more if I had more time."], ["if", "had", "would"]],
+    ["Si ella hablara inglés con fluidez, conseguiría el trabajo.", "If she spoke English fluently, she would get the job.", ["If she spoke English fluently, she would get the job.", "If she were fluent in English, she would get the job."], ["if", "spoke", "would"]],
+    ["Si viviéramos cerca, iríamos caminando.", "If we lived nearby, we would walk.", ["If we lived nearby, we would walk.", "We would walk if we lived nearby."], ["if", "lived", "would"]]
+  ],
+  "Third Conditional": [
+    ["Si hubiera estudiado más, habría aprobado el examen.", "If I had studied more, I would have passed the exam.", ["If I had studied more, I would have passed the exam.", "If I had prepared more, I would have passed the exam.", "I would have passed the exam if I had studied more."], ["if", "had", "would", "passed"]],
+    ["Si hubiéramos salido antes, no habríamos perdido el tren.", "If we had left earlier, we would not have missed the train.", ["If we had left earlier, we would not have missed the train.", "If we had left earlier, we wouldn't have missed the train."], ["if", "had", "would", "missed"]],
+    ["Si ella hubiera leído las instrucciones, habría evitado el error.", "If she had read the instructions, she would have avoided the mistake.", ["If she had read the instructions, she would have avoided the mistake.", "If she had checked the instructions, she would have avoided the mistake."], ["if", "had", "would", "avoided"]]
+  ]
+};
+
+let quickPracticeTopicCycleV20 = [];
+let currentQuickItemV20 = null;
+let quickPracticeRoundV20 = 0;
+
+function buildQuickPracticePool() {
+  const pool = [];
+
+  quickPracticeTopicsV20.forEach((topic) => {
+    const rows = quickPracticeBlueprintsV20[topic] || [];
+    for (let i = 0; i < 30; i++) {
+      const row = rows[i % rows.length];
+      pool.push({
+        topic,
+        es: row[0],
+        answer: row[1],
+        acceptedAnswers: row[2],
+        keywords: row[3]
+      });
+    }
+  });
+
+  return pool;
+}
+
+function resetQuickPracticeTopicCycleV20() {
+  quickPracticeTopicCycleV20 = shuffleArray([...quickPracticeTopicsV20]);
+}
+
+function pickQuickPracticeItemByTopicV20(topic) {
+  const matches = quickPracticePool.filter((item) => item.topic === topic);
+  const list = matches.length ? matches : quickPracticePool;
+  return list[Math.floor(Math.random() * list.length)];
+}
+
+function renderQuickPracticeTopicV20(item) {
+  const quickTopicEl = document.getElementById("quickTopic");
+  if (!quickTopicEl) return;
+
+  quickTopicEl.textContent = item?.topic || "Present Simple";
+  quickTopicEl.title = item?.topic || "Present Simple";
+  quickTopicEl.classList.add("quick-topic-pill");
+}
+
+function renderQuickPractice() {
+  if (!quickPracticePool.length) quickPracticePool = buildQuickPracticePool();
+  if (!currentQuickItemV20) nextQuickPractice(false);
+
+  const item = currentQuickItemV20;
+  if (!item) return;
+
+  if (quickTopic) quickTopic.textContent = item.topic;
+  if (quickPrompt) quickPrompt.textContent = item.es;
+  if (quickAnswer) quickAnswer.value = "";
+  if (quickFeedback) quickFeedback.innerHTML = "";
+
+  renderQuickPracticeTopicV20(item);
+}
+
+function nextQuickPractice(shouldRender = true) {
+  if (!quickPracticePool.length) quickPracticePool = buildQuickPracticePool();
+  if (!quickPracticeTopicCycleV20.length) resetQuickPracticeTopicCycleV20();
+
+  const nextTopic = quickPracticeTopicCycleV20.shift();
+  currentQuickItemV20 = pickQuickPracticeItemByTopicV20(nextTopic);
+  currentQuickIndex = quickPracticeRoundV20;
+  quickPracticeRoundV20 += 1;
+
+  if (shouldRender) renderQuickPractice();
+}
+
+function checkQuickPractice(showAnswer = false) {
+  const item = currentQuickItemV20;
+  if (!item || !quickFeedback) return;
+
+  if (showAnswer) {
+    const variants = [...new Set([item.answer, ...(item.acceptedAnswers || [])])].slice(0, 4);
+    quickFeedback.innerHTML = `
+      <strong>Respuesta modelo</strong>
+      <p>${escapeHTML(item.answer)}</p>
+      ${variants.length > 1 ? `<p><strong>También se aceptan:</strong> ${variants.slice(1).map(escapeHTML).join(" · ")}</p>` : ""}
+    `;
+    return;
+  }
+
+  const user = quickAnswer?.value?.trim() || "";
+  if (!user) {
+    alert("Escribí tu traducción antes de corregir.");
+    return;
+  }
+
+  const accepted = [...new Set([item.answer, ...(item.acceptedAnswers || [])])];
+  let best = "";
+  let bestScore = 0;
+
+  accepted.forEach((option) => {
+    const score = textSimilarity(user, option);
+    if (score > bestScore) {
+      bestScore = score;
+      best = option;
+    }
+  });
+
+  const keywordScore = item.keywords?.length
+    ? item.keywords.filter((kw) => normalizeText(user).includes(normalizeText(kw))).length / item.keywords.length
+    : 0;
+
+  const finalScore = Math.round(Math.max(bestScore, keywordScore) * 100);
+  const acceptedAnswer = bestScore >= 0.74 || keywordScore >= 0.75;
+
+  quickFeedback.innerHTML = `
+    <strong>${acceptedAnswer ? "Muy bien" : "Ajustá un poco más la traducción"}</strong>
+    <p>${acceptedAnswer
+      ? `Tu respuesta entra dentro de las variantes válidas. Coincidencia aproximada: ${finalScore}%.`
+      : `Coincidencia aproximada: ${finalScore}%. Revisá el tiempo verbal, auxiliar o verbo principal.`}
+    </p>
+    <p><strong>Tiempo verbal:</strong> ${escapeHTML(item.topic)}</p>
+    <p><strong>Modelo base:</strong> ${escapeHTML(item.answer)}</p>
+    ${best && normalizeText(best) !== normalizeText(item.answer) ? `<p><strong>Variante compatible:</strong> ${escapeHTML(best)}</p>` : ""}
+  `;
+
+  if (typeof logActivity === "function") logActivity(`Práctica rápida · ${item.topic}`);
+}
+
+setTimeout(() => {
+  ensureCircleTimerMarkupV20();
+  updateTimerUI();
+
+  quickPracticePool = buildQuickPracticePool();
+  resetQuickPracticeTopicCycleV20();
+  currentQuickItemV20 = null;
+  nextQuickPractice(false);
+  renderQuickPractice();
+}, 0);
