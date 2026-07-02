@@ -1881,3 +1881,67 @@ textarea {
     padding: 24px;
   }
 }
+
+
+/* =========================================================
+   NAV TABS + TIMER V9
+   - Navbar principal se comporta como pestañas.
+   - Inicio muestra toda la landing.
+   - Las demás opciones muestran sólo su sección.
+   - Timer con neón interno, no en el borde exterior.
+========================================================= */
+
+.dashboard-section-hidden {
+  display: none !important;
+}
+
+#dashboardView main section[id]:not(.dashboard-section-hidden) {
+  animation: dashboardSectionFade 0.22s ease both;
+}
+
+@keyframes dashboardSectionFade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.digital-timer-card,
+#timerProgressRing.digital-timer-card {
+  padding: 7px !important;
+  background:
+    conic-gradient(
+      from -90deg,
+      #ff7a00 var(--timer-progress),
+      rgba(255, 255, 255, 0.08) 0deg
+    ),
+    linear-gradient(145deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015)) !important;
+  box-shadow:
+    0 18px 38px rgba(0, 0, 0, 0.34),
+    0 0 0 1px rgba(255,255,255,0.04) inset !important;
+}
+
+.digital-timer-inner {
+  border-radius: 23px !important;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(255, 122, 0, 0.22), transparent 38%),
+    radial-gradient(circle at 50% 52%, rgba(255, 122, 0, 0.13), transparent 54%),
+    linear-gradient(145deg, #1a1a1a 0%, #101010 100%) !important;
+  box-shadow:
+    inset 0 0 28px rgba(255, 122, 0, 0.18),
+    inset 0 0 8px rgba(255, 122, 0, 0.22),
+    inset 0 0 0 1px rgba(255,255,255,0.045) !important;
+}
+
+.timer-display,
+#timerDisplay.timer-display {
+  color: rgba(255, 248, 240, 0.96) !important;
+  text-shadow:
+    0 0 10px rgba(255, 122, 0, 0.34),
+    0 0 22px rgba(255, 122, 0, 0.18) !important;
+}

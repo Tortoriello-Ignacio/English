@@ -1382,14 +1382,33 @@ function openResources(tab = "apuntes") {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+function setDashboardMode(sectionId = "inicio") {
+  const dashboardSections = document.querySelectorAll("#dashboardView main section[id]");
+
+  dashboardSections.forEach((section) => {
+    if (sectionId === "inicio") {
+      section.classList.remove("dashboard-section-hidden");
+      return;
+    }
+
+    section.classList.toggle("dashboard-section-hidden", section.id !== sectionId);
+  });
+}
+
 function openDashboard(sectionId = "inicio") {
   resourcesView.hidden = true;
   dashboardView.hidden = false;
   setResourceNavActive(null);
+  setDashboardMode(sectionId);
+
   requestAnimationFrame(() => {
-    const target = document.getElementById(sectionId) || document.getElementById("inicio");
+    const target = sectionId === "inicio"
+      ? document.getElementById("inicio")
+      : document.getElementById(sectionId);
+
     if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
-    setActiveLink();
+
+    setActiveDashboardNav(sectionId);
   });
 }
 
@@ -2409,16 +2428,32 @@ function setWidth(id, value) {
   if (el) el.style.width = `${Math.max(0, Math.min(value, 100))}%`;
 }
 
+function setActiveDashboardNav(sectionId) {
+  navLinks.forEach((link) => {
+    link.classList.toggle("active", link.getAttribute("href") === `#${sectionId}`);
+  });
+  setResourceNavActive(null);
+}
+
 function setActiveLink() {
   if (!dashboardView || dashboardView.hidden) return;
+
+  const allSections = document.querySelectorAll("#dashboardView main section[id]");
+  const hiddenSections = document.querySelectorAll("#dashboardView main section.dashboard-section-hidden");
+
+  if (hiddenSections.length > 0) {
+    const visibleSection = [...allSections].find((section) => !section.classList.contains("dashboard-section-hidden"));
+    if (visibleSection) setActiveDashboardNav(visibleSection.id);
+    return;
+  }
+
   let current = "inicio";
 
-  document.querySelectorAll("#dashboardView main section[id]").forEach((section) => {
+  allSections.forEach((section) => {
     if (window.scrollY >= section.offsetTop - 160) current = section.id;
   });
 
-  navLinks.forEach((link) => link.classList.toggle("active", link.getAttribute("href") === `#${current}`));
-  setResourceNavActive(null);
+  setActiveDashboardNav(current);
 }
 
 function revealOnScroll() {
@@ -2529,6 +2564,7 @@ function bindEvents() {
 }
 
 window.addEventListener("load", () => {
+  setDashboardMode("inicio");
   bindEvents();
   renderTables();
   renderTenseCards();
