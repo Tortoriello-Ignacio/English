@@ -2975,6 +2975,12 @@ body[data-theme="black"] {
 
 /* Slider fluido, sin sensación de tramos */
 .intensity-range {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 12px;
+  border-radius: 999px;
+  outline: none;
+  border: 1px solid rgba(255,255,255,0.09);
   background:
     var(--theme-range-gradient, linear-gradient(90deg, var(--accent-dark), var(--accent), var(--accent-soft))) !important;
   background-size: 100% 100% !important;
@@ -3139,4 +3145,153 @@ body[data-theme="black"] {
 /* Evita duplicación visual con la vieja bottom-sand, deja que la base depositada mande */
 #timerProgressRing .bottom-sand {
   opacity: 0.18 !important;
+}
+
+
+/* =========================================================
+   TIMER + PALETTE V15
+   - Las partículas ya no atraviesan el fondo.
+   - Se frenan visualmente al tocar la arena acumulada.
+   - Swatches de paleta mate, planos y sin brillo.
+========================================================= */
+
+/* Contener visualmente la caída dentro del reloj */
+#timerProgressRing .hourglass-stage {
+  overflow: hidden !important;
+}
+
+#timerProgressRing .hourglass {
+  overflow: visible !important;
+}
+
+/* La partícula cae sólo hasta el depósito de arena inferior y desaparece ahí */
+#timerProgressRing.timer-running .falling-particle {
+  animation: particleDepositStop 1.85s cubic-bezier(.38,.02,.2,1) infinite !important;
+}
+
+/* Ajuste fino de retrasos para que parezca arena real */
+#timerProgressRing .particle-one { --particle-drift: -8px; animation-delay: 0s !important; }
+#timerProgressRing .particle-two { --particle-drift: 7px; animation-delay: 0.24s !important; }
+#timerProgressRing .particle-three { --particle-drift: 0px; animation-delay: 0.48s !important; }
+#timerProgressRing .particle-four { --particle-drift: -4px; animation-delay: 0.72s !important; }
+#timerProgressRing .particle-five { --particle-drift: 10px; animation-delay: 0.96s !important; }
+#timerProgressRing .particle-six { --particle-drift: -11px; animation-delay: 1.20s !important; }
+
+@keyframes particleDepositStop {
+  0% {
+    transform: translateY(0) translateX(0) scale(0.52);
+    opacity: 0;
+  }
+
+  12% {
+    opacity: 1;
+  }
+
+  60% {
+    transform: translateY(62px) translateX(0) scale(0.82);
+    opacity: 1;
+  }
+
+  82% {
+    transform: translateY(88px) translateX(var(--particle-drift, 0px)) scale(1.02);
+    opacity: 0.95;
+  }
+
+  94% {
+    transform: translateY(94px) translateX(var(--particle-drift, 0px)) scale(1.18);
+    opacity: 0.44;
+  }
+
+  100% {
+    transform: translateY(96px) translateX(var(--particle-drift, 0px)) scale(1.25);
+    opacity: 0;
+  }
+}
+
+/* Depósito inferior: más presente, para que las partículas parezcan integrarse ahí */
+#timerProgressRing .bottom-bulb::before {
+  bottom: 12px !important;
+  height: clamp(10px, var(--sand-progress), 54%) !important;
+  z-index: 6 !important;
+}
+
+#timerProgressRing .bottom-bulb::after {
+  bottom: calc(13px + var(--sand-progress)) !important;
+  z-index: 7 !important;
+}
+
+/* Atenuar partículas justo al llegar al depósito */
+#timerProgressRing .bottom-bulb {
+  overflow: hidden !important;
+}
+
+/* =========================================================
+   PALETA MATE
+========================================================= */
+
+/* Swatches planos, sin gradientes, sin brillo y sin sombra */
+.theme-swatch {
+  opacity: 1 !important;
+  filter: saturate(0.72) brightness(0.86) !important;
+  box-shadow: none !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  transition:
+    transform 0.16s ease,
+    border-color 0.16s ease,
+    filter 0.16s ease !important;
+}
+
+.theme-swatch:hover,
+.theme-swatch.active {
+  transform: translateY(-1px) !important;
+  filter: saturate(0.82) brightness(0.94) !important;
+  box-shadow: none !important;
+  border-color: rgba(255,255,255,0.32) !important;
+}
+
+/* Colores mate por tema */
+.theme-swatch[data-theme="orange"] { background: #b85f23 !important; }
+.theme-swatch[data-theme="blue"] { background: #2f5f9f !important; }
+.theme-swatch[data-theme="gray"] { background: #66666a !important; }
+.theme-swatch[data-theme="gold"] { background: #b28a2e !important; }
+.theme-swatch[data-theme="red"] { background: #a84545 !important; }
+.theme-swatch[data-theme="green"] { background: #4f8a5b !important; }
+.theme-swatch[data-theme="purple"] { background: #7350a6 !important; }
+
+/* Activo sobrio: borde claro, sin glow */
+.theme-swatch.active {
+  outline: 2px solid rgba(245, 245, 244, 0.40) !important;
+  outline-offset: 2px !important;
+}
+
+/* Paleta continua también más mate, sin brillo ni overlay fuerte */
+.palette-continuous {
+  filter: saturate(0.76) brightness(0.86) !important;
+  opacity: 0.95 !important;
+}
+
+.palette-preview {
+  box-shadow: none !important;
+  border-color: rgba(255,255,255,0.10) !important;
+}
+
+.palette-preview::after {
+  display: none !important;
+}
+
+.palette-selector {
+  background: rgba(255,255,255,0.10) !important;
+  border-color: rgba(255,255,255,0.62) !important;
+  box-shadow: none !important;
+}
+
+/* Barra de intensidad mate, sin brillo */
+.intensity-range {
+  filter: saturate(0.82) brightness(0.90) !important;
+  box-shadow: none !important;
+}
+
+.intensity-range:hover {
+  filter: saturate(0.90) brightness(0.96) !important;
+  box-shadow: none !important;
 }
