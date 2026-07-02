@@ -2728,3 +2728,230 @@ body:not([data-theme="white"]) {
     top: 110px;
   }
 }
+
+
+/* =========================================================
+   THEME + TIMER V13
+   - Sin línea vertical en reloj de arena.
+   - Partículas como caída principal.
+   - Paleta continua, swatches más opacos.
+   - Sin themes blanco/negro.
+   - Botones del timer acompañan el color elegido.
+========================================================= */
+
+/* Sacar la línea vertical marcada en el reloj de arena */
+#timerProgressRing .falling-line,
+#timerProgressRing.timer-running .falling-line {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* Partículas cayendo más claro, sin línea fija */
+#timerProgressRing.timer-running .falling-particle {
+  animation: particleFallToBottom 1.85s linear infinite !important;
+}
+
+#timerProgressRing .falling-particle {
+  width: 5px !important;
+  height: 5px !important;
+  background: var(--accent-soft) !important;
+  box-shadow:
+    0 0 9px rgba(var(--accent-rgb), 0.85),
+    0 0 18px rgba(var(--accent-rgb), 0.32) !important;
+}
+
+/* Estrechamiento más limpio */
+#timerProgressRing .hourglass-neck {
+  width: 28px !important;
+  height: 28px !important;
+  background:
+    radial-gradient(circle at center, rgba(var(--accent-rgb), 0.20), transparent 54%),
+    linear-gradient(90deg, transparent, rgba(255,255,255,0.13), transparent) !important;
+  border-radius: 999px !important;
+}
+
+/* Timer buttons toman color del theme */
+#startTimerBtn,
+#customTimerBtn,
+.timer-custom .compact-btn {
+  color: #111111 !important;
+  background: linear-gradient(135deg, var(--accent), var(--accent-soft)) !important;
+  border: 1px solid rgba(var(--accent-rgb), 0.28) !important;
+  box-shadow:
+    0 10px 24px rgba(var(--accent-rgb), 0.18),
+    0 0 18px rgba(var(--accent-rgb), 0.10) !important;
+}
+
+#startTimerBtn:disabled {
+  cursor: default !important;
+  opacity: 0.72 !important;
+  color: rgba(255,255,255,0.76) !important;
+  background: rgba(255,255,255,0.075) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  box-shadow: none !important;
+}
+
+.preset-btn:hover {
+  border-color: rgba(var(--accent-rgb), 0.52) !important;
+  box-shadow: 0 0 18px rgba(var(--accent-rgb), 0.10) !important;
+}
+
+/* Tuerca / panel: sólo 7 colores */
+.theme-grid {
+  grid-template-columns: repeat(7, 1fr) !important;
+}
+
+/* Swatches más opacos, menos brillantes */
+.theme-swatch {
+  opacity: 0.72 !important;
+  filter: saturate(0.86) brightness(0.88) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.035) !important;
+}
+
+.theme-swatch:hover,
+.theme-swatch.active {
+  opacity: 0.95 !important;
+  filter: saturate(0.96) brightness(0.98) !important;
+  transform: translateY(-1px) !important;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.18),
+    0 0 12px rgba(var(--accent-rgb), 0.10) !important;
+}
+
+/* Ocultar por seguridad blanco/negro si quedaran en caché */
+.theme-swatch[data-theme="white"],
+.theme-swatch[data-theme="black"] {
+  display: none !important;
+}
+
+/* Barra de intensidad más continua y con movimiento suave */
+.intensity-range {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 12px;
+  border-radius: 999px;
+  outline: none;
+  border: 1px solid rgba(255,255,255,0.09);
+  background:
+    var(--theme-range-gradient, linear-gradient(90deg, var(--accent-dark), var(--accent), var(--accent-soft))) !important;
+  background-size: 180% 100% !important;
+  animation: rangeDrift 7s ease-in-out infinite alternate;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.035),
+    0 0 18px rgba(var(--accent-rgb), 0.07);
+}
+
+.intensity-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  cursor: pointer;
+  background: rgba(245, 245, 244, 0.92);
+  border: 3px solid var(--accent);
+  box-shadow:
+    0 0 0 4px rgba(var(--accent-rgb), 0.12),
+    0 0 18px rgba(var(--accent-rgb), 0.16);
+}
+
+.intensity-range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  cursor: pointer;
+  background: rgba(245, 245, 244, 0.92);
+  border: 3px solid var(--accent);
+  box-shadow:
+    0 0 0 4px rgba(var(--accent-rgb), 0.12),
+    0 0 18px rgba(var(--accent-rgb), 0.16);
+}
+
+@keyframes rangeDrift {
+  from {
+    background-position: 0% 50%;
+  }
+
+  to {
+    background-position: 100% 50%;
+  }
+}
+
+/* Paleta continua, sin cortes duros */
+.palette-preview {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: repeat(5, 1fr) !important;
+  min-height: 46px !important;
+  overflow: hidden !important;
+  border-radius: 16px !important;
+  border: 1px solid var(--line) !important;
+  background: var(--palette-gradient, linear-gradient(90deg, var(--accent-dark), var(--accent), var(--accent-soft))) !important;
+}
+
+.palette-continuous {
+  position: absolute;
+  inset: 0;
+  background: var(--palette-gradient, linear-gradient(90deg, var(--accent-dark), var(--accent), var(--accent-soft)));
+  filter: saturate(0.86) brightness(0.90);
+  opacity: 0.86;
+}
+
+.palette-preview::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,0.045), transparent 18%, transparent 82%, rgba(0,0,0,0.12));
+  pointer-events: none;
+}
+
+.palette-cell {
+  position: relative !important;
+  z-index: 2 !important;
+  min-height: 46px !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+}
+
+.palette-cell.active::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: calc(50% - 2px);
+  width: 4px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.92);
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.12),
+    0 0 12px rgba(255,255,255,0.22);
+}
+
+.palette-selector {
+  position: absolute;
+  z-index: 3;
+  top: 5px;
+  bottom: 5px;
+  width: 18px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  border: 2px solid rgba(255,255,255,0.85);
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.20),
+    0 0 18px rgba(var(--accent-rgb), 0.18);
+  pointer-events: none;
+}
+
+/* Neutralizar reglas anteriores de body blanco/negro si quedaron cargadas */
+body[data-theme="white"],
+body[data-theme="black"] {
+  background:
+    radial-gradient(circle at 12% 20%, rgba(var(--accent-rgb), 0.13), transparent 30%),
+    radial-gradient(circle at 85% 5%, rgba(var(--accent-soft-rgb), 0.10), transparent 28%),
+    radial-gradient(circle at 70% 90%, rgba(120, 113, 108, 0.16), transparent 34%),
+    linear-gradient(135deg, #0f0f0f 0%, #141414 48%, #1c1917 100%) !important;
+}
