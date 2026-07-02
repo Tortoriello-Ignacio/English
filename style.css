@@ -2975,12 +2975,6 @@ body[data-theme="black"] {
 
 /* Slider fluido, sin sensación de tramos */
 .intensity-range {
-  appearance: none;
-  -webkit-appearance: none;
-  height: 12px;
-  border-radius: 999px;
-  outline: none;
-  border: 1px solid rgba(255,255,255,0.09);
   background:
     var(--theme-range-gradient, linear-gradient(90deg, var(--accent-dark), var(--accent), var(--accent-soft))) !important;
   background-size: 100% 100% !important;
@@ -3294,4 +3288,327 @@ body[data-theme="black"] {
 .intensity-range:hover {
   filter: saturate(0.90) brightness(0.96) !important;
   box-shadow: none !important;
+}
+
+
+/* =========================================================
+   V16 PATCH - water hourglass + flashcard pronunciation
+========================================================= */
+
+.flashcard-pronunciation{
+  display:block;
+  margin-top:10px;
+  font-size:.9rem;
+  color:var(--muted);
+  letter-spacing:.01em;
+}
+
+#timerProgressRing.hourglass-timer-card{
+  --water-progress: var(--sand-progress, 0%);
+  position:relative;
+  display:grid;
+  place-items:center;
+  min-height:420px;
+  padding:22px 18px 20px;
+  background:
+    radial-gradient(circle at 50% 14%, rgba(255,255,255,.08), transparent 26%),
+    linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:28px;
+  overflow:hidden;
+}
+
+#timerProgressRing .hourglass-time{
+  position:relative;
+  z-index:3;
+  text-align:center;
+  margin-bottom:14px;
+}
+
+#timerProgressRing .timer-display{
+  display:block;
+  font-size:2.75rem;
+  font-weight:300;
+  line-height:1;
+  letter-spacing:.06em;
+  color:#f2e3d8;
+  text-shadow:0 0 22px rgba(255,255,255,.08);
+}
+
+#timerProgressRing .hourglass-time small{
+  display:block;
+  margin-top:8px;
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  font-size:.75rem;
+  color:rgba(255,255,255,.56);
+}
+
+#timerProgressRing .water-stage{
+  position:relative;
+  width:220px;
+  height:300px;
+  display:grid;
+  place-items:center;
+}
+
+#timerProgressRing .hourglass-waterframe{
+  position:relative;
+  width:196px;
+  height:262px;
+  filter:drop-shadow(0 18px 30px rgba(0,0,0,.35));
+}
+
+#timerProgressRing .frame-top,
+#timerProgressRing .frame-bottom{
+  position:absolute;
+  left:20px;
+  right:20px;
+  height:18px;
+  border-radius:999px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.52), rgba(160,160,160,.45) 38%, rgba(70,70,70,.88));
+  border:1px solid rgba(255,255,255,.28);
+  box-shadow:
+    inset 0 2px 6px rgba(255,255,255,.35),
+    inset 0 -3px 8px rgba(0,0,0,.25),
+    0 8px 16px rgba(0,0,0,.20);
+}
+
+#timerProgressRing .frame-top{ top:0; }
+#timerProgressRing .frame-bottom{ bottom:0; }
+
+#timerProgressRing .frame-side{
+  position:absolute;
+  top:14px;
+  bottom:14px;
+  width:6px;
+  border-radius:999px;
+  background:linear-gradient(180deg, rgba(255,255,255,.6), rgba(155,155,155,.55), rgba(70,70,70,.9));
+  border:1px solid rgba(255,255,255,.22);
+  box-shadow:inset 0 0 4px rgba(255,255,255,.18);
+}
+
+#timerProgressRing .frame-side.left{ left:34px; }
+#timerProgressRing .frame-side.right{ right:34px; }
+
+#timerProgressRing .glass-shell{
+  position:absolute;
+  inset:18px 46px 18px 46px;
+  display:grid;
+  grid-template-rows:1fr 34px 1fr;
+  justify-items:center;
+}
+
+#timerProgressRing .glass-bowl{
+  position:relative;
+  width:110px;
+  overflow:hidden;
+  border:2px solid rgba(255,255,255,.5);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+  box-shadow:
+    inset 0 0 24px rgba(255,255,255,.08),
+    inset 0 -10px 24px rgba(0,0,0,.12);
+  backdrop-filter: blur(3px);
+}
+
+#timerProgressRing .upper-bowl{
+  height:104px;
+  border-radius:0 0 56px 56px;
+}
+
+#timerProgressRing .lower-bowl{
+  height:104px;
+  border-radius:56px 56px 0 0;
+}
+
+#timerProgressRing .glass-neck{
+  position:relative;
+  width:24px;
+  height:34px;
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+}
+
+#timerProgressRing .glass-neck::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:0;
+  transform:translateX(-50%);
+  width:18px;
+  height:100%;
+  background:linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.04));
+  clip-path:polygon(30% 0, 70% 0, 58% 100%, 42% 100%);
+  border-left:1px solid rgba(255,255,255,.25);
+  border-right:1px solid rgba(255,255,255,.25);
+  border-radius:0 0 8px 8px;
+}
+
+#timerProgressRing .water-fill{
+  position:absolute;
+  left:0;
+  right:0;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 30% 28%, rgba(255,255,255,.82) 0 2px, transparent 8px),
+    linear-gradient(180deg, rgba(108,242,255,.92), rgba(38,151,255,.92));
+  box-shadow:
+    inset 0 10px 20px rgba(255,255,255,.18),
+    0 0 18px rgba(46,174,255,.18);
+}
+
+#timerProgressRing .top-water{
+  bottom:0;
+  height:calc(100% - var(--water-progress));
+  min-height:2px;
+  border-radius:0 0 52px 52px;
+  transition:height .4s ease;
+}
+
+#timerProgressRing .bottom-water{
+  bottom:0;
+  height:var(--water-progress);
+  border-radius:52px 52px 0 0;
+  transition:height .4s ease;
+}
+
+#timerProgressRing .water-surface{
+  position:absolute;
+  left:-4%;
+  width:108%;
+  height:12px;
+  background:rgba(255,255,255,.18);
+  border-radius:999px;
+  filter:blur(.15px);
+}
+
+#timerProgressRing .upper-surface{
+  top:-2px;
+  animation:surface-wave 3s ease-in-out infinite;
+}
+#timerProgressRing .lower-surface{
+  top:-3px;
+  animation:surface-wave 2.8s ease-in-out infinite reverse;
+}
+
+#timerProgressRing .water-stream{
+  position:absolute;
+  left:50%;
+  top:4px;
+  transform:translateX(-50%);
+  width:4px;
+  height:0;
+  border-radius:999px;
+  background:linear-gradient(180deg, rgba(144,246,255,1), rgba(46,174,255,1));
+  box-shadow:0 0 10px rgba(64,191,255,.55);
+}
+
+#timerProgressRing.timer-running .water-stream{
+  height:24px;
+  animation:stream-flow 1.15s ease-in-out infinite;
+}
+
+#timerProgressRing .water-drop{
+  position:absolute;
+  left:50%;
+  top:4px;
+  width:8px;
+  height:8px;
+  margin-left:-4px;
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.95), rgba(61,185,255,.98) 58%, rgba(12,96,188,.94));
+  opacity:0;
+  box-shadow:0 0 10px rgba(66,197,255,.35);
+}
+
+#timerProgressRing.timer-running .drop-one{ animation:water-drop-fall 1.45s linear infinite; }
+#timerProgressRing.timer-running .drop-two{ animation:water-drop-fall 1.45s linear .48s infinite; }
+#timerProgressRing.timer-running .drop-three{ animation:water-drop-fall 1.45s linear .96s infinite; }
+
+#timerProgressRing .bubble,
+#timerProgressRing .pool-bubble{
+  position:absolute;
+  border-radius:50%;
+  background:rgba(255,255,255,.52);
+  filter:blur(.15px);
+}
+
+#timerProgressRing .bubble-a{ width:10px; height:10px; right:24px; bottom:18px; animation:bubble-float 3.2s ease-in-out infinite; }
+#timerProgressRing .bubble-b{ width:6px; height:6px; left:26px; bottom:24px; animation:bubble-float 2.8s ease-in-out 1s infinite; }
+#timerProgressRing .bubble-c{ width:5px; height:5px; left:48px; bottom:14px; animation:bubble-float 3.6s ease-in-out .4s infinite; }
+
+#timerProgressRing .pool-bubble.pool-a{ width:7px; height:7px; left:20px; bottom:18px; animation:pool-bob 3s ease-in-out infinite; }
+#timerProgressRing .pool-bubble.pool-b{ width:5px; height:5px; right:28px; bottom:12px; animation:pool-bob 2.5s ease-in-out .5s infinite; }
+#timerProgressRing .pool-bubble.pool-c{ width:4px; height:4px; left:50%; bottom:9px; margin-left:-2px; animation:pool-bob 3.4s ease-in-out 1s infinite; }
+
+#timerProgressRing .ripple{
+  position:absolute;
+  left:50%;
+  top:8px;
+  width:18px;
+  height:7px;
+  margin-left:-9px;
+  border:1.5px solid rgba(194,243,255,.75);
+  border-top:0;
+  border-radius:0 0 999px 999px;
+  opacity:.75;
+}
+
+#timerProgressRing.timer-running .ripple-a{
+  animation:ripple-pulse 1.4s ease-out infinite;
+}
+#timerProgressRing.timer-running .ripple-b{
+  animation:ripple-pulse 1.4s ease-out .7s infinite;
+}
+
+#timerProgressRing.timer-paused .water-stream,
+#timerProgressRing.timer-paused .water-drop,
+#timerProgressRing:not(.timer-running) .water-drop,
+#timerProgressRing:not(.timer-running) .water-stream{
+  animation-play-state:paused;
+}
+
+@keyframes surface-wave{
+  0%,100%{ transform:translateX(0) scaleX(1); }
+  50%{ transform:translateX(-3px) scaleX(1.03); }
+}
+
+@keyframes stream-flow{
+  0%,100%{ opacity:.85; height:20px; }
+  50%{ opacity:1; height:25px; }
+}
+
+@keyframes water-drop-fall{
+  0%{ opacity:0; transform:translate(-50%, 0) scale(.8); }
+  10%{ opacity:1; }
+  60%{ opacity:1; transform:translate(-50%, 34px) scale(1); }
+  80%{ opacity:.95; transform:translate(-50%, 52px) scale(.94); }
+  100%{ opacity:0; transform:translate(-50%, 59px) scale(.7); }
+}
+
+@keyframes bubble-float{
+  0%,100%{ transform:translateY(0); opacity:.55; }
+  50%{ transform:translateY(-8px); opacity:.85; }
+}
+
+@keyframes pool-bob{
+  0%,100%{ transform:translateY(0); opacity:.5; }
+  50%{ transform:translateY(-4px); opacity:.82; }
+}
+
+@keyframes ripple-pulse{
+  0%{ transform:translateX(-50%) scale(.6); opacity:.82; }
+  100%{ transform:translateX(-50%) scale(1.5); opacity:0; }
+}
+
+@media (max-width: 860px){
+  #timerProgressRing.hourglass-timer-card{
+    min-height:380px;
+  }
+  #timerProgressRing .timer-display{
+    font-size:2.35rem;
+  }
 }

@@ -2842,3 +2842,1669 @@ window.addEventListener("load", () => {
   setActiveLink();
   revealOnScroll();
 });
+
+
+/* =========================================================
+   V16 PATCH - water hourglass, 500+ quick exercises,
+   200+ extra flashcards, pronunciation support.
+========================================================= */
+
+const EXTRA_PHRASALS_V16 = [
+  [
+    "account for",
+    "explicar, justificar",
+    "How do you account for the sudden change?"
+  ],
+  [
+    "act on",
+    "actuar según, tomar medidas sobre",
+    "The team acted on the feedback immediately."
+  ],
+  [
+    "add up",
+    "tener sentido, sumar",
+    "His excuse doesn't add up."
+  ],
+  [
+    "back up",
+    "respaldar, apoyar",
+    "Please back up your files before updating the system."
+  ],
+  [
+    "bail out",
+    "rescatar, sacar de un apuro",
+    "The manager bailed us out with a quick solution."
+  ],
+  [
+    "bear with",
+    "tener paciencia con",
+    "Please bear with me while I explain the data."
+  ],
+  [
+    "blow up",
+    "explotar, estallar",
+    "The issue blew up on social media."
+  ],
+  [
+    "break into",
+    "irrumpir, empezar de repente",
+    "She broke into tears during the movie."
+  ],
+  [
+    "break out",
+    "estallar, comenzar de repente",
+    "A fire broke out in the lab."
+  ],
+  [
+    "bring about",
+    "provocar, causar",
+    "The new policy brought about major changes."
+  ],
+  [
+    "bring back",
+    "traer de vuelta, recordar",
+    "That song brings back good memories."
+  ],
+  [
+    "bring forward",
+    "adelantar",
+    "They brought the meeting forward to 9 a.m."
+  ],
+  [
+    "brush up on",
+    "repasar, refrescar",
+    "I need to brush up on my grammar."
+  ],
+  [
+    "build up",
+    "acumular, fortalecer",
+    "She is building up her confidence."
+  ],
+  [
+    "bump into",
+    "encontrarse con casualmente",
+    "I bumped into my old teacher yesterday."
+  ],
+  [
+    "call back",
+    "devolver la llamada",
+    "I'll call you back after class."
+  ],
+  [
+    "call off",
+    "cancelar",
+    "They called off the event because of the storm."
+  ],
+  [
+    "calm down",
+    "calmarse",
+    "Take a breath and calm down."
+  ],
+  [
+    "carry out",
+    "llevar a cabo",
+    "The researchers carried out several tests."
+  ],
+  [
+    "catch on",
+    "entender, ponerse de moda",
+    "The concept finally caught on."
+  ],
+  [
+    "check in",
+    "registrarse",
+    "We checked in at the hotel at noon."
+  ],
+  [
+    "check over",
+    "revisar",
+    "Could you check over my essay?"
+  ],
+  [
+    "chop up",
+    "cortar en trozos",
+    "Chop up the vegetables first."
+  ],
+  [
+    "clean up",
+    "limpiar, ordenar",
+    "Let's clean up the desk."
+  ],
+  [
+    "clear up",
+    "aclarar, despejarse",
+    "The teacher cleared up our doubts."
+  ],
+  [
+    "close down",
+    "cerrar definitivamente",
+    "The factory closed down last year."
+  ],
+  [
+    "come along",
+    "venir, progresar",
+    "How is your project coming along?"
+  ],
+  [
+    "come apart",
+    "desarmarse, romperse",
+    "The old chair came apart."
+  ],
+  [
+    "come down with",
+    "contraer una enfermedad",
+    "He came down with the flu."
+  ],
+  [
+    "come from",
+    "provenir de",
+    "This quote comes from a famous speech."
+  ],
+  [
+    "come up with",
+    "idear, ocurrírsele",
+    "She came up with a brilliant idea."
+  ],
+  [
+    "count on",
+    "contar con",
+    "You can count on me."
+  ],
+  [
+    "cut back on",
+    "reducir",
+    "I'm trying to cut back on sugar."
+  ],
+  [
+    "cut down on",
+    "reducir",
+    "The company cut down on expenses."
+  ],
+  [
+    "cut off",
+    "cortar, interrumpir",
+    "The call was cut off."
+  ],
+  [
+    "deal with",
+    "ocuparse de, tratar con",
+    "We need to deal with the problem now."
+  ],
+  [
+    "die down",
+    "disminuir, apagarse",
+    "The noise died down after midnight."
+  ],
+  [
+    "do away with",
+    "eliminar",
+    "The school did away with that rule."
+  ],
+  [
+    "do up",
+    "abrochar, arreglar",
+    "Do up your coat, it's cold."
+  ],
+  [
+    "drag on",
+    "prolongarse demasiado",
+    "The meeting dragged on for hours."
+  ],
+  [
+    "draw up",
+    "redactar, elaborar",
+    "The lawyer drew up the contract."
+  ],
+  [
+    "drop by",
+    "pasar a visitar",
+    "Drop by my office later."
+  ],
+  [
+    "end up",
+    "terminar, acabar",
+    "We ended up staying home."
+  ],
+  [
+    "face up to",
+    "afrontar",
+    "You need to face up to reality."
+  ],
+  [
+    "fall apart",
+    "desmoronarse",
+    "My plans fell apart."
+  ],
+  [
+    "fall for",
+    "caer en, enamorarse de",
+    "Don't fall for that trick."
+  ],
+  [
+    "figure out",
+    "resolver, entender",
+    "I can't figure out this question."
+  ],
+  [
+    "fill in",
+    "completar",
+    "Please fill in the form."
+  ],
+  [
+    "fill out",
+    "rellenar",
+    "Fill out your application carefully."
+  ],
+  [
+    "fit in",
+    "encajar, integrarse",
+    "He fits in well with the group."
+  ],
+  [
+    "follow up on",
+    "dar seguimiento a",
+    "I'll follow up on your request tomorrow."
+  ],
+  [
+    "get across",
+    "hacer entender",
+    "The professor got the idea across clearly."
+  ],
+  [
+    "get ahead",
+    "progresar",
+    "She wants to get ahead in her career."
+  ],
+  [
+    "get away",
+    "escaparse, irse de viaje",
+    "We got away for the weekend."
+  ],
+  [
+    "get back",
+    "volver, recuperar",
+    "When did you get back from London?"
+  ],
+  [
+    "get by",
+    "arreglárselas",
+    "It's hard to get by on that salary."
+  ],
+  [
+    "get in",
+    "entrar, llegar",
+    "What time did you get in last night?"
+  ],
+  [
+    "get into",
+    "interesarse por, meterse en",
+    "He got into coding at school."
+  ],
+  [
+    "get off",
+    "bajarse, salir del trabajo",
+    "I get off work at six."
+  ],
+  [
+    "get on with",
+    "seguir con, llevarse bien con",
+    "Let's get on with the lesson."
+  ],
+  [
+    "get rid of",
+    "deshacerse de",
+    "I need to get rid of old notes."
+  ],
+  [
+    "get through",
+    "superar, terminar",
+    "We got through the hardest part."
+  ],
+  [
+    "get together",
+    "reunirse",
+    "Let's get together this weekend."
+  ],
+  [
+    "give away",
+    "regalar, revelar",
+    "He gave away the surprise."
+  ],
+  [
+    "give in",
+    "ceder",
+    "Don't give in so easily."
+  ],
+  [
+    "go against",
+    "ir en contra de",
+    "That decision goes against the rules."
+  ],
+  [
+    "go ahead",
+    "seguir adelante",
+    "Go ahead and ask your question."
+  ],
+  [
+    "go back",
+    "volver",
+    "I want to go back to that topic."
+  ],
+  [
+    "go by",
+    "pasar, guiarse por",
+    "Time goes by quickly."
+  ],
+  [
+    "go over",
+    "repasar",
+    "Let's go over the answers again."
+  ],
+  [
+    "grow up",
+    "crecer",
+    "She grew up in Córdoba."
+  ],
+  [
+    "hand over",
+    "entregar",
+    "Please hand over your assignment."
+  ],
+  [
+    "hang out",
+    "pasar el rato",
+    "We usually hang out after class."
+  ],
+  [
+    "hold back",
+    "contener, frenar",
+    "He held back his opinion."
+  ],
+  [
+    "hold up",
+    "demorar, sostener",
+    "Traffic held us up."
+  ],
+  [
+    "iron out",
+    "resolver detalles",
+    "We need to iron out a few issues."
+  ],
+  [
+    "join in",
+    "participar",
+    "Everyone joined in the discussion."
+  ],
+  [
+    "keep away",
+    "mantener alejado",
+    "Keep away from the wet paint."
+  ],
+  [
+    "keep on",
+    "seguir haciendo",
+    "Keep on practicing every day."
+  ],
+  [
+    "leave out",
+    "omitir, dejar afuera",
+    "You left out an important detail."
+  ],
+  [
+    "let down",
+    "decepcionar",
+    "I don't want to let my team down."
+  ],
+  [
+    "live up to",
+    "estar a la altura de",
+    "The course lived up to expectations."
+  ],
+  [
+    "look after",
+    "cuidar",
+    "Who looks after the children?"
+  ],
+  [
+    "look ahead",
+    "pensar en el futuro",
+    "It's time to look ahead."
+  ],
+  [
+    "look back on",
+    "recordar",
+    "She looks back on that year fondly."
+  ],
+  [
+    "look into",
+    "investigar",
+    "The committee will look into the issue."
+  ],
+  [
+    "look up",
+    "buscar información / mejorar",
+    "Look the word up in a dictionary."
+  ],
+  [
+    "make for",
+    "contribuir a, dirigirse hacia",
+    "Good habits make for better results."
+  ],
+  [
+    "move on",
+    "seguir adelante",
+    "Let's move on to the next exercise."
+  ],
+  [
+    "narrow down",
+    "reducir opciones",
+    "We narrowed down the choices."
+  ],
+  [
+    "opt for",
+    "optar por",
+    "I opted for the online course."
+  ],
+  [
+    "pass away",
+    "fallecer",
+    "His grandfather passed away last year."
+  ],
+  [
+    "pass on",
+    "transmitir, pasar",
+    "Please pass on the message."
+  ],
+  [
+    "pay off",
+    "dar resultado, pagar",
+    "Hard work paid off."
+  ],
+  [
+    "pick out",
+    "elegir, distinguir",
+    "Can you pick out the main idea?"
+  ],
+  [
+    "point out",
+    "señalar",
+    "She pointed out the mistake."
+  ],
+  [
+    "pull off",
+    "lograr con éxito",
+    "They pulled off a difficult experiment."
+  ],
+  [
+    "pull through",
+    "recuperarse",
+    "He pulled through after the operation."
+  ],
+  [
+    "put aside",
+    "dejar de lado, ahorrar",
+    "Put aside some time for practice."
+  ],
+  [
+    "put away",
+    "guardar",
+    "Put your notes away after class."
+  ],
+  [
+    "put back",
+    "volver a poner",
+    "Please put the book back."
+  ],
+  [
+    "put down",
+    "anotar / menospreciar",
+    "Put down your ideas before you forget them."
+  ],
+  [
+    "put forward",
+    "proponer",
+    "She put forward a useful suggestion."
+  ],
+  [
+    "put through",
+    "comunicar por teléfono / someter",
+    "The operator put me through to the manager."
+  ],
+  [
+    "rely on",
+    "depender de",
+    "Many students rely on flashcards."
+  ],
+  [
+    "rule out",
+    "descartar",
+    "The doctor ruled out an infection."
+  ],
+  [
+    "run across",
+    "encontrarse con",
+    "I ran across an interesting article."
+  ],
+  [
+    "run into",
+    "chocar con / encontrarse",
+    "We ran into a few problems."
+  ],
+  [
+    "see through",
+    "darse cuenta de / acompañar hasta el final",
+    "I can see through that excuse."
+  ],
+  [
+    "set aside",
+    "reservar, apartar",
+    "Set aside an hour for English."
+  ],
+  [
+    "set back",
+    "retrasar",
+    "The storm set us back by two days."
+  ],
+  [
+    "settle down",
+    "calmarse, establecerse",
+    "The class settled down quickly."
+  ],
+  [
+    "show off",
+    "presumir",
+    "He loves to show off his pronunciation."
+  ],
+  [
+    "sort out",
+    "organizar, resolver",
+    "Let's sort out your study plan."
+  ],
+  [
+    "speak up",
+    "hablar más fuerte",
+    "Could you speak up, please?"
+  ],
+  [
+    "stand by",
+    "estar preparado / apoyar",
+    "The nurse stood by during the procedure."
+  ],
+  [
+    "stand out",
+    "destacarse",
+    "Her vocabulary really stands out."
+  ],
+  [
+    "stick to",
+    "atenerse a, mantener",
+    "Stick to your study routine."
+  ],
+  [
+    "sum up",
+    "resumir",
+    "To sum up, consistency matters."
+  ],
+  [
+    "switch off",
+    "desconectar, apagarse mentalmente",
+    "I switch off after a long meeting."
+  ],
+  [
+    "take after",
+    "parecerse a",
+    "She takes after her mother."
+  ],
+  [
+    "take away",
+    "quitar / sacar conclusión",
+    "What did you take away from the lecture?"
+  ],
+  [
+    "take back",
+    "retirar lo dicho",
+    "I take back what I said."
+  ],
+  [
+    "take down",
+    "anotar / desmontar",
+    "Take down the key points."
+  ],
+  [
+    "take in",
+    "absorber, entender, alojar",
+    "It took me time to take in the information."
+  ],
+  [
+    "talk over",
+    "conversar, discutir",
+    "Let's talk over your options."
+  ],
+  [
+    "tear down",
+    "derribar",
+    "They tore down the old building."
+  ],
+  [
+    "think over",
+    "pensar detenidamente",
+    "Think over your answer."
+  ],
+  [
+    "throw away",
+    "tirar",
+    "Don't throw away those notes."
+  ],
+  [
+    "try on",
+    "probarse ropa",
+    "She tried on three jackets."
+  ],
+  [
+    "turn around",
+    "dar vuelta, revertir",
+    "The team turned the project around."
+  ],
+  [
+    "use up",
+    "agotar, gastar",
+    "We used up all the paper."
+  ],
+  [
+    "warm up",
+    "entrar en calor",
+    "Let's warm up with easy questions."
+  ],
+  [
+    "wear out",
+    "agotar, desgastar",
+    "That routine can wear you out."
+  ],
+  [
+    "work around",
+    "rodear un problema",
+    "We worked around the issue."
+  ],
+  [
+    "write up",
+    "redactar",
+    "Please write up your findings."
+  ],
+  [
+    "zoom in on",
+    "centrarse en",
+    "Let's zoom in on conditionals."
+  ]
+];
+const EXTRA_MODALS_V16 = [
+  [
+    "Can",
+    "poder / capacidad: I can swim."
+  ],
+  [
+    "Could",
+    "podría / habilidad pasada / petición cortés: Could you help me?"
+  ],
+  [
+    "May",
+    "puede que / permiso: May I come in?"
+  ],
+  [
+    "Might",
+    "podría / posibilidad débil: It might rain later."
+  ],
+  [
+    "Must",
+    "deber / obligación fuerte: You must wear gloves."
+  ],
+  [
+    "Should",
+    "debería / consejo: You should review your notes."
+  ],
+  [
+    "Ought to",
+    "debería / recomendación formal: You ought to apologize."
+  ],
+  [
+    "Would",
+    "condicional / hábito pasado / cortesía: Would you like some tea?"
+  ],
+  [
+    "Will",
+    "futuro / voluntad: I will call you tomorrow."
+  ],
+  [
+    "Shall",
+    "oferta / sugerencia formal: Shall we begin?"
+  ],
+  [
+    "Need",
+    "necesitar / semi-modal: You need to rest."
+  ],
+  [
+    "Needn't",
+    "no es necesario: You needn't bring anything."
+  ],
+  [
+    "Needn't have",
+    "no hacía falta que...: You needn't have worried."
+  ],
+  [
+    "Had better",
+    "más vale que: You had better leave now."
+  ],
+  [
+    "Would rather",
+    "preferiría: I'd rather stay home."
+  ],
+  [
+    "Used to",
+    "solía: I used to play chess."
+  ],
+  [
+    "Be able to",
+    "ser capaz de: She is able to solve it."
+  ],
+  [
+    "Have to",
+    "tener que / obligación externa: I have to work."
+  ],
+  [
+    "Has to",
+    "tener que: He has to study."
+  ],
+  [
+    "Had to",
+    "tuvo que: They had to cancel the class."
+  ],
+  [
+    "Don't have to",
+    "no tener que: You don't have to come early."
+  ],
+  [
+    "Mustn't",
+    "prohibición: You mustn't park here."
+  ],
+  [
+    "Can’t",
+    "no poder / imposibilidad: I can't hear you."
+  ],
+  [
+    "Couldn’t",
+    "no podía / no pude: She couldn't attend."
+  ],
+  [
+    "May not",
+    "puede que no / no permiso: You may not enter."
+  ],
+  [
+    "Might not",
+    "puede que no: They might not arrive."
+  ],
+  [
+    "Would like to",
+    "quisiera: I would like to improve."
+  ],
+  [
+    "Be supposed to",
+    "se supone que: You're supposed to sign here."
+  ],
+  [
+    "Be allowed to",
+    "tener permiso para: Are we allowed to record?"
+  ],
+  [
+    "Be meant to",
+    "estar destinado / querer decir: What is this meant to show?"
+  ],
+  [
+    "Dare",
+    "atreverse: I daren't ask again."
+  ],
+  [
+    "Dare not",
+    "no atreverse: He dare not speak."
+  ],
+  [
+    "Have got to",
+    "tener que: I've got to finish this."
+  ],
+  [
+    "Would have to",
+    "tendría que: We would have to wait."
+  ],
+  [
+    "Could have",
+    "podría haber: You could have asked."
+  ],
+  [
+    "Should have",
+    "debería haber: She should have called."
+  ],
+  [
+    "Would have",
+    "habría: I would have helped."
+  ],
+  [
+    "Might have",
+    "podría haber: They might have missed the train."
+  ],
+  [
+    "May have",
+    "puede haber: He may have forgotten."
+  ],
+  [
+    "Must have",
+    "debe haber: She must have left already."
+  ],
+  [
+    "Can't have",
+    "no puede haber: He can't have seen it."
+  ],
+  [
+    "Couldn't have",
+    "no pudo haber: They couldn't have known."
+  ],
+  [
+    "Needn't have",
+    "no hacía falta que: You needn't have bought more."
+  ],
+  [
+    "Shouldn't have",
+    "no deberías haber: You shouldn't have said that."
+  ],
+  [
+    "Would rather not",
+    "preferiría no: I'd rather not discuss it now."
+  ],
+  [
+    "Would sooner",
+    "preferiría: I'd sooner leave early."
+  ],
+  [
+    "Might as well",
+    "bien podría: We might as well start."
+  ],
+  [
+    "Would you mind...?",
+    "¿te importaría...?: Would you mind opening the window?"
+  ],
+  [
+    "Can I...?",
+    "¿puedo...?: Can I ask a question?"
+  ],
+  [
+    "Could I...?",
+    "¿podría...?: Could I sit here?"
+  ],
+  [
+    "May I...?",
+    "¿me permite...?: May I leave now?"
+  ],
+  [
+    "Must I...?",
+    "¿tengo que...?: Must I submit it today?"
+  ],
+  [
+    "Do I have to...?",
+    "¿tengo que...?: Do I have to print it?"
+  ],
+  [
+    "Need I...?",
+    "¿es necesario que...?: Need I explain more?"
+  ],
+  [
+    "Should I...?",
+    "¿debería...?: Should I email the teacher?"
+  ],
+  [
+    "Would you rather...?",
+    "¿preferirías...?: Would you rather stay?"
+  ],
+  [
+    "Could you...?",
+    "¿podrías...?: Could you repeat that?"
+  ],
+  [
+    "Would you...?",
+    "¿harías / te gustaría...?: Would you join us?"
+  ],
+  [
+    "Can you...?",
+    "¿puedes...?: Can you carry this?"
+  ],
+  [
+    "Shouldn't",
+    "no debería: You shouldn't smoke here."
+  ],
+  [
+    "Wouldn't",
+    "no haría / no quiso: He wouldn't listen."
+  ],
+  [
+    "Couldn't",
+    "no podría: I couldn't finish on time."
+  ],
+  [
+    "Mightn't",
+    "quizá no / raro en uso moderno: She mightn't agree."
+  ],
+  [
+    "Shan't",
+    "no haré / forma británica: I shan't forget."
+  ],
+  [
+    "Will be able to",
+    "podrá: We will be able to join later."
+  ],
+  [
+    "Won't be able to",
+    "no podrá: She won't be able to attend."
+  ],
+  [
+    "Used not to",
+    "no solía: He used not to like coffee."
+  ],
+  [
+    "Would often",
+    "solía con frecuencia: My grandmother would often tell stories."
+  ],
+  [
+    "Should be able to",
+    "debería poder: You should be able to see it."
+  ],
+  [
+    "Could be",
+    "podría ser: It could be true."
+  ],
+  [
+    "Could not be",
+    "no podría ser: That could not be right."
+  ],
+  [
+    "May well",
+    "muy posiblemente: She may well win."
+  ],
+  [
+    "Might well",
+    "bien podría: They might well refuse."
+  ],
+  [
+    "Must be",
+    "debe ser: It must be difficult."
+  ],
+  [
+    "Must not be",
+    "no debe ser: This must not be ignored."
+  ],
+  [
+    "Would seem to",
+    "parecería: It would seem to help."
+  ],
+  [
+    "Would tend to",
+    "tendería a: These results would tend to support the idea."
+  ],
+  [
+    "Need to",
+    "necesitar: I need to practice more."
+  ],
+  [
+    "Need not",
+    "no necesitar: You need not worry."
+  ],
+  [
+    "Ought not to",
+    "no debería: You ought not to skip the basics."
+  ],
+  [
+    "Be about to",
+    "estar a punto de: The class is about to begin."
+  ],
+  [
+    "Be likely to",
+    "ser probable que: Prices are likely to rise."
+  ],
+  [
+    "Be unlikely to",
+    "ser poco probable que: He is unlikely to come."
+  ],
+  [
+    "Be going to",
+    "ir a / plan: I'm going to study tonight."
+  ],
+  [
+    "Be willing to",
+    "estar dispuesto a: She is willing to help."
+  ],
+  [
+    "Be meant to",
+    "estar previsto que: The meeting is meant to start at eight."
+  ],
+  [
+    "Be due to",
+    "estar programado para: The exam is due to begin soon."
+  ],
+  [
+    "Would prefer to",
+    "preferiría: I would prefer to stay."
+  ],
+  [
+    "Can’t stand",
+    "no soportar: I can't stand waiting."
+  ],
+  [
+    "Be bound to",
+    "seguramente: They are bound to notice."
+  ],
+  [
+    "Had better not",
+    "más vale que no: You had better not be late."
+  ],
+  [
+    "Might want to",
+    "quizá convenga / quizá quieras: You might want to revise that."
+  ],
+  [
+    "Should consider",
+    "deberías considerar: You should consider taking notes."
+  ],
+  [
+    "Can hardly",
+    "apenas poder: I can hardly believe it."
+  ],
+  [
+    "Could do with",
+    "me vendría bien: I could do with a break."
+  ],
+  [
+    "Would love to",
+    "me encantaría: I'd love to visit London."
+  ],
+  [
+    "Would hate to",
+    "odiaría: I'd hate to miss the class."
+  ],
+  [
+    "May as well",
+    "también podría: We may as well leave now."
+  ]
+];
+
+if (!window.__englishTrainerV16DataLoaded) {
+  window.__englishTrainerV16DataLoaded = true;
+
+  EXTRA_PHRASALS_V16.forEach((item) => phrasalVerbs.push(item));
+  EXTRA_MODALS_V16.forEach((item) => modalVerbs.push(item));
+
+  const quickSubjects = [
+    { es: "Lucía", en: "Lucía", pronoun: "she" },
+    { es: "Tomás", en: "Tomás", pronoun: "he" },
+    { es: "Micaela", en: "Micaela", pronoun: "she" },
+    { es: "Santiago", en: "Santiago", pronoun: "he" },
+    { es: "Martina", en: "Martina", pronoun: "she" },
+    { es: "Nicolás", en: "Nicolás", pronoun: "he" },
+    { es: "el equipo", en: "the team", pronoun: "it" },
+    { es: "los estudiantes", en: "the students", pronoun: "they" },
+    { es: "nosotros", en: "we", pronoun: "we" },
+    { es: "yo", en: "I", pronoun: "I" }
+  ];
+
+  const thirdStudy = [
+    {
+      es: "hubiera estudiado más",
+      en: ["had studied more", "had prepared more", "had worked harder"]
+    },
+    {
+      es: "hubiera repasado con tiempo",
+      en: ["had revised earlier", "had reviewed in advance", "had prepared in advance"]
+    },
+    {
+      es: "hubiera practicado todos los días",
+      en: ["had practiced every day", "had trained every day", "had worked every day"]
+    },
+    {
+      es: "hubiera leído las instrucciones con cuidado",
+      en: ["had read the instructions carefully", "had checked the instructions carefully", "had gone through the instructions carefully"]
+    }
+  ];
+
+  const thirdResult = [
+    {
+      es: "habría aprobado el examen",
+      en: ["would have passed the exam", "would have succeeded in the exam"]
+    },
+    {
+      es: "habría obtenido una mejor nota",
+      en: ["would have got a better grade", "would have received a better mark", "would have achieved a better score"]
+    },
+    {
+      es: "habría terminado a tiempo",
+      en: ["would have finished on time", "would have completed it on time"]
+    },
+    {
+      es: "habría evitado el error",
+      en: ["would have avoided the mistake", "would have prevented the error"]
+    }
+  ];
+
+  const firstConditions = [
+    {
+      es: "si llueve mañana",
+      en: ["if it rains tomorrow", "if it is rainy tomorrow"]
+    },
+    {
+      es: "si terminás temprano",
+      en: ["if you finish early", "if you complete it early"]
+    },
+    {
+      es: "si el profesor responde hoy",
+      en: ["if the teacher replies today", "if the teacher answers today"]
+    },
+    {
+      es: "si practicamos un poco más",
+      en: ["if we practice a little more", "if we train a little more"]
+    },
+    {
+      es: "si el laboratorio abre a tiempo",
+      en: ["if the laboratory opens on time", "if the lab opens on time"]
+    }
+  ];
+
+  const firstResults = [
+    {
+      es: "me quedaré en casa",
+      en: ["I will stay at home", "I will stay home"]
+    },
+    {
+      es: "iremos juntos",
+      en: ["we will go together", "we will head there together"]
+    },
+    {
+      es: "te avisaré enseguida",
+      en: ["I will let you know right away", "I will tell you immediately", "I will inform you straight away"]
+    },
+    {
+      es: "podremos empezar antes",
+      en: ["we will be able to start earlier", "we can start earlier"]
+    },
+    {
+      es: "cancelaremos la reunión",
+      en: ["we will cancel the meeting", "we will call off the meeting"]
+    }
+  ];
+
+  const secondConditions = [
+    {
+      es: "si tuviera más tiempo",
+      en: ["if I had more time", "if I had extra time"]
+    },
+    {
+      es: "si ella hablara inglés con fluidez",
+      en: ["if she spoke English fluently", "if she were fluent in English"]
+    },
+    {
+      es: "si viviéramos cerca",
+      en: ["if we lived nearby", "if we lived close by"]
+    },
+    {
+      es: "si el curso fuera más barato",
+      en: ["if the course were cheaper", "if the course was cheaper"]
+    },
+    {
+      es: "si ellos tuvieran más experiencia",
+      en: ["if they had more experience", "if they were more experienced"]
+    }
+  ];
+
+  const secondResults = [
+    {
+      es: "viajaría más seguido",
+      en: ["I would travel more often", "I would travel more frequently"]
+    },
+    {
+      es: "aceptaría la propuesta",
+      en: ["she would accept the proposal", "she would take the offer"]
+    },
+    {
+      es: "nos mudaríamos allí",
+      en: ["we would move there", "we would relocate there"]
+    },
+    {
+      es: "lo comprarían de inmediato",
+      en: ["they would buy it immediately", "they would purchase it straight away"]
+    },
+    {
+      es: "trabajaría con vos",
+      en: ["I would work with you", "I would collaborate with you"]
+    }
+  ];
+
+  const presentPerfectActions = [
+    {
+      es: "he estudiado durante dos horas",
+      en: ["I have studied for two hours", "I have been studying for two hours"]
+    },
+    {
+      es: "ha mejorado mucho este año",
+      en: ["she has improved a lot this year", "she has gotten much better this year"]
+    },
+    {
+      es: "hemos terminado el informe",
+      en: ["we have finished the report", "we have completed the report"]
+    },
+    {
+      es: "todavía no han llegado",
+      en: ["they haven't arrived yet", "they have not arrived yet"]
+    },
+    {
+      es: "¿alguna vez visitaste Londres?",
+      en: ["have you ever visited London?", "have you ever been to London?"]
+    }
+  ];
+
+  const futurePerfectActions = [
+    {
+      es: "para fin de año habré terminado el curso",
+      en: ["by the end of the year, I will have finished the course", "by year-end, I will have completed the course"]
+    },
+    {
+      es: "para mañana ella habrá enviado el correo",
+      en: ["by tomorrow, she will have sent the email", "by tomorrow, she will have emailed it"]
+    },
+    {
+      es: "para las ocho habremos llegado",
+      en: ["by eight o'clock, we will have arrived", "by eight, we will have got there"]
+    },
+    {
+      es: "para la próxima semana ellos habrán resuelto el problema",
+      en: ["by next week, they will have solved the problem", "by next week, they will have fixed the issue"]
+    },
+    {
+      es: "para entonces ya habrás practicado suficiente",
+      en: ["by then, you will have practiced enough", "by then, you will have trained enough"]
+    }
+  ];
+
+  const modalPrompts = [
+    {
+      topic: "Modal verbs",
+      es: "Deberías descansar un poco antes del examen.",
+      answer: "You should rest a little before the exam.",
+      acceptedAnswers: ["You should rest a little before the exam.", "You ought to rest a little before the exam."],
+      keywords: ["you", "should", "rest", "exam"]
+    },
+    {
+      topic: "Modal verbs",
+      es: "Podría ayudarte mañana si termino temprano.",
+      answer: "I could help you tomorrow if I finish early.",
+      acceptedAnswers: ["I could help you tomorrow if I finish early.", "I would be able to help you tomorrow if I finish early."],
+      keywords: ["could", "help", "tomorrow"]
+    },
+    {
+      topic: "Modal verbs",
+      es: "Tal vez ellos lleguen más tarde.",
+      answer: "They might arrive later.",
+      acceptedAnswers: ["They might arrive later.", "They may arrive later."],
+      keywords: ["might", "arrive", "later"]
+    },
+    {
+      topic: "Modal verbs",
+      es: "No tenés que imprimir todo el documento.",
+      answer: "You don't have to print the whole document.",
+      acceptedAnswers: ["You don't have to print the whole document.", "You needn't print the whole document."],
+      keywords: ["don't have to", "print", "document"]
+    },
+    {
+      topic: "Modal verbs",
+      es: "Más vale que salgas ahora.",
+      answer: "You had better leave now.",
+      acceptedAnswers: ["You had better leave now.", "You'd better leave now."],
+      keywords: ["had better", "leave", "now"]
+    }
+  ];
+
+  function generateQuickSentencesV16() {
+    const generated = [];
+    let guard = 0;
+
+    while (generated.length < 520 && guard < 3000) {
+      guard += 1;
+
+      const subj = quickSubjects[generated.length % quickSubjects.length];
+      const thirdA = thirdStudy[generated.length % thirdStudy.length];
+      const thirdB = thirdResult[generated.length % thirdResult.length];
+      const firstA = firstConditions[generated.length % firstConditions.length];
+      const firstB = firstResults[generated.length % firstResults.length];
+      const secondA = secondConditions[generated.length % secondConditions.length];
+      const secondB = secondResults[generated.length % secondResults.length];
+      const presentPerf = presentPerfectActions[generated.length % presentPerfectActions.length];
+      const futurePerf = futurePerfectActions[generated.length % futurePerfectActions.length];
+
+      const bundle = [
+        {
+          topic: "Third Conditional",
+          es: `Si ${subj.es} ${thirdA.es}, ${thirdB.es}.`,
+          answer: `If ${subj.en} ${thirdA.en[0]}, ${subj.pronoun === "I" ? "I" : subj.pronoun} ${thirdB.en[0]}.`,
+          acceptedAnswers: thirdA.en.flatMap((a) => thirdB.en.map((b) => `If ${subj.en} ${a}, ${subj.pronoun === "I" ? "I" : subj.pronoun} ${b}.`)),
+          keywords: ["if", "had", "would have"]
+        },
+        {
+          topic: "First Conditional",
+          es: `${firstA.es.charAt(0).toUpperCase() + firstA.es.slice(1)}, ${firstB.es}.`,
+          answer: `${firstA.en[0].charAt(0).toUpperCase() + firstA.en[0].slice(1)}, ${firstB.en[0]}.`,
+          acceptedAnswers: firstA.en.flatMap((a) => firstB.en.map((b) => `${a.charAt(0).toUpperCase() + a.slice(1)}, ${b}.`)),
+          keywords: ["if", "will"]
+        },
+        {
+          topic: "Second Conditional",
+          es: `${secondA.es.charAt(0).toUpperCase() + secondA.es.slice(1)}, ${secondB.es}.`,
+          answer: `${secondA.en[0].charAt(0).toUpperCase() + secondA.en[0].slice(1)}, ${secondB.en[0]}.`,
+          acceptedAnswers: secondA.en.flatMap((a) => secondB.en.map((b) => `${a.charAt(0).toUpperCase() + a.slice(1)}, ${b}.`)),
+          keywords: ["if", "would"]
+        },
+        {
+          topic: "Present Perfect",
+          es: `${presentPerf.es.charAt(0).toUpperCase() + presentPerf.es.slice(1)}.`,
+          answer: `${presentPerf.en[0].charAt(0).toUpperCase() + presentPerf.en[0].slice(1)}.`,
+          acceptedAnswers: presentPerf.en.map((a) => `${a.charAt(0).toUpperCase() + a.slice(1)}.`),
+          keywords: ["have", "has"]
+        },
+        {
+          topic: "Future Perfect",
+          es: `${futurePerf.es.charAt(0).toUpperCase() + futurePerf.es.slice(1)}.`,
+          answer: `${futurePerf.en[0].charAt(0).toUpperCase() + futurePerf.en[0].slice(1)}.`,
+          acceptedAnswers: futurePerf.en.map((a) => `${a.charAt(0).toUpperCase() + a.slice(1)}.`),
+          keywords: ["will have"]
+        },
+        modalPrompts[generated.length % modalPrompts.length]
+      ];
+
+      for (const item of bundle) {
+        if (generated.length >= 520) break;
+        generated.push(item);
+      }
+    }
+
+    return generated;
+  }
+
+  quickSentences.push(...generateQuickSentencesV16());
+}
+
+function normalizeTrainerText(text = "") {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/['’]/g, "")
+    .replace(/[^a-z0-9\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function textSimilarityV16(a, b) {
+  const aTokens = normalizeTrainerText(a).split(" ").filter(Boolean);
+  const bTokens = normalizeTrainerText(b).split(" ").filter(Boolean);
+  if (!aTokens.length || !bTokens.length) return 0;
+  const aSet = new Set(aTokens);
+  const bSet = new Set(bTokens);
+  let common = 0;
+  aSet.forEach((token) => { if (bSet.has(token)) common += 1; });
+  const ratioA = common / aSet.size;
+  const ratioB = common / bSet.size;
+  return Math.max(0, Math.min(1, (ratioA + ratioB) / 2));
+}
+
+function getAcceptedQuickAnswersV16(item) {
+  const base = [item.answer].filter(Boolean);
+  const more = Array.isArray(item.acceptedAnswers) ? item.acceptedAnswers : [];
+  return [...new Set([...base, ...more])];
+}
+
+function isQuickAnswerAcceptedV16(userAnswer, item) {
+  const normalizedUser = normalizeTrainerText(userAnswer);
+  if (!normalizedUser) return { accepted: false, score: 0, bestMatch: "", similarity: 0 };
+
+  const acceptedAnswers = getAcceptedQuickAnswersV16(item);
+  let bestMatch = "";
+  let bestSimilarity = 0;
+
+  for (const option of acceptedAnswers) {
+    const sim = textSimilarityV16(normalizedUser, option);
+    if (sim > bestSimilarity) {
+      bestSimilarity = sim;
+      bestMatch = option;
+    }
+    if (normalizeTrainerText(option) === normalizedUser) {
+      return { accepted: true, score: 100, bestMatch: option, similarity: 1 };
+    }
+  }
+
+  const keywordScore = Array.isArray(item.keywords) && item.keywords.length
+    ? item.keywords.filter((kw) => normalizeTrainerText(userAnswer).includes(normalizeTrainerText(kw))).length / item.keywords.length
+    : 0;
+
+  const finalScore = Math.round(Math.max(bestSimilarity, keywordScore) * 100);
+  return {
+    accepted: bestSimilarity >= 0.74 || keywordScore >= 0.75,
+    score: finalScore,
+    bestMatch,
+    similarity: bestSimilarity
+  };
+}
+
+function renderQuickPractice() {
+  const item = quickSentences[currentQuickIndex % quickSentences.length];
+  setText("quickTopic", item.topic);
+  setText("quickPrompt", item.es);
+  if (quickAnswer) quickAnswer.value = "";
+  if (quickFeedback) quickFeedback.innerHTML = "";
+}
+
+function checkQuickPractice(showAnswer = false) {
+  const item = quickSentences[currentQuickIndex % quickSentences.length];
+  if (!quickFeedback) return;
+
+  if (showAnswer) {
+    const options = getAcceptedQuickAnswersV16(item).slice(0, 3);
+    quickFeedback.innerHTML = `
+      <strong>Respuesta modelo</strong>
+      <p>${escapeHTML(item.answer)}</p>
+      ${options.length > 1 ? `<p><strong>También se aceptan:</strong> ${options.slice(1).map(escapeHTML).join(" · ")}</p>` : ""}
+    `;
+    return;
+  }
+
+  const answer = quickAnswer?.value || "";
+  const result = isQuickAnswerAcceptedV16(answer, item);
+
+  quickFeedback.innerHTML = `
+    <strong>${result.accepted ? "Muy bien" : "Ajustá un poco más la traducción"}</strong>
+    <p>
+      ${result.accepted
+        ? `Tu respuesta entra dentro de las variantes válidas. Coincidencia aproximada: ${result.score}%.`
+        : `Coincidencia aproximada: ${result.score}%. Revisá el tiempo verbal, el auxiliar o la elección del verbo principal.`}
+    </p>
+    <p><strong>Modelo base:</strong> ${escapeHTML(item.answer)}</p>
+    ${result.bestMatch && normalizeTrainerText(result.bestMatch) !== normalizeTrainerText(item.answer)
+      ? `<p><strong>Variante compatible:</strong> ${escapeHTML(result.bestMatch)}</p>`
+      : ""}
+  `;
+}
+
+function ensureFlashcardPronunciationNodeV16() {
+  if (!flashcard) return null;
+  let node = document.getElementById("flashcardPronunciation");
+  if (!node) {
+    node = document.createElement("small");
+    node.id = "flashcardPronunciation";
+    node.className = "flashcard-pronunciation";
+    const back = document.getElementById("flashcardBack");
+    if (back && back.parentNode) {
+      back.insertAdjacentElement("afterend", node);
+    } else {
+      flashcard.appendChild(node);
+    }
+  }
+  return node;
+}
+
+function toCastilianPronunciationV16(text = "") {
+  return text
+    .toLowerCase()
+    .replace(/ing\b/g, "in")
+    .replace(/tion/g, "shon")
+    .replace(/ture/g, "cher")
+    .replace(/ough/g, "of")
+    .replace(/igh/g, "ai")
+    .replace(/ph/g, "f")
+    .replace(/th/g, "d")
+    .replace(/sh/g, "sh")
+    .replace(/ch/g, "ch")
+    .replace(/qu/g, "ku")
+    .replace(/ck/g, "k")
+    .replace(/ee/g, "ii")
+    .replace(/oo/g, "uu")
+    .replace(/ou/g, "au")
+    .replace(/ow/g, "au")
+    .replace(/ay/g, "ei")
+    .replace(/ai/g, "ei")
+    .replace(/ea/g, "i")
+    .replace(/er\b/g, "er")
+    .replace(/ar\b/g, "ar")
+    .replace(/wr/g, "r")
+    .replace(/wh/g, "u")
+    .replace(/w/g, "u")
+    .replace(/v/g, "v")
+    .replace(/x/g, "ks")
+    .replace(/y/g, "i")
+    .replace(/j/g, "y")
+    .replace(/z/g, "s")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function buildFlashcards() {
+  const source = flashcardSource?.value || "phrasals";
+
+  if (source === "modals") {
+    currentFlashcards = modalVerbs.map(([front, back]) => ({
+      type: "Modal / auxiliar",
+      front,
+      back,
+      example: "",
+      pronunciation: toCastilianPronunciationV16(front)
+    }));
+  } else if (source === "vocabulario") {
+    currentFlashcards = vocabulary.map((item) => ({
+      type: item.category || "Vocabulario",
+      front: item.word,
+      back: item.meaning,
+      example: item.example || "",
+      pronunciation: toCastilianPronunciationV16(item.word)
+    }));
+  } else {
+    currentFlashcards = phrasalVerbs.map(([front, back, example]) => ({
+      type: "Phrasal verb",
+      front,
+      back,
+      example,
+      pronunciation: toCastilianPronunciationV16(front)
+    }));
+  }
+
+  flashcardIndex = 0;
+  flashcardShowingBack = false;
+  renderFlashcard();
+}
+
+function renderFlashcard() {
+  if (!flashcardFront) return;
+
+  const pronunciationNode = ensureFlashcardPronunciationNodeV16();
+
+  if (!currentFlashcards.length) {
+    setText("flashcardType", "Sin tarjetas");
+    setText("flashcardFront", "Agregá vocabulario o cambiá la fuente");
+    setText("flashcardBack", "");
+    setText("flashcardExample", "");
+    if (pronunciationNode) pronunciationNode.textContent = "";
+    if (flashcard) flashcard.classList.remove("show-back");
+    return;
+  }
+
+  const card = currentFlashcards[flashcardIndex % currentFlashcards.length];
+  setText("flashcardType", card.type);
+  setText("flashcardFront", card.front);
+  setText("flashcardBack", card.back);
+  setText("flashcardExample", card.example || "");
+  if (flashcardStats) flashcardStats.textContent = `${flashcardIndex + 1} / ${currentFlashcards.length}`;
+
+  if (pronunciationNode) {
+    pronunciationNode.textContent = flashcardShowingBack ? `Pronunciación aprox.: ${card.pronunciation || toCastilianPronunciationV16(card.front)}` : "";
+  }
+
+  if (flashcard) {
+    flashcard.classList.toggle("show-back", flashcardShowingBack);
+  }
+}
+
+function ensureHourglassTimerMarkup() {
+  const ring = document.getElementById("timerProgressRing");
+  if (!ring) return;
+
+  ring.classList.remove("digital-timer-card");
+  ring.classList.add("hourglass-timer-card");
+
+  ring.innerHTML = `
+    <div class="hourglass-time">
+      <span id="timerDisplay" class="timer-display">00:00</span>
+      <small>sesión de foco</small>
+    </div>
+
+    <div class="hourglass-stage water-stage" aria-hidden="true">
+      <div class="hourglass-waterframe">
+        <div class="frame-top"></div>
+        <div class="frame-bottom"></div>
+        <div class="frame-side left"></div>
+        <div class="frame-side right"></div>
+
+        <div class="glass-shell">
+          <div class="glass-bowl upper-bowl">
+            <div class="water-fill top-water">
+              <span class="water-surface upper-surface"></span>
+              <span class="bubble bubble-a"></span>
+              <span class="bubble bubble-b"></span>
+              <span class="bubble bubble-c"></span>
+            </div>
+          </div>
+
+          <div class="glass-neck">
+            <span class="water-stream"></span>
+            <span class="water-drop drop-one"></span>
+            <span class="water-drop drop-two"></span>
+            <span class="water-drop drop-three"></span>
+          </div>
+
+          <div class="glass-bowl lower-bowl">
+            <div class="water-fill bottom-water">
+              <span class="water-surface lower-surface"></span>
+              <span class="ripple ripple-a"></span>
+              <span class="ripple ripple-b"></span>
+              <span class="pool-bubble pool-a"></span>
+              <span class="pool-bubble pool-b"></span>
+              <span class="pool-bubble pool-c"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+if (typeof renderTables === "function") renderTables();
+if (typeof buildFlashcards === "function") buildFlashcards();
+if (typeof renderQuickPractice === "function") renderQuickPractice();
+if (typeof ensureHourglassTimerMarkup === "function") ensureHourglassTimerMarkup();
+if (typeof updateTimerUI === "function") updateTimerUI();
