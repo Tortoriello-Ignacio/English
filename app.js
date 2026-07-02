@@ -1,292 +1,343 @@
+/* =========================================================
+   DATOS BASE: TIEMPOS VERBALES Y CONDICIONALES
+========================================================= */
 const tenses = [
+  // --- Presentes ---
   {
-    id: "present-simple",
-    name: "Present Simple",
-    level: "Base",
+    id: "present-simple", name: "Present Simple", level: "Base",
     summary: "Hábitos, rutinas, verdades generales, estados y horarios.",
     structures: {
       affirmative: "Subject + base verb / verb + s-es with he, she, it",
       negative: "Subject + do/does not + base verb",
       question: "Do/Does + subject + base verb?"
     },
-    uses: [
-      "Acciones habituales",
-      "Opiniones",
-      "Situaciones permanentes",
-      "Verdades generales",
-      "Horarios"
-    ],
+    uses: ["Acciones habituales", "Opiniones", "Situaciones permanentes", "Verdades generales"],
     examples: [
       ["I usually get up at 7 o’clock.", "Normalmente me levanto a las 7."],
-      ["She lives in New York.", "Ella vive en Nueva York."],
       ["The Earth goes around the Sun.", "La Tierra gira alrededor del Sol."]
     ],
-    prompt: "Write a paragraph about your daily routine. Use frequency adverbs such as usually, always, often and sometimes."
+    prompt: "Write a paragraph about your daily routine. Use frequency adverbs."
   },
   {
-    id: "present-continuous",
-    name: "Present Continuous",
-    level: "Base",
+    id: "present-continuous", name: "Present Continuous", level: "Base",
     summary: "Acciones que ocurren ahora, situaciones temporales y planes cercanos.",
     structures: {
       affirmative: "Subject + am/is/are + verb + ing",
       negative: "Subject + am/is/are + not + verb + ing",
       question: "Wh + am/is/are + subject + verb + ing?"
     },
-    uses: [
-      "Acción actual",
-      "Situación temporal",
-      "Plan futuro cercano",
-      "Proceso en desarrollo"
-    ],
+    uses: ["Acción actual", "Situación temporal", "Plan futuro cercano"],
     examples: [
-      ["What are you doing?", "¿Qué estás haciendo?"],
       ["She is studying hard for her exam.", "Ella está estudiando mucho para su examen."],
       ["I am working until 9 p.m. this week.", "Estoy trabajando hasta las 21 esta semana."]
     ],
-    prompt: "Describe what is happening around you right now. Use Present Continuous and at least three action verbs."
+    prompt: "Describe what is happening around you right now."
   },
   {
-    id: "past-simple",
-    name: "Past Simple",
-    level: "Base",
-    summary: "Acciones terminadas en un momento específico del pasado.",
-    structures: {
-      affirmative: "Subject + past verb",
-      negative: "Subject + did not + base verb",
-      question: "Did + subject + base verb?"
-    },
-    uses: [
-      "Acción terminada",
-      "Secuencia de eventos",
-      "Momento específico en el pasado"
-    ],
-    examples: [
-      ["I went to Paris last year.", "Fui a París el año pasado."],
-      ["They didn’t drive to work.", "No fueron al trabajo en auto."],
-      ["Where did she get that hat?", "¿Dónde consiguió ese sombrero?"]
-    ],
-    prompt: "Write about a memorable day from your past. Use Past Simple and include time expressions."
-  },
-  {
-    id: "past-continuous",
-    name: "Past Continuous",
-    level: "Base",
-    summary: "Acciones en progreso en un momento del pasado.",
-    structures: {
-      affirmative: "Subject + was/were + verb + ing",
-      negative: "Subject + was/were not + verb + ing",
-      question: "Wh + was/were + subject + verb + ing?"
-    },
-    uses: [
-      "Acción en progreso en pasado",
-      "Acción larga interrumpida",
-      "Contexto narrativo"
-    ],
-    examples: [
-      ["At midnight we were driving home.", "A midnight we were driving home.", "A medianoche estábamos manejando a casa."],
-      ["I was studying all day yesterday.", "Estuve estudiando todo el día ayer."],
-      ["He wasn’t working.", "Él no estaba trabajando."]
-    ],
-    prompt: "Write a short story about what you were doing when something unexpected happened."
-  },
-  {
-    id: "present-perfect",
-    name: "Present Perfect",
-    level: "Intermedio",
+    id: "present-perfect", name: "Present Perfect", level: "Intermedio",
     summary: "Acciones pasadas con conexión al presente: experiencia, resultado o duración.",
     structures: {
       affirmative: "Subject + have/has + past participle",
       negative: "Subject + have/has not + past participle",
       question: "Have/Has + subject + past participle?"
     },
-    uses: [
-      "Experiencia",
-      "Resultado actual",
-      "Acción con for/since",
-      "Pasado conectado al presente"
-    ],
+    uses: ["Experiencia", "Resultado actual", "Acción con for/since"],
     examples: [
       ["I have been here for two hours.", "Estoy acá desde hace dos horas."],
-      ["The postman hasn’t come yet.", "El cartero todavía no llegó."],
-      ["How long have you worked here?", "¿Cuánto tiempo trabajaste/trabajás acá?"]
+      ["The postman hasn’t come yet.", "El cartero todavía no llegó."]
     ],
-    prompt: "Write about experiences you have had in your life and explain why they were important."
+    prompt: "Write about experiences you have had in your life."
   },
   {
-    id: "present-perfect-continuous",
-    name: "Present Perfect Continuous",
-    level: "Intermedio",
+    id: "present-perfect-continuous", name: "Present Perfect Continuous", level: "Intermedio",
     summary: "Duración de una acción que empezó en el pasado y continúa o tiene efecto ahora.",
     structures: {
       affirmative: "Subject + have/has been + verb + ing",
       negative: "Subject + have/has not been + verb + ing",
       question: "Have/Has + subject + been + verb + ing?"
     },
-    uses: [
-      "Duración hasta el presente",
-      "Acción reciente con evidencia",
-      "Proceso continuo"
-    ],
+    uses: ["Duración hasta el presente", "Acción reciente con evidencia"],
     examples: [
-      ["I have been waiting for the bus for a long time.", "Hace mucho que estoy esperando el colectivo."],
-      ["He hasn’t been studying long.", "No lleva mucho tiempo estudiando."],
-      ["How long have you been working?", "¿Hace cuánto estás trabajando?"]
+      ["I have been waiting for the bus for a long time.", "Hace mucho que estoy esperando el colectivo."]
     ],
-    prompt: "Write about something you have been doing for weeks or months and explain your progress."
+    prompt: "Write about something you have been doing for weeks."
+  },
+
+  // --- Pasados ---
+  {
+    id: "past-simple", name: "Past Simple", level: "Base",
+    summary: "Acciones terminadas en un momento específico del pasado.",
+    structures: {
+      affirmative: "Subject + past verb",
+      negative: "Subject + did not + base verb",
+      question: "Did + subject + base verb?"
+    },
+    uses: ["Acción terminada", "Secuencia de eventos"],
+    examples: [
+      ["I went to Paris last year.", "Fui a París el año pasado."],
+      ["They didn’t drive to work.", "No fueron al trabajo en auto."]
+    ],
+    prompt: "Write about a memorable day from your past."
   },
   {
-    id: "past-perfect",
-    name: "Past Perfect",
-    level: "Intermedio",
+    id: "past-continuous", name: "Past Continuous", level: "Base",
+    summary: "Acciones en progreso en un momento del pasado.",
+    structures: {
+      affirmative: "Subject + was/were + verb + ing",
+      negative: "Subject + was/were not + verb + ing",
+      question: "Wh + was/were + subject + verb + ing?"
+    },
+    uses: ["Acción en progreso en pasado", "Acción larga interrumpida"],
+    examples: [
+      ["I was studying all day yesterday.", "Estuve estudiando todo el día ayer."],
+      ["At midnight we were driving home.", "A medianoche estábamos manejando a casa."]
+    ],
+    prompt: "Write a short story about what you were doing when something unexpected happened."
+  },
+  {
+    id: "past-perfect", name: "Past Perfect", level: "Intermedio",
     summary: "Acción que ocurrió antes de otra acción pasada.",
     structures: {
       affirmative: "Subject + had + past participle",
       negative: "Subject + had not + past participle",
       question: "Had + subject + past participle?"
     },
-    uses: [
-      "Acción anterior a otra pasada",
-      "Narración",
-      "Causa o antecedente"
-    ],
+    uses: ["Acción anterior a otra pasada", "Narración"],
     examples: [
-      ["She had cooked lunch before she went to work.", "Ella había cocinado antes de ir al trabajo."],
-      ["She hadn’t been to Rome before.", "Ella no había estado en Roma antes."],
-      ["Had you ever seen such a crazy day?", "¿Alguna vez habías visto un día tan loco?"]
+      ["She had cooked lunch before she went to work.", "Ella había cocinado antes de ir al trabajo."]
     ],
-    prompt: "Write a story where one past action happened before another. Use Past Perfect clearly."
+    prompt: "Write a story where one past action happened before another."
   },
   {
-    id: "past-perfect-continuous",
-    name: "Past Perfect Continuous",
-    level: "Avanzado",
+    id: "past-perfect-continuous", name: "Past Perfect Continuous", level: "Avanzado",
     summary: "Duración de una acción antes de otro momento pasado.",
     structures: {
       affirmative: "Subject + had been + verb + ing",
       negative: "Subject + had not been + verb + ing",
       question: "Had + subject + been + verb + ing?"
     },
-    uses: [
-      "Duración antes de otro pasado",
-      "Causa visible en pasado",
-      "Narrativa avanzada"
-    ],
+    uses: ["Duración antes de otro pasado", "Causa visible en pasado"],
     examples: [
-      ["We had been waiting for hours when the train arrived.", "Habíamos estado esperando durante horas cuando llegó el tren."],
-      ["I hadn’t been sleeping long.", "No había estado durmiendo mucho tiempo."],
-      ["How long had you been playing tennis?", "¿Cuánto tiempo habías estado jugando al tenis?"]
+      ["We had been waiting for hours when the train arrived.", "Habíamos estado esperando durante horas cuando llegó el tren."]
     ],
-    prompt: "Describe a past situation where an action had been happening for a long time before another event."
+    prompt: "Describe a past situation where an action had been happening for a long time."
   },
+
+  // --- Futuros ---
   {
-    id: "future-simple",
-    name: "Future Simple",
-    level: "Base",
+    id: "future-simple", name: "Future Simple", level: "Base",
     summary: "Decisiones espontáneas, predicciones, promesas y ofrecimientos.",
     structures: {
       affirmative: "Subject + will + base verb",
       negative: "Subject + will not + base verb",
       question: "Will + subject + base verb?"
     },
-    uses: [
-      "Predicciones",
-      "Promesas",
-      "Decisiones espontáneas",
-      "Ofrecimientos"
-    ],
+    uses: ["Predicciones", "Promesas", "Decisiones espontáneas"],
     examples: [
       ["I’ll help you.", "Te voy a ayudar."],
-      ["She won’t win the game.", "Ella no ganará el juego."],
-      ["Will they visit us soon?", "¿Nos visitarán pronto?"]
+      ["She won’t win the game.", "Ella no ganará el juego."]
     ],
-    prompt: "Write predictions about your future. Use will, probably, maybe and certainly."
+    prompt: "Write predictions about your future. Use will."
   },
   {
-    id: "going-to",
-    name: "Going to",
-    level: "Base",
+    id: "going-to", name: "Going to", level: "Base",
     summary: "Planes, intenciones y predicciones con evidencia presente.",
     structures: {
       affirmative: "Subject + am/is/are + going to + base verb",
       negative: "Subject + am/is/are not + going to + base verb",
       question: "Am/Is/Are + subject + going to + base verb?"
     },
-    uses: [
-      "Planes futuros",
-      "Intenciones",
-      "Predicciones con evidencia"
-    ],
+    uses: ["Planes futuros", "Predicciones con evidencia"],
     examples: [
       ["I’m going to study languages.", "Voy a estudiar idiomas."],
-      ["It’s going to rain.", "Va a llover."],
-      ["Are you going to travel next month?", "¿Vas a viajar el mes que viene?"]
+      ["It’s going to rain.", "Va a llover."]
     ],
-    prompt: "Write about your plans for the next six months. Use going to and specific goals."
+    prompt: "Write about your plans for the next six months."
   },
   {
-    id: "future-continuous",
-    name: "Future Continuous",
-    level: "Intermedio",
+    id: "future-continuous", name: "Future Continuous", level: "Intermedio",
     summary: "Acción que estará en progreso en un momento futuro.",
     structures: {
       affirmative: "Subject + will be + verb + ing",
       negative: "Subject + will not be + verb + ing",
       question: "Will + subject + be + verb + ing?"
     },
-    uses: [
-      "Acción futura en progreso",
-      "Planes como proceso",
-      "Situaciones temporales futuras"
-    ],
+    uses: ["Acción futura en progreso", "Planes como proceso"],
     examples: [
-      ["Next Friday I will be travelling to London.", "El próximo viernes estaré viajando a Londres."],
-      ["This time tomorrow, I’ll be working.", "A esta hora mañana estaré trabajando."]
+      ["Next Friday I will be travelling to London.", "El próximo viernes estaré viajando a Londres."]
     ],
-    prompt: "Write about what you will be doing at this time tomorrow and next week."
+    prompt: "Write about what you will be doing at this time tomorrow."
   },
   {
-    id: "future-perfect",
-    name: "Future Perfect",
-    level: "Avanzado",
+    id: "future-perfect", name: "Future Perfect", level: "Avanzado",
     summary: "Acción que estará terminada antes de un punto futuro.",
     structures: {
       affirmative: "Subject + will have + past participle",
       negative: "Subject + will not have + past participle",
       question: "Will + subject + have + past participle?"
     },
-    uses: [
-      "Acción completada antes de un futuro",
-      "Metas cumplidas",
-      "Resultados proyectados"
-    ],
+    uses: ["Acción completada antes de un futuro", "Metas cumplidas"],
     examples: [
-      ["We will have finished the project by tomorrow.", "Habremos terminado el proyecto para mañana."],
-      ["By 2030, I will have learned advanced English.", "Para 2030 habré aprendido inglés avanzado."]
+      ["We will have finished the project by tomorrow.", "Habremos terminado el proyecto para mañana."]
     ],
     prompt: "Write about goals you will have achieved by the end of the year."
   },
   {
-    id: "future-perfect-continuous",
-    name: "Future Perfect Continuous",
-    level: "Avanzado",
+    id: "future-perfect-continuous", name: "Future Perfect Continuous", level: "Avanzado",
     summary: "Duración de una acción hasta un punto específico del futuro.",
     structures: {
       affirmative: "Subject + will have been + verb + ing",
       negative: "Subject + will not have been + verb + ing",
       question: "Will + subject + have been + verb + ing?"
     },
-    uses: [
-      "Duración hasta un point futuro",
-      "Continuidad",
-      "Proyección avanzada"
-    ],
+    uses: ["Duración hasta un punto futuro", "Proyección avanzada"],
     examples: [
-      ["I will have been working here for ten years next month.", "El mes que viene habré estado trabajando acá durante diez años."],
-      ["By July, she will have been studying for six months.", "Para julio, ella habrá estado estudiando durante seis meses."]
+      ["I will have been working here for ten years next month.", "El mes que viene habré estado trabajando acá durante diez años."]
     ],
     prompt: "Write about something you will have been doing for a long time by a future date."
+  },
+
+  // --- NUEVO: Condicionales ---
+  {
+    id: "zero-conditional", name: "Zero Conditional", level: "Base",
+    summary: "Verdades generales, hechos científicos o leyes naturales.",
+    structures: {
+      affirmative: "If + Present Simple, Present Simple",
+      negative: "If + don't/doesn't + verb, don't/doesn't + verb",
+      question: "What happens if + Present Simple?"
+    },
+    uses: ["Hechos inmutables", "Verdades científicas", "Causa y efecto directo"],
+    examples: [
+      ["If you heat ice, it melts.", "Si calentás hielo, se derrite."],
+      ["If I eat peanuts, I get sick.", "Si como maní, me enfermo."]
+    ],
+    prompt: "Write about general facts using the Zero Conditional (If + present, present)."
+  },
+  {
+    id: "first-conditional", name: "First Conditional", level: "Intermedio",
+    summary: "Situaciones reales o muy probables en el futuro.",
+    structures: {
+      affirmative: "If + Present Simple, will + base verb",
+      negative: "If + Present Simple, won't + base verb",
+      question: "What will happen if + Present Simple?"
+    },
+    uses: ["Posibilidades futuras", "Advertencias", "Promesas condicionadas"],
+    examples: [
+      ["If it rains, we will stay at home.", "Si llueve, nos quedaremos en casa."],
+      ["If she studies hard, she will pass the exam.", "Si ella estudia mucho, aprobará."]
+    ],
+    prompt: "Write about your plans depending on weather or time using First Conditional."
+  },
+  {
+    id: "second-conditional", name: "Second Conditional", level: "Avanzado",
+    summary: "Situaciones hipotéticas, imaginarias o poco probables en el presente/futuro.",
+    structures: {
+      affirmative: "If + Past Simple, would + base verb",
+      negative: "If + Past Simple, wouldn't + base verb",
+      question: "What would you do if + Past Simple?"
+    },
+    uses: ["Situaciones irreales", "Deseos improbables", "Dar consejos (If I were you)"],
+    examples: [
+      ["If I won the lottery, I would travel the world.", "Si ganara la lotería, viajaría por el mundo."],
+      ["If I were you, I would study more.", "Si yo fuera vos, estudiaría más."]
+    ],
+    prompt: "Write about what you would do if you had a million dollars."
+  },
+  {
+    id: "third-conditional", name: "Third Conditional", level: "Avanzado",
+    summary: "Situaciones irreales en el pasado. Se usa para arrepentimientos o escenarios que no ocurrieron.",
+    structures: {
+      affirmative: "If + Past Perfect, would have + past participle",
+      negative: "If + Past Perfect, wouldn't have + past participle",
+      question: "What would have happened if + Past Perfect?"
+    },
+    uses: ["Arrepentimientos", "Situaciones hipotéticas pasadas"],
+    examples: [
+      ["If I had studied harder, I would have passed.", "Si hubiera estudiado más, habría aprobado."],
+      ["We wouldn't have missed the flight if we had woken up earlier.", "No habríamos perdido el vuelo si nos hubiéramos despertado antes."]
+    ],
+    prompt: "Write about a past mistake and how things would have been different."
   }
+];
+
+/* =========================================================
+   DATOS NUEVOS: PHRASALS Y MODALES (Extraídos de las fotos)
+========================================================= */
+const phrasalVerbs = [
+  { verb: "pick up", meaning: "levantar, recoger", example: "She picked up the book from the floor." },
+  { verb: "turn on / turn off", meaning: "encender / apagar", example: "Turn off the lights before you leave." },
+  { verb: "look for", meaning: "buscar", example: "I’m looking for my keys." },
+  { verb: "find out", meaning: "descubrir, averiguar", example: "I found out the truth yesterday." },
+  { verb: "give up", meaning: "rendirse, dejar de hacer algo", example: "Don’t give up on your dreams." },
+  { verb: "put on / take off", meaning: "ponerse / quitarse (ropa)", example: "He put on his jacket." },
+  { verb: "run out of", meaning: "quedarse sin", example: "We ran out of milk." },
+  { verb: "come back", meaning: "regresar", example: "She came back home late." },
+  { verb: "get along (with)", meaning: "llevarse bien", example: "I get along with my coworkers." },
+  { verb: "set up", meaning: "organizar, montar", example: "They set up a new company." },
+  { verb: "take care of", meaning: "cuidar", example: "She takes care of her little brother." },
+  { verb: "wake up", meaning: "despertarse", example: "I wake up at 7 a.m." },
+  { verb: "carry on", meaning: "continuar", example: "Carry on with your work." },
+  { verb: "check out", meaning: "revisar, mirar", example: "Check out this new song." },
+  { verb: "break down", meaning: "averiarse, descomponerse", example: "My car broke down yesterday." },
+  { verb: "bring up", meaning: "sacar un tema, mencionar", example: "She brought up an interesting point." },
+  { verb: "call off", meaning: "cancelar", example: "They called off the meeting." },
+  { verb: "come across", meaning: "encontrarse con algo/alguien", example: "I came across an old photo." },
+  { verb: "drop off", meaning: "dejar a alguien en un lugar", example: "He dropped me off at the station." },
+  { verb: "get over", meaning: "superar (una enfermedad, problema)", example: "It took her weeks to get over the flu." },
+  { verb: "go on", meaning: "continuar", example: "Please, go on with your story." },
+  { verb: "look after", meaning: "cuidar", example: "She looks after her grandmother." },
+  { verb: "make up", meaning: "inventar / reconciliarse", example: "He made up an excuse. / They made up after the fight." },
+  { verb: "put off", meaning: "posponer", example: "We had to put off the trip." },
+  { verb: "show up", meaning: "aparecer, presentarse", example: "He didn’t show up to class." },
+  { verb: "take up", meaning: "empezar una actividad", example: "She took up painting last year." },
+  { verb: "work out", meaning: "hacer ejercicio / resolver", example: "I work out three times a week. / We worked out the problem." },
+  { verb: "hand in", meaning: "entregar (tarea, documento)", example: "Please hand in your homework." },
+  { verb: "look forward to", meaning: "esperar con ilusión", example: "I look forward to meeting you." },
+  { verb: "turn up", meaning: "aparecer / subir volumen", example: "She turned up unexpectedly. / Turn up the radio." },
+  { verb: "take off", meaning: "despegar (además de quitarse ropa)", example: "The plane took off at 9 a.m." },
+  { verb: "put up with", meaning: "tolerar", example: "I can’t put up with the noise." },
+  { verb: "break up", meaning: "terminar relación", example: "They broke up last month." },
+  { verb: "catch up (with)", meaning: "ponerse al día", example: "I need to catch up with my studies." },
+  { verb: "hold on", meaning: "esperar", example: "Hold on a minute, please." },
+  { verb: "keep up (with)", meaning: "mantener el ritmo", example: "She runs fast, I can’t keep up with her." },
+  { verb: "take over", meaning: "asumir control", example: "He took over the family business." },
+  { verb: "turn down", meaning: "rechazar / bajar volumen", example: "She turned down the job offer. / Turn down the TV." },
+  { verb: "write down", meaning: "anotar", example: "Write down the phone number." },
+  { verb: "to put away", meaning: "guardar", example: "I had to put away everything / the groceries." }
+];
+
+const modalVerbs = [
+  { word: "Can / Could", meaning: "(Poder / Podría)" },
+  { word: "Want to / Would like to", meaning: "(Querer / Gustaría)" },
+  { word: "Do / Does / Did", meaning: "(Hacer - auxiliar y acción)" },
+  { word: "Make", meaning: "(Hacer – crear - Tomar)" },
+  { word: "Have to / Must", meaning: "(Tener que / Deber)" },
+  { word: "Had to", meaning: "(Tuvo que)" },
+  { word: "Should / Ought to", meaning: "(Debería) / (Debería) formal" },
+  { word: "May / Might", meaning: "(Poder - posibilidad/permiso)" },
+  { word: "Shall", meaning: "(Debería/Haré - formal)" },
+  { word: "Wish", meaning: "(Ojalá / Deseo)" },
+  { word: "Hope", meaning: "Espero que" },
+  { word: "Would rather", meaning: "Preferiría" },
+  { word: "Might", meaning: "Capaz / Tal vez" },
+  { word: "Had better", meaning: "Más vale que" },
+  { word: "Thus", meaning: "Entonces" },
+  { word: "Often", meaning: "A menudo" },
+  { word: "Huge", meaning: "Enorme" },
+  { word: "Loss", meaning: "Perdida" },
+  { word: "Improve my skills", meaning: "Mejorar mis habilidades" },
+  { word: "Shape", meaning: "Estar en forma" },
+  { word: "Enhancing", meaning: "Mejorando" },
+  { word: "Following", meaning: "Siguiente" },
+  { word: "Kind", meaning: "Tipos /// Amable" },
+  { word: "Then", meaning: "Entonces" },
+  { word: "To realize", meaning: "Me di cuenta" },
+  { word: "Despite / Even though", meaning: "A pesar de" },
+  { word: "It seemed", meaning: "Parecía" },
+  { word: "Although / Even though", meaning: "Aunque" },
+  { word: "Because of", meaning: "Debido a" },
+  { word: "I used to", meaning: "Solía" },
+  { word: "Be able to", meaning: "Voy a poder" }
 ];
 
 const ieltsPrompts = {
@@ -312,6 +363,9 @@ const ieltsPrompts = {
   ]
 };
 
+// ==========================================
+// REFERENCIAS DOM Y ESTADOS GLOBALES
+// ==========================================
 const tenseGrid = document.getElementById("tenseGrid");
 const tenseSearch = document.getElementById("tenseSearch");
 const detailTitle = document.getElementById("detailTitle");
@@ -322,7 +376,6 @@ const negativeStructure = document.getElementById("negativeStructure");
 const questionStructure = document.getElementById("questionStructure");
 const usageList = document.getElementById("usageList");
 const examplesList = document.getElementById("examplesList");
-const totalTenses = document.getElementById("totalTenses");
 
 const ieltsLevel = document.getElementById("ieltsLevel");
 const practiceTense = document.getElementById("practiceTense");
@@ -340,11 +393,9 @@ const quizContainer = document.getElementById("quizContainer");
 const submitQuizBtn = document.getElementById("submitQuizBtn");
 const resetQuizBtn = document.getElementById("resetQuizBtn");
 const quizResult = document.getElementById("quizResult");
-const quizScorePreview = document.getElementById("quizScorePreview");
 const quizProgress = document.getElementById("quizProgress");
 
 const savedParagraphsList = document.getElementById("savedParagraphsList");
-const savedParagraphsCount = document.getElementById("savedParagraphsCount");
 const clearParagraphsBtn = document.getElementById("clearParagraphsBtn");
 
 const noteTitle = document.getElementById("noteTitle");
@@ -353,21 +404,199 @@ const saveNoteBtn = document.getElementById("saveNoteBtn");
 const clearNoteEditorBtn = document.getElementById("clearNoteEditorBtn");
 const clearNotesBtn = document.getElementById("clearNotesBtn");
 const notesList = document.getElementById("notesList");
-const savedNotesCount = document.getElementById("savedNotesCount");
 
-const navLinks = document.querySelectorAll(".nav-link");
+const navLinks = document.querySelectorAll("#mainNav .nav-link");
 const sections = document.querySelectorAll("main section[id]");
 const revealElements = document.querySelectorAll(".reveal");
 
-let selectedTenseId = tenses[0].id;
+// Progreso
 let paragraphs = JSON.parse(localStorage.getItem("englishTrainerParagraphs")) || [];
 let notes = JSON.parse(localStorage.getItem("englishTrainerNotes")) || [];
-let lastScore = localStorage.getItem("englishTrainerLastScore") || "0%";
+let accumulatedStudyMins = parseInt(localStorage.getItem("englishTrainerStudyMins")) || 0;
+let examsCompleted = parseInt(localStorage.getItem("englishTrainerExamsCount")) || 0;
+let averageScore = parseInt(localStorage.getItem("englishTrainerAvgScore")) || 0;
+
+let selectedTenseId = tenses[0].id;
 let currentQuiz = [];
 
+// ==========================================
+// 1. SISTEMA DE RUTEO (VIEWS)
+// ==========================================
+const appView = document.getElementById("appView");
+const resourcesView = document.getElementById("resourcesView");
+const navToResourcesBtn = document.getElementById("navToResources");
+const backToAppBtn = document.getElementById("backToAppBtn");
+
+navToResourcesBtn.addEventListener("click", () => showView('resources'));
+backToAppBtn.addEventListener("click", () => showView('app'));
+
+// Manejo de botones internos que piden ir a recursos
+document.querySelectorAll(".open-resources-btn").forEach(btn => {
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    const targetTab = btn.getAttribute("data-target");
+    showView('resources');
+    activateResourceTab(targetTab);
+  });
+});
+
+function showView(viewName) {
+  if (viewName === 'resources') {
+    appView.classList.remove('active-view');
+    resourcesView.classList.add('active-view');
+    window.scrollTo(0,0);
+  } else {
+    resourcesView.classList.remove('active-view');
+    appView.classList.add('active-view');
+    window.scrollTo(0,0);
+  }
+}
+
+// TABS DENTRO DE RESOURCES
+const resourceTabs = document.querySelectorAll(".resource-tab");
+const resourcePanes = document.querySelectorAll(".resource-pane");
+
+resourceTabs.forEach(tab => {
+  tab.addEventListener("click", () => {
+    activateResourceTab(tab.getAttribute("data-tab"));
+  });
+});
+
+function activateResourceTab(tabId) {
+  resourceTabs.forEach(t => t.classList.remove("active"));
+  resourcePanes.forEach(p => p.classList.remove("active-pane"));
+  
+  const selectedTab = document.querySelector(`.resource-tab[data-tab="${tabId}"]`);
+  const selectedPane = document.getElementById(`tab-${tabId}`);
+  
+  if(selectedTab) selectedTab.classList.add("active");
+  if(selectedPane) selectedPane.classList.add("active-pane");
+}
+
+// ==========================================
+// 2. SISTEMA DE PROGRESO Y TIMER (RELOJ ANALÓGICO)
+// ==========================================
+
+// Trackeo silencioso cada minuto que la página esté abierta
+setInterval(() => {
+  accumulatedStudyMins++;
+  localStorage.setItem("englishTrainerStudyMins", accumulatedStudyMins);
+  updateProgressBars();
+}, 60000);
+
+function updateProgressBars() {
+  document.getElementById("studyTimeText").textContent = `${accumulatedStudyMins} min`;
+  const timePercent = Math.min((accumulatedStudyMins / 600) * 100, 100); // Meta 10 horas
+  document.getElementById("studyTimeBar").style.width = `${timePercent}%`;
+
+  document.getElementById("quizAvgText").textContent = examsCompleted > 0 ? `${examsCompleted} tests (${averageScore}%)` : `0 tests`;
+  const quizPercent = Math.min((examsCompleted / 50) * 100, 100); // Meta 50 exams
+  document.getElementById("quizAvgBar").style.width = `${quizPercent}%`;
+
+  document.getElementById("writingCountText").textContent = paragraphs.length;
+  const writePercent = Math.min((paragraphs.length / 20) * 100, 100); // Meta 20 textos
+  document.getElementById("writingCountBar").style.width = `${writePercent}%`;
+}
+
+// Lógica del Timer Analógico
+const timerToggleBtn = document.getElementById("timerToggleBtn");
+const timerPanel = document.getElementById("timerPanel");
+const closeTimerBtn = document.getElementById("closeTimerBtn");
+const secHand = document.getElementById("secHand");
+const minHand = document.getElementById("minHand");
+const timerText = document.getElementById("timerText");
+const stopTimerBtn = document.getElementById("stopTimerBtn");
+let countdownInterval;
+let totalSecondsLeft = 0;
+
+timerToggleBtn.addEventListener("click", () => timerPanel.classList.add("open"));
+closeTimerBtn.addEventListener("click", () => timerPanel.classList.remove("open"));
+
+document.querySelectorAll(".preset-btn").forEach(btn => {
+  btn.addEventListener("click", () => startFocusTimer(parseInt(btn.getAttribute("data-mins"))));
+});
+
+document.getElementById("startCustomTimerBtn").addEventListener("click", () => {
+  const custom = parseInt(document.getElementById("customMins").value);
+  if (custom > 0) startFocusTimer(custom);
+});
+
+stopTimerBtn.addEventListener("click", () => {
+  clearInterval(countdownInterval);
+  totalSecondsLeft = 0;
+  updateClockUI();
+});
+
+function startFocusTimer(minutes) {
+  clearInterval(countdownInterval);
+  totalSecondsLeft = minutes * 60;
+  updateClockUI();
+  
+  countdownInterval = setInterval(() => {
+    totalSecondsLeft--;
+    updateClockUI();
+    
+    if (totalSecondsLeft <= 0) {
+      clearInterval(countdownInterval);
+      alert("¡Tiempo cumplido! Excelente sesión de foco.");
+      // Sumamos al progreso
+      accumulatedStudyMins += minutes;
+      localStorage.setItem("englishTrainerStudyMins", accumulatedStudyMins);
+      updateProgressBars();
+    }
+  }, 1000);
+}
+
+function updateClockUI() {
+  if (totalSecondsLeft <= 0) {
+    timerText.textContent = "00:00";
+    secHand.style.transform = `translateX(-50%) rotate(0deg)`;
+    minHand.style.transform = `translateX(-50%) rotate(0deg)`;
+    return;
+  }
+  
+  const m = Math.floor(totalSecondsLeft / 60);
+  const s = totalSecondsLeft % 60;
+  
+  timerText.textContent = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  
+  // Rotación suave del reloj
+  const secDeg = (s / 60) * 360;
+  // El minutero avanza ligeramente según los segundos
+  const minDeg = ((m + s/60) / 60) * 360; 
+  
+  secHand.style.transform = `translateX(-50%) rotate(${secDeg}deg)`;
+  minHand.style.transform = `translateX(-50%) rotate(${minDeg}deg)`;
+}
+
+
+// ==========================================
+// 3. TABLAS DE RECURSOS (INYECTADAS)
+// ==========================================
+function renderResourcesTables() {
+  const pBody = document.getElementById("phrasalTableBody");
+  pBody.innerHTML = phrasalVerbs.map(p => `
+    <tr>
+      <td>${p.verb}</td>
+      <td>${p.meaning}</td>
+      <td><em>${p.example}</em></td>
+    </tr>
+  `).join("");
+
+  const mBody = document.getElementById("modalsTableBody");
+  mBody.innerHTML = modalVerbs.map(m => `
+    <tr>
+      <td>${m.word}</td>
+      <td>${m.meaning}</td>
+    </tr>
+  `).join("");
+}
+
+// ==========================================
+// 4. TIEMPOS VERBALES Y GRAMÁTICA
+// ==========================================
 function renderTenseCards(filter = "") {
   tenseGrid.innerHTML = "";
-
   const normalizedFilter = filter.toLowerCase().trim();
 
   const filteredTenses = tenses.filter((tense) => {
@@ -388,7 +617,6 @@ function renderTenseCards(filter = "") {
         <h4>${tense.name}</h4>
         <p>${tense.summary}</p>
       </div>
-
       <div class="card-bottom">
         <span class="level-tag">${tense.level}</span>
       </div>
@@ -399,11 +627,7 @@ function renderTenseCards(filter = "") {
       renderTenseCards(tenseSearch.value);
       renderTenseDetail(tense.id);
       setPracticeTense(tense.id);
-
-      document.getElementById("estructura").scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
+      document.getElementById("estructura").scrollIntoView({ behavior: "smooth", block: "start" });
     });
 
     tenseGrid.appendChild(card);
@@ -412,13 +636,11 @@ function renderTenseCards(filter = "") {
 
 function renderTenseDetail(tenseId) {
   const tense = tenses.find((item) => item.id === tenseId);
-
   if (!tense) return;
 
   detailTitle.textContent = tense.name;
   detailSummary.textContent = tense.summary;
   detailLevel.textContent = tense.level;
-
   affirmativeStructure.textContent = tense.structures.affirmative;
   negativeStructure.textContent = tense.structures.negative;
   questionStructure.textContent = tense.structures.question;
@@ -434,32 +656,28 @@ function renderTenseDetail(tenseId) {
   tense.examples.forEach(([english, spanish]) => {
     const example = document.createElement("article");
     example.className = "example-item";
-    example.innerHTML = `
-      <strong>${english}</strong>
-      <span>${spanish}</span>
-    `;
+    example.innerHTML = `<strong>${english}</strong><span>${spanish}</span>`;
     examplesList.appendChild(example);
   });
 }
 
+// ==========================================
+// 5. WRITING Y CORRECCIÓN IA
+// ==========================================
 function renderPracticeOptions() {
   practiceTense.innerHTML = "";
-
   tenses.forEach((tense) => {
     const option = document.createElement("option");
     option.value = tense.id;
     option.textContent = tense.name;
     practiceTense.appendChild(option);
   });
-
   setPracticeTense(selectedTenseId);
 }
 
 function setPracticeTense(tenseId) {
   const tense = tenses.find((item) => item.id === tenseId);
-
   if (!tense) return;
-
   practiceTense.value = tense.id;
   generatePrompt();
 }
@@ -469,7 +687,6 @@ function generatePrompt() {
   const prompts = ieltsPrompts[level];
   const tense = tenses.find((item) => item.id === practiceTense.value);
   const randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
-
   practicePrompt.textContent = `${randomPrompt} Try to include: ${tense.name}.`;
 }
 
@@ -480,14 +697,9 @@ function updateWordCounter() {
 
 function saveParagraph() {
   const text = practiceText.value.trim();
-
-  if (!text) {
-    alert("Escribí un texto antes de guardarlo.");
-    return;
-  }
+  if (!text) { alert("Escribí un texto antes de guardarlo."); return; }
 
   const tense = tenses.find((item) => item.id === practiceTense.value);
-
   const newParagraph = {
     id: createId(),
     title: `Writing practice · ${tense.name}`,
@@ -498,88 +710,59 @@ function saveParagraph() {
 
   paragraphs.unshift(newParagraph);
   localStorage.setItem("englishTrainerParagraphs", JSON.stringify(paragraphs));
-
+  updateProgressBars();
   practiceText.value = "";
   updateWordCounter();
   renderParagraphs();
+  
+  // Avisar éxito
+  alert("¡Párrafo guardado exitosamente en tu Biblioteca!");
 }
 
 function renderParagraphs() {
   savedParagraphsList.innerHTML = "";
-  savedParagraphsCount.textContent = paragraphs.length;
-
   if (paragraphs.length === 0) {
-    savedParagraphsList.innerHTML = `
-      <div class="empty-state">
-        Todavía no guardaste párrafos. Escribí una práctica de writing y guardala para verla acá.
-      </div>
-    `;
+    savedParagraphsList.innerHTML = `<div class="empty-state">Todavía no guardaste párrafos.</div>`;
     return;
   }
-
-  paragraphs.forEach((paragraph) => {
+  paragraphs.forEach((p) => {
     const article = document.createElement("article");
     article.className = "saved-item";
-
     article.innerHTML = `
       <div class="saved-meta">
         <div>
-          <strong>${escapeHTML(paragraph.title)}</strong>
-          <span>${escapeHTML(paragraph.date)} · ${escapeHTML(paragraph.tense)}</span>
+          <strong>${escapeHTML(p.title)}</strong>
+          <span>${escapeHTML(p.date)} · ${escapeHTML(p.tense)}</span>
         </div>
       </div>
-
-      <p>${escapeHTML(paragraph.text)}</p>
-
+      <p>${escapeHTML(p.text)}</p>
       <div class="item-actions">
-        <button class="small-danger-btn" type="button" data-delete-paragraph="${paragraph.id}">
-          Borrar párrafo
-        </button>
+        <button class="small-danger-btn" type="button" data-delete-paragraph="${p.id}">Borrar párrafo</button>
       </div>
     `;
-
     savedParagraphsList.appendChild(article);
   });
 }
 
 function deleteParagraph(id) {
-  paragraphs = paragraphs.filter((paragraph) => paragraph.id !== id);
+  paragraphs = paragraphs.filter((p) => p.id !== id);
   localStorage.setItem("englishTrainerParagraphs", JSON.stringify(paragraphs));
+  updateProgressBars();
   renderParagraphs();
 }
 
 function runAICorrection() {
   const text = practiceText.value.trim();
-
-  if (!text) {
-    alert("Escribí un párrafo antes de corregirlo.");
-    return;
-  }
+  if (!text) { alert("Escribí un párrafo antes de corregirlo."); return; }
 
   const words = getWords(text);
-  const sentences = text.split(/[.!?]+/).filter((sentence) => sentence.trim().length > 0);
+  const sentences = text.split(/[.!?]+/).filter((s) => s.trim().length > 0);
   const lower = text.toLowerCase();
-
-  const connectors = [
-    "however",
-    "therefore",
-    "moreover",
-    "although",
-    "because",
-    "while",
-    "whereas",
-    "in addition",
-    "for example",
-    "as a result",
-    "on the other hand",
-    "nevertheless"
-  ];
-
-  const foundConnectors = connectors.filter((connector) => lower.includes(connector));
+  const connectors = ["however", "therefore", "moreover", "although", "because", "while", "whereas", "in addition", "for example", "as a result", "on the other hand", "nevertheless"];
+  const foundConnectors = connectors.filter((c) => lower.includes(c));
   const selectedLevel = Number(ieltsLevel.value);
 
   let band = 5;
-
   if (words.length >= 80) band += 0.5;
   if (words.length >= 130) band += 0.5;
   if (sentences.length >= 4) band += 0.5;
@@ -594,134 +777,40 @@ function runAICorrection() {
   band = Math.max(4, Math.min(8.5, Math.round(band * 2) / 2));
 
   const correctedText = createCorrectedVersion(text);
-  const coachIntro = createCoachIntro(band);
-
   const strengths = [];
-
-  if (words.length >= 80) {
-    strengths.push("Tu párrafo ya tiene una extensión razonable para desarrollar una idea.");
-  } else {
-    strengths.push("La idea inicial se entiende, pero todavía necesita más desarrollo para sonar como una respuesta IELTS completa.");
-  }
-
-  if (foundConnectors.length > 0) {
-    strengths.push(`Usaste conectores útiles como ${foundConnectors.slice(0, 3).join(", ")}.`);
-  } else {
-    strengths.push("La base del texto está, pero conviene sumar conectores para que las ideas avancen con más naturalidad.");
-  }
-
-  const nextSteps = [
-    "Agregá una oración inicial que responda directamente la consigna.",
-    "Desarrollá una razón principal y después agregá un ejemplo concreto.",
-    "Cerrá el párrafo con una frase final que refuerce tu idea.",
-    "Intentá variar estructuras: una oración simple, una oración con because/although y una con relative clause."
-  ];
+  if (words.length >= 80) strengths.push("Tu párrafo ya tiene una extensión razonable.");
+  else strengths.push("La idea inicial se entiende, pero necesita más desarrollo.");
+  if (foundConnectors.length > 0) strengths.push(`Usaste conectores útiles como ${foundConnectors.slice(0, 3).join(", ")}.`);
+  else strengths.push("Conviene sumar conectores para que las ideas avancen con más naturalidad.");
 
   aiFeedback.classList.remove("hidden");
   aiFeedback.innerHTML = `
     <h4>Feedback de IA Coach</h4>
-
-    <p class="coach-message">
-      ${coachIntro}
-    </p>
-
     <div class="ai-feedback-grid">
-      <div class="band-score">
-        <strong>${band}</strong>
-        <span>IELTS estimated band</span>
-      </div>
-
+      <div class="band-score"><strong>${band}</strong><span>IELTS estimated band</span></div>
       <div class="feedback-list">
-        <article>
-          <strong>Lo que está funcionando</strong>
-          <p>${strengths.join(" ")}</p>
-        </article>
-
-        <article>
-          <strong>Correcciones importantes</strong>
-          <p>${detectedIssues.length ? detectedIssues.join(" ") : "No detecté errores frecuentes graves. El próximo paso es mejorar precisión, variedad y naturalidad."}</p>
-        </article>
-
-        <article>
-          <strong>Próximo objetivo</strong>
-          <p>${nextSteps.slice(0, 3).join(" ")}</p>
-        </article>
+        <article><strong>Lo que está funcionando</strong><p>${strengths.join(" ")}</p></article>
+        <article><strong>Correcciones importantes</strong><p>${detectedIssues.length ? detectedIssues.join(" ") : "No detecté errores frecuentes graves."}</p></article>
       </div>
     </div>
-
-    <div class="corrected-box">
-      <strong>Versión corregida orientativa</strong>
-      <p>${escapeHTML(correctedText)}</p>
-    </div>
+    <div class="corrected-box"><strong>Versión corregida orientativa</strong><p>${escapeHTML(correctedText)}</p></div>
   `;
-}
-
-function createCoachIntro(band) {
-  if (band >= 7) {
-    return "Leí tu párrafo y la impresión general es buena: se entiende la idea, hay control razonable de la estructura y ya empezás a sonar más natural. Para llevarlo a un nivel más alto, trabajaría en precisión, vocabulario menos repetitivo y una conclusión más contundente.";
-  }
-
-  if (band >= 6) {
-    return "Tu párrafo comunica la idea principal, que es lo más importante al principio. Todavía se nota que algunas frases podrían ordenarse mejor y que faltan conectores o ejemplos para que el texto sea más convincente. Estás en una base intermedia sobre la cual se puede construir muy bien.";
-  }
-
-  return "Tu texto tiene una intención clara, pero todavía necesita más estructura. Yo lo trabajaría como haría un entrenador: primero una oración principal clara, después una explicación simple, luego un ejemplo y finalmente una frase de cierre. Eso solo ya mejoraría mucho la respuesta.";
 }
 
 function detectCommonIssues(text) {
   const issues = [];
-
-  if (/\bi am agree\b/i.test(text)) {
-    issues.push("No se dice “I am agree”; la forma correcta es “I agree”.");
-  }
-
-  if (/\bpeople is\b/i.test(text)) {
-    issues.push("“People” normalmente funciona como plural: usá “people are”.");
-  }
-
-  if (/\bhe have\b/i.test(text)) {
-    issues.push("Con he/she/it corresponde “has”, no “have”.");
-  }
-
-  if (/\bshe go\b/i.test(text)) {
-    issues.push("En Present Simple con she corresponde “she goes”.");
-  }
-
-  if (/\bvery important\b/gi.test(text) && text.match(/\bvery important\b/gi)?.length > 1) {
-    issues.push("Repetís “very important”; podés variar con “essential”, “crucial” o “highly relevant”.");
-  }
-
-  if (!/[.!?]$/.test(text.trim())) {
-    issues.push("El párrafo debería cerrar con puntuación final.");
-  }
-
+  if (/\bi am agree\b/i.test(text)) issues.push("No se dice “I am agree”; usá “I agree”.");
+  if (/\bpeople is\b/i.test(text)) issues.push("“People” es plural: usá “people are”.");
+  if (/\bhe have\b/i.test(text)) issues.push("Con he/she/it corresponde “has”.");
+  if (!/[.!?]$/.test(text.trim())) issues.push("El párrafo debería cerrar con puntuación final.");
   return issues;
 }
 
 function createCorrectedVersion(text) {
   let corrected = text.trim();
-
-  const replacements = [
-    [/\bi am agree\b/gi, "I agree"],
-    [/\bpeople is\b/gi, "people are"],
-    [/\bhe have\b/gi, "he has"],
-    [/\bshe go\b/gi, "she goes"],
-    [/\bi think that\b/gi, "I believe that"],
-    [/\ba lot of people\b/gi, "many people"]
-  ];
-
-  replacements.forEach(([pattern, replacement]) => {
-    corrected = corrected.replace(pattern, replacement);
-  });
-
-  if (!/[.!?]$/.test(corrected)) {
-    corrected += ".";
-  }
-
-  if (getWords(corrected).length < 80) {
-    corrected += " For example, this situation can affect people’s opportunities, habits and long-term progress. Therefore, it is important to develop a clear opinion and support it with specific reasons.";
-  }
-
+  const replacements = [[/\bi am agree\b/gi, "I agree"], [/\bpeople is\b/gi, "people are"], [/\bhe have\b/gi, "he has"]];
+  replacements.forEach(([pattern, replacement]) => { corrected = corrected.replace(pattern, replacement); });
+  if (!/[.!?]$/.test(corrected)) corrected += ".";
   return corrected;
 }
 
@@ -729,14 +818,11 @@ function hasComplexSentence(text) {
   return /\b(although|while|whereas|because|which|who|that|therefore|however)\b/i.test(text);
 }
 
+// ==========================================
+// 6. APUNTES (NOTES)
+// ==========================================
 function saveNote(title, text) {
-  const newNote = {
-    id: createId(),
-    title: title || "Apunte sin título",
-    text,
-    date: new Date().toLocaleDateString("es-AR")
-  };
-
+  const newNote = { id: createId(), title: title || "Apunte sin título", text, date: new Date().toLocaleDateString("es-AR") };
   notes.unshift(newNote);
   localStorage.setItem("englishTrainerNotes", JSON.stringify(notes));
   renderNotes();
@@ -744,65 +830,37 @@ function saveNote(title, text) {
 
 function renderNotes() {
   notesList.innerHTML = "";
-  savedNotesCount.textContent = notes.length;
-
   if (notes.length === 0) {
-    notesList.innerHTML = `
-      <div class="empty-state">
-        Todavía no guardaste apuntes. Podés guardar textos largos, reglas, vocabulario o correcciones.
-      </div>
-    `;
+    notesList.innerHTML = `<div class="empty-state">Todavía no guardaste apuntes.</div>`;
     return;
   }
-
   notes.forEach((note) => {
     const article = document.createElement("article");
     article.className = "note-item";
-
     article.innerHTML = `
       <div class="note-meta">
-        <div>
-          <strong>${escapeHTML(note.title)}</strong>
-          <span>${note.date}</span>
-        </div>
+        <div><strong>${escapeHTML(note.title)}</strong><span>${note.date}</span></div>
       </div>
-
       <p>${escapeHTML(note.text)}</p>
-
       <div class="item-actions">
-        <button class="small-danger-btn" type="button" data-delete-note="${note.id}">
-          Borrar apunte
-        </button>
+        <button class="small-danger-btn" type="button" data-delete-note="${note.id}">Borrar apunte</button>
       </div>
     `;
-
     notesList.appendChild(article);
   });
 }
 
-function saveNoteFromEditor() {
-  const title = noteTitle.value.trim() || "Apunte personal";
-  const text = noteText.value.trim();
-
-  if (!text) {
-    alert("Escribí o pegá un texto antes de guardarlo.");
-    return;
-  }
-
-  saveNote(title, text);
-  noteTitle.value = "";
-  noteText.value = "";
-}
-
 function deleteNote(id) {
-  notes = notes.filter((note) => note.id !== id);
+  notes = notes.filter((n) => n.id !== id);
   localStorage.setItem("englishTrainerNotes", JSON.stringify(notes));
   renderNotes();
 }
 
+// ==========================================
+// 7. QUIZ / MÚLTIPLE CHOICE
+// ==========================================
 function renderExamSelector() {
   examSelector.innerHTML = "";
-
   for (let i = 1; i <= 100; i++) {
     const option = document.createElement("option");
     option.value = String(i);
@@ -811,323 +869,142 @@ function renderExamSelector() {
   }
 }
 
-function generateQuestionBank() {
+function getExamQuestions(examNumber) {
   const templates = [
-    {
-      question: "Choose the correct Present Simple sentence.",
-      correct: "She studies every morning.",
-      wrong: ["She study every morning.", "She is study every morning.", "She studying every morning."]
-    },
-    {
-      question: "Choose the correct Present Continuous sentence.",
-      correct: "They are working now.",
-      wrong: ["They working now.", "They are work now.", "They work yesterday."]
-    },
-    {
-      question: "Choose the correct Past Simple sentence.",
-      correct: "I visited London last year.",
-      wrong: ["I visit London last year.", "I have visited London yesterday.", "I was visit London."]
-    },
-    {
-      question: "Choose the correct Past Continuous sentence.",
-      correct: "I was reading when he called.",
-      wrong: ["I read when he was called.", "I was read when he called.", "I reading when he called."]
-    },
-    {
-      question: "Choose the correct Present Perfect sentence.",
-      correct: "We have finished the project.",
-      wrong: ["We has finished the project.", "We have finish the project.", "We finished the project tomorrow."]
-    },
-    {
-      question: "Choose the correct Going to sentence.",
-      correct: "It is going to rain.",
-      wrong: ["It going to rain.", "It is going rain.", "It will going to rain."]
-    },
-    {
-      question: "Which connector shows contrast?",
-      correct: "However",
-      wrong: ["Therefore", "Moreover", "For example"]
-    },
-    {
-      question: "Which connector introduces a result?",
-      correct: "Therefore",
-      wrong: ["Although", "Whereas", "Despite"]
-    },
-    {
-      question: "Which tense describes an action before another past action?",
-      correct: "Past Perfect",
-      wrong: ["Past Simple", "Future Simple", "Present Continuous"]
-    },
-    {
-      question: "Which option is more academic?",
-      correct: "This issue is significant.",
-      wrong: ["This thing is very good.", "This stuff is nice.", "This is super cool."]
-    },
-    {
-      question: "Choose the correct Future Perfect sentence.",
-      correct: "I will have finished by Monday.",
-      wrong: ["I will finishing by Monday.", "I have finish by Monday.", "I finished by Monday tomorrow."]
-    },
-    {
-      question: "Choose the best IELTS-style opening.",
-      correct: "It is widely believed that education plays a crucial role in society.",
-      wrong: ["Education is good thing.", "I will talk about education.", "Nowadays education very important."]
-    }
+    { q: "Choose the correct Present Simple sentence.", c: "She studies every morning.", w: ["She study every morning.", "She is study every morning.", "She studying every morning."] },
+    { q: "Choose the correct Past Simple sentence.", c: "I visited London last year.", w: ["I visit London last year.", "I have visited London yesterday.", "I was visit London."] },
+    { q: "Which connector shows contrast?", c: "However", w: ["Therefore", "Moreover", "For example"] },
+    { q: "Which tense describes an action before another past action?", c: "Past Perfect", w: ["Past Simple", "Future Simple", "Present Continuous"] },
+    { q: "What is a correct Zero Conditional?", c: "If you heat ice, it melts.", w: ["If you heat ice, it will melt.", "If you heated ice, it melts.", "If you heating ice, it melts."] },
+    { q: "Choose the correct Second Conditional.", c: "If I were rich, I would travel.", w: ["If I am rich, I would travel.", "If I was rich, I will travel.", "If I be rich, I would travel."] }
   ];
-
+  
   const bank = [];
-
   for (let i = 0; i < 1000; i++) {
     const template = templates[i % templates.length];
-    const options = seededShuffle([template.correct, ...template.wrong], i + 11);
-    const answer = options.indexOf(template.correct);
-
-    bank.push({
-      question: template.question,
-      options,
-      answer
-    });
+    const options = seededShuffle([template.c, ...template.w], i + 11);
+    const answer = options.indexOf(template.c);
+    bank.push({ question: template.q, options, answer });
   }
-
-  return bank;
-}
-
-function getExamQuestions(examNumber) {
-  const bank = generateQuestionBank();
   const start = (examNumber - 1) * 10;
   return bank.slice(start, start + 10);
 }
 
 function seededShuffle(array, seed) {
   const result = [...array];
-
   for (let i = result.length - 1; i > 0; i--) {
     seed = (seed * 9301 + 49297) % 233280;
     const random = seed / 233280;
     const j = Math.floor(random * (i + 1));
-
     [result[i], result[j]] = [result[j], result[i]];
   }
-
   return result;
 }
 
 function renderQuiz() {
   quizContainer.innerHTML = "";
   quizResult.textContent = "";
-
   const examNumber = Number(examSelector.value || 1);
   currentQuiz = getExamQuestions(examNumber);
 
-  currentQuiz.forEach((question, questionIndex) => {
+  currentQuiz.forEach((question, idx) => {
     const article = document.createElement("article");
     article.className = "quiz-question";
-    article.dataset.index = questionIndex;
+    article.dataset.index = idx;
 
-    const optionsHTML = question.options.map((option, optionIndex) => {
-      return `
-        <label>
-          <input 
-            type="radio" 
-            name="question-${questionIndex}" 
-            value="${optionIndex}" 
-          />
-          <span>${option}</span>
-        </label>
-      `;
-    }).join("");
+    const optionsHTML = question.options.map((option, optIdx) => `
+      <label><input type="radio" name="question-${idx}" value="${optIdx}" /><span>${option}</span></label>
+    `).join("");
 
-    article.innerHTML = `
-      <h4>${questionIndex + 1}. ${question.question}</h4>
-      <div class="quiz-options">
-        ${optionsHTML}
-      </div>
-    `;
-
+    article.innerHTML = `<h4>${idx + 1}. ${question.question}</h4><div class="quiz-options">${optionsHTML}</div>`;
     quizContainer.appendChild(article);
   });
-
   updateQuizProgress();
 }
 
 function updateQuizProgress() {
-  const answered = currentQuiz.filter((_, index) => {
-    return document.querySelector(`input[name="question-${index}"]:checked`);
-  }).length;
-
+  const answered = currentQuiz.filter((_, idx) => document.querySelector(`input[name="question-${idx}"]:checked`)).length;
   quizProgress.textContent = `${answered}/10 respondidas`;
 }
 
 function submitQuiz() {
   let correctAnswers = 0;
+  currentQuiz.forEach((question, idx) => {
+    const qElement = document.querySelector(`.quiz-question[data-index="${idx}"]`);
+    const selected = document.querySelector(`input[name="question-${idx}"]:checked`);
+    qElement.classList.remove("correct", "incorrect");
 
-  currentQuiz.forEach((question, questionIndex) => {
-    const questionElement = document.querySelector(`.quiz-question[data-index="${questionIndex}"]`);
-    const selectedOption = document.querySelector(`input[name="question-${questionIndex}"]:checked`);
-
-    questionElement.classList.remove("correct", "incorrect");
-
-    if (!selectedOption) {
-      questionElement.classList.add("incorrect");
-      return;
-    }
-
-    const selectedValue = Number(selectedOption.value);
-
-    if (selectedValue === question.answer) {
-      correctAnswers++;
-      questionElement.classList.add("correct");
+    if (!selected) { qElement.classList.add("incorrect"); return; }
+    if (Number(selected.value) === question.answer) {
+      correctAnswers++; qElement.classList.add("correct");
     } else {
-      questionElement.classList.add("incorrect");
+      qElement.classList.add("incorrect");
     }
   });
 
   const percentage = Math.round((correctAnswers / currentQuiz.length) * 100);
-  const resultText = `${correctAnswers}/10 correctas · ${percentage}%`;
-
-  quizResult.textContent = resultText;
-  quizScorePreview.textContent = `${percentage}%`;
-  localStorage.setItem("englishTrainerLastScore", `${percentage}%`);
+  quizResult.textContent = `${correctAnswers}/10 correctas · ${percentage}%`;
+  
+  // Guardar métricas del quiz para barra de progreso
+  examsCompleted++;
+  averageScore = Math.round(((averageScore * (examsCompleted - 1)) + percentage) / examsCompleted);
+  localStorage.setItem("englishTrainerExamsCount", examsCompleted);
+  localStorage.setItem("englishTrainerAvgScore", averageScore);
+  updateProgressBars();
 }
 
-function resetQuiz() {
-  renderQuiz();
-}
+// ==========================================
+// SCROLL, REVEAL & LISTENERS GLOBALES
+// ==========================================
+function getWords(text) { return text.trim().split(/\s+/).filter(Boolean); }
+function createId() { return crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random()); }
+function escapeHTML(text) { return text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;"); }
 
 function setActiveLink() {
+  if (resourcesView.classList.contains('active-view')) return;
   let currentSection = "inicio";
-
   sections.forEach((section) => {
     const sectionTop = section.offsetTop - 140;
-
-    if (window.scrollY >= sectionTop) {
-      currentSection = section.getAttribute("id");
-    }
+    if (window.scrollY >= sectionTop) currentSection = section.getAttribute("id");
   });
-
   navLinks.forEach((link) => {
     link.classList.remove("active");
-
-    if (link.getAttribute("href") === `#${currentSection}`) {
-      link.classList.add("active");
-    }
+    if (link.getAttribute("href") === `#${currentSection}`) link.classList.add("active");
   });
 }
 
 function revealOnScroll() {
   revealElements.forEach((element) => {
-    const elementTop = element.getBoundingClientRect().top;
-
-    if (elementTop < window.innerHeight - 80) {
-      element.classList.add("visible");
-    }
+    if (element.getBoundingClientRect().top < window.innerHeight - 80) element.classList.add("visible");
   });
 }
 
-function getWords(text) {
-  return text.trim().split(/\s+/).filter(Boolean);
-}
-
-function createId() {
-  return crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random());
-}
-
-function escapeHTML(text) {
-  return text
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;");
-}
-
-tenseSearch.addEventListener("input", () => {
-  renderTenseCards(tenseSearch.value);
-});
-
+// Events
+tenseSearch.addEventListener("input", () => renderTenseCards(tenseSearch.value));
 ieltsLevel.addEventListener("change", generatePrompt);
 practiceTense.addEventListener("change", generatePrompt);
 newPromptBtn.addEventListener("click", generatePrompt);
 practiceText.addEventListener("input", updateWordCounter);
-
-clearTextBtn.addEventListener("click", () => {
-  practiceText.value = "";
-  updateWordCounter();
-  aiFeedback.classList.add("hidden");
-});
-
+clearTextBtn.addEventListener("click", () => { practiceText.value = ""; updateWordCounter(); aiFeedback.classList.add("hidden"); });
 saveParagraphBtn.addEventListener("click", saveParagraph);
 aiCorrectBtn.addEventListener("click", runAICorrection);
-
-clearParagraphsBtn.addEventListener("click", () => {
-  const confirmed = confirm("¿Seguro que querés borrar todos los párrafos guardados?");
-
-  if (!confirmed) return;
-
-  paragraphs = [];
-  localStorage.removeItem("englishTrainerParagraphs");
-  renderParagraphs();
-});
-
-savedParagraphsList.addEventListener("click", (event) => {
-  const deleteButton = event.target.closest("[data-delete-paragraph]");
-
-  if (!deleteButton) return;
-
-  deleteParagraph(deleteButton.dataset.deleteParagraph);
-});
-
-saveNoteBtn.addEventListener("click", saveNoteFromEditor);
-
-clearNoteEditorBtn.addEventListener("click", () => {
-  noteTitle.value = "";
-  noteText.value = "";
-});
-
-clearNotesBtn.addEventListener("click", () => {
-  const confirmed = confirm("¿Seguro que querés borrar todos los apuntes guardados?");
-
-  if (!confirmed) return;
-
-  notes = [];
-  localStorage.removeItem("englishTrainerNotes");
-  renderNotes();
-});
-
-notesList.addEventListener("click", (event) => {
-  const deleteButton = event.target.closest("[data-delete-note]");
-
-  if (!deleteButton) return;
-
-  deleteNote(deleteButton.dataset.deleteNote);
-});
-
+clearParagraphsBtn.addEventListener("click", () => { if(confirm("¿Borrar todos los párrafos?")) { paragraphs = []; localStorage.removeItem("englishTrainerParagraphs"); renderParagraphs(); updateProgressBars();} });
+savedParagraphsList.addEventListener("click", (e) => { const btn = e.target.closest("[data-delete-paragraph]"); if(btn) deleteParagraph(btn.dataset.deleteParagraph); });
+saveNoteBtn.addEventListener("click", () => { saveNote(noteTitle.value.trim(), noteText.value.trim()); noteTitle.value = ""; noteText.value = ""; });
+clearNoteEditorBtn.addEventListener("click", () => { noteTitle.value = ""; noteText.value = ""; });
+clearNotesBtn.addEventListener("click", () => { if(confirm("¿Borrar todos los apuntes?")) { notes = []; localStorage.removeItem("englishTrainerNotes"); renderNotes(); } });
+notesList.addEventListener("click", (e) => { const btn = e.target.closest("[data-delete-note]"); if(btn) deleteNote(btn.dataset.deleteNote); });
 examSelector.addEventListener("change", renderQuiz);
 quizContainer.addEventListener("change", updateQuizProgress);
 submitQuizBtn.addEventListener("click", submitQuiz);
-resetQuizBtn.addEventListener("click", resetQuiz);
+resetQuizBtn.addEventListener("click", renderQuiz);
 
-// Manejo inteligente de los accesos directos a la sección de Apuntes Varios
-document.querySelectorAll(".notes-shortcut-trigger").forEach(trigger => {
-  trigger.addEventListener("click", (e) => {
-    e.preventDefault();
-    const targetSection = document.getElementById("apuntes");
-    if (targetSection) {
-      targetSection.scrollIntoView({ behavior: "smooth", block: "start" });
-      setTimeout(() => {
-        noteTitle.focus();
-      }, 600);
-    }
-  });
-});
+window.addEventListener("scroll", () => { setActiveLink(); revealOnScroll(); });
 
-window.addEventListener("scroll", () => {
-  setActiveLink();
-  revealOnScroll();
-});
-
+// Inicialización global
 window.addEventListener("load", () => {
-  totalTenses.textContent = tenses.length;
-  quizScorePreview.textContent = lastScore;
-
+  updateProgressBars();
+  renderResourcesTables();
   renderTenseCards();
   renderTenseDetail(selectedTenseId);
   renderPracticeOptions();
@@ -1135,7 +1012,6 @@ window.addEventListener("load", () => {
   renderQuiz();
   renderParagraphs();
   renderNotes();
-
   setActiveLink();
   revealOnScroll();
 });
