@@ -4899,3 +4899,143 @@ if (typeof updateTimerUI === "function") updateTimerUI();
     if (typeof renderQuickPractice === "function") renderQuickPractice();
   }, 0);
 })();
+
+
+/* =========================================================
+   CIRCLE TIMER V18
+   Reemplaza el reloj de arena por un contador circular.
+   El interior empieza lleno con el color del theme y se consume
+   linealmente en sentido horario, como una aguja que va comiendo el relleno.
+========================================================= */
+
+function ensureCircleTimerMarkupV18() {
+  const ring = document.getElementById("timerProgressRing");
+  if (!ring) return;
+
+  ring.classList.remove("digital-timer-card", "hourglass-timer-card");
+  ring.classList.add("circle-timer-card");
+
+  if (ring.querySelector(".circle-timer-orb")) return;
+
+  ring.innerHTML = `
+    <div class="circle-timer-time">
+      <span id="timerDisplay" class="timer-display">00:00</span>
+      <small>sesión de foco</small>
+    </div>
+
+    <div class="circle-timer-orb" aria-hidden="true">
+      <div class="circle-timer-face">
+        <span class="circle-consume-hand"></span>
+        <span class="circle-pivot"></span>
+        <span class="circle-inner-glow"></span>
+      </div>
+    </div>
+
+    <p class="circle-timer-caption">El relleno se consume en sentido horario.</p>
+  `;
+}
+
+// Mantengo el nombre anterior porque algunas inicializaciones viejas lo llaman.
+ensureHourglassTimerMarkup = ensureCircleTimerMarkupV18;
+
+updateTimerUI = function updateCircleTimerUIV18() {
+  const remaining = Math.max(timerSecondsLeft, 0);
+  const minutes = Math.floor(remaining / 60);
+  const seconds = remaining % 60;
+
+  ensureCircleTimerMarkupV18();
+
+  const timerDisplayEl = document.getElementById("timerDisplay");
+  const timerRingEl = document.getElementById("timerProgressRing");
+
+  if (timerDisplayEl) {
+    timerDisplayEl.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  }
+
+  const progress = timerInitialSeconds
+    ? (timerInitialSeconds - remaining) / timerInitialSeconds
+    : 0;
+
+  const elapsedDegrees = Math.max(0, Math.min(360, progress * 360));
+  const remainingDegrees = Math.max(0, 360 - elapsedDegrees);
+
+  if (timerRingEl) {
+    timerRingEl.style.setProperty("--timer-elapsed", `${elapsedDegrees}deg`);
+    timerRingEl.style.setProperty("--timer-remaining", `${remainingDegrees}deg`);
+    timerRingEl.style.setProperty("--timer-progress-ratio", String(progress));
+  }
+};
+
+setTimeout(() => {
+  ensureCircleTimerMarkupV18();
+  updateTimerUI();
+}, 0);
+
+
+/* =========================================================
+   PRACTICE TOPIC V19
+   Asegura que cada oración de Práctica muestre siempre
+   el tiempo verbal / estructura correspondiente.
+========================================================= */
+
+function inferQuickPracticeTopicV19(item = {}) {
+  const base = `${item.topic || ""} ${item.es || ""} ${item.answer || ""}`.toLowerCase();
+
+  if (base.includes("future perfect continuous") || base.includes("will have been")) return "Future Perfect Continuous";
+  if (base.includes("future perfect") || base.includes("will have")) return "Future Perfect";
+  if (base.includes("future continuous") || base.includes("will be")) return "Future Continuous";
+  if (base.includes("going to") || base.includes("va a")) return "Going To";
+  if (base.includes("future simple") || base.includes("will ")) return "Future Simple";
+
+  if (base.includes("present perfect continuous") || base.includes("has been") || base.includes("have been")) return "Present Perfect Continuous";
+  if (base.includes("present perfect") || base.includes("has ") || base.includes("have ")) return "Present Perfect";
+
+  if (base.includes("past perfect continuous") || base.includes("had been")) return "Past Perfect Continuous";
+  if (base.includes("past perfect") || base.includes("had ")) return "Past Perfect";
+  if (base.includes("past continuous") || base.includes("was ") || base.includes("were ")) return "Past Continuous";
+  if (base.includes("past simple") || base.includes("yesterday") || base.includes("ayer")) return "Past Simple";
+
+  if (base.includes("present continuous") || base.includes("is ") || base.includes("are ") || base.includes("am ")) return "Present Continuous";
+
+  if (base.includes("third conditional") || base.includes("would have") || base.includes("hubiera")) return "Third Conditional";
+  if (base.includes("second conditional") || base.includes("would ") || base.includes("tuviera")) return "Second Conditional";
+  if (base.includes("first conditional") || (base.includes("if") && base.includes("will"))) return "First Conditional";
+  if (base.includes("zero conditional") || (base.includes("if") && base.includes("boils"))) return "Zero Conditional";
+
+  if (base.includes("modal") || base.includes("should") || base.includes("could") || base.includes("might") || base.includes("must")) return "Modal Verbs";
+
+  return item.topic || "Present Simple";
+}
+
+function renderQuickPracticeTopicV19(item) {
+  const topic = inferQuickPracticeTopicV19(item);
+  const quickTopicEl = document.getElementById("quickTopic");
+
+  if (!quickTopicEl) return;
+
+  quickTopicEl.textContent = `Tiempo verbal: ${topic}`;
+  quickTopicEl.title = topic;
+  quickTopicEl.classList.add("quick-topic-pill");
+}
+
+if (typeof renderQuickPractice === "function") {
+  const previousRenderQuickPracticeV19 = renderQuickPractice;
+
+  renderQuickPractice = function renderQuickPracticeWithTopicV19() {
+    previousRenderQuickPracticeV19();
+
+    const item = Array.isArray(quickPracticeQueue)
+      ? quickPracticeQueue[currentQuickIndex]
+      : null;
+
+    renderQuickPracticeTopicV19(item || {});
+  };
+}
+
+setTimeout(() => {
+  const item = Array.isArray(quickPracticeQueue)
+    ? quickPracticeQueue[currentQuickIndex]
+    : null;
+
+  renderQuickPracticeTopicV19(item || {});
+}, 0);

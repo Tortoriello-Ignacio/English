@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>English Trainer IELTS | Inglés desde Español</title>
   <meta name="description" content="Entrenador de inglés desde español con tiempos verbales, writing IELTS, recursos, timer, flashcards, vocabulario y progreso." />
-  <link rel="stylesheet" href="style.css?v=17" />
+  <link rel="stylesheet" href="style.css?v=practice-topic-v19" />
 </head>
 
 <body>
@@ -20,32 +20,21 @@
       </div>
     </div>
 
-    <div id="timerProgressRing" class="hourglass-timer-card" aria-label="Tiempo restante del timer">
-      <div class="hourglass-time">
+    <div id="timerProgressRing" class="circle-timer-card" aria-label="Tiempo restante del timer">
+      <div class="circle-timer-time">
         <span id="timerDisplay" class="timer-display">00:00</span>
         <small>sesión de foco</small>
       </div>
 
-      <div class="hourglass-stage" aria-hidden="true">
-        <div class="hourglass-glow"></div>
-
-        <div class="hourglass">
-          <div class="hourglass-bulb top-bulb">
-            <div class="sand top-sand"></div>
-          </div>
-
-          <div class="hourglass-neck">
-            <span class="falling-line"></span>
-            <span class="falling-particle particle-one"></span>
-            <span class="falling-particle particle-two"></span>
-            <span class="falling-particle particle-three"></span>
-          </div>
-
-          <div class="hourglass-bulb bottom-bulb">
-            <div class="sand bottom-sand"></div>
-          </div>
+      <div class="circle-timer-orb" aria-hidden="true">
+        <div class="circle-timer-face">
+          <span class="circle-consume-hand"></span>
+          <span class="circle-pivot"></span>
+          <span class="circle-inner-glow"></span>
         </div>
       </div>
+
+      <p class="circle-timer-caption">El relleno se consume en sentido horario.</p>
     </div>
 
     <div class="timer-presets">
@@ -369,7 +358,7 @@
         </div>
 
         <div class="quick-practice-card">
-          <span id="quickTopic" class="level-pill">Condicionales</span>
+          <span id="quickTopic" class="level-pill quick-topic-pill">Condicionales</span>
           <h4 id="quickPrompt">Si hubiera estudiado más, habría aprobado el examen.</h4>
           <textarea id="quickAnswer" placeholder="Write your translation here..."></textarea>
           <div class="writing-tools">
@@ -603,6 +592,6 @@
     </main>
   </div>
 
-  <script src="app.js?v=17"></script>
+  <script src="app.js?v=practice-topic-v19"></script>
 </body>
 </html>
