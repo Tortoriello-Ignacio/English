@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>English Trainer IELTS | Inglés desde Español</title>
   <meta name="description" content="Entrenador de inglés desde español con tiempos verbales, writing IELTS, recursos, timer, flashcards, vocabulario y progreso." />
-  <link rel="stylesheet" href="style.css?v=nav-tabs-timer-v9" />
+  <link rel="stylesheet" href="style.css?v=hourglass-timer-v10" />
 </head>
 
 <body>
@@ -20,10 +20,31 @@
       </div>
     </div>
 
-    <div id="timerProgressRing" class="digital-timer-card" aria-label="Tiempo restante del timer">
-      <div class="digital-timer-inner">
+    <div id="timerProgressRing" class="hourglass-timer-card" aria-label="Tiempo restante del timer">
+      <div class="hourglass-time">
         <span id="timerDisplay" class="timer-display">00:00</span>
         <small>sesión de foco</small>
+      </div>
+
+      <div class="hourglass-stage" aria-hidden="true">
+        <div class="hourglass-glow"></div>
+
+        <div class="hourglass">
+          <div class="hourglass-bulb top-bulb">
+            <div class="sand top-sand"></div>
+          </div>
+
+          <div class="hourglass-neck">
+            <span class="falling-line"></span>
+            <span class="falling-particle particle-one"></span>
+            <span class="falling-particle particle-two"></span>
+            <span class="falling-particle particle-three"></span>
+          </div>
+
+          <div class="hourglass-bulb bottom-bulb">
+            <div class="sand bottom-sand"></div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -540,6 +561,6 @@
     </main>
   </div>
 
-  <script src="app.js?v=nav-tabs-timer-v9"></script>
+  <script src="app.js?v=hourglass-timer-v10"></script>
 </body>
 </html>

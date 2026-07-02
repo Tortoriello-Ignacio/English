@@ -1945,3 +1945,289 @@ textarea {
     0 0 10px rgba(255, 122, 0, 0.34),
     0 0 22px rgba(255, 122, 0, 0.18) !important;
 }
+
+
+/* =========================================================
+   HOURGLASS TIMER V10
+   Reloj de arena con partículas naranjas, tiempo arriba y movimiento.
+========================================================= */
+
+.hourglass-timer-card {
+  --sand-progress: 0%;
+  width: 220px;
+  min-height: 282px;
+  margin: 8px auto 22px;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 16px;
+  padding: 18px 14px 20px;
+  border-radius: 34px;
+  background:
+    radial-gradient(circle at 50% 20%, rgba(255, 122, 0, 0.11), transparent 38%),
+    linear-gradient(145deg, rgba(255,255,255,0.065), rgba(255,255,255,0.025));
+  border: 1px solid rgba(255,255,255,0.085);
+  box-shadow:
+    0 18px 38px rgba(0, 0, 0, 0.34),
+    inset 0 0 0 1px rgba(255,255,255,0.035);
+}
+
+.hourglass-time {
+  text-align: center;
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+}
+
+.hourglass-time .timer-display,
+#timerDisplay.timer-display {
+  font-size: 2.04rem !important;
+  font-weight: 330 !important;
+  letter-spacing: 0.075em !important;
+  color: rgba(255, 248, 240, 0.96) !important;
+  text-shadow:
+    0 0 10px rgba(255, 122, 0, 0.26),
+    0 0 20px rgba(255, 122, 0, 0.12) !important;
+}
+
+.hourglass-time small {
+  color: rgba(168, 162, 158, 0.74);
+  font-size: 0.68rem;
+  font-weight: 760;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hourglass-stage {
+  position: relative;
+  width: 132px;
+  height: 164px;
+  display: grid;
+  place-items: center;
+}
+
+.hourglass-glow {
+  position: absolute;
+  width: 122px;
+  height: 122px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(255, 122, 0, 0.18), transparent 62%);
+  filter: blur(6px);
+  opacity: 0.82;
+  animation: hourglassGlow 2.6s ease-in-out infinite;
+}
+
+.hourglass {
+  position: relative;
+  width: 92px;
+  height: 148px;
+  display: grid;
+  grid-template-rows: 1fr 18px 1fr;
+  filter: drop-shadow(0 16px 24px rgba(0, 0, 0, 0.30));
+}
+
+.hourglass::before,
+.hourglass::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  height: 8px;
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,0.11), rgba(255,122,0,0.42), rgba(255,255,255,0.10));
+  box-shadow:
+    0 0 14px rgba(255, 122, 0, 0.16),
+    inset 0 0 0 1px rgba(255,255,255,0.08);
+  z-index: 4;
+}
+
+.hourglass::before {
+  top: -1px;
+}
+
+.hourglass::after {
+  bottom: -1px;
+}
+
+.hourglass-bulb {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.20);
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.105), rgba(255,255,255,0.025));
+  box-shadow:
+    inset 0 0 18px rgba(255,255,255,0.035),
+    inset 0 0 26px rgba(255, 122, 0, 0.08);
+}
+
+.top-bulb {
+  clip-path: polygon(7% 0%, 93% 0%, 57% 100%, 43% 100%);
+  border-radius: 26px 26px 8px 8px;
+}
+
+.bottom-bulb {
+  clip-path: polygon(43% 0%, 57% 0%, 93% 100%, 7% 100%);
+  border-radius: 8px 8px 26px 26px;
+}
+
+.sand {
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  background:
+    radial-gradient(circle at 40% 20%, rgba(255, 231, 180, 0.78), transparent 12%),
+    linear-gradient(180deg, #ffb02e, #ff7a00 48%, #ff5f00);
+  box-shadow:
+    inset 0 5px 14px rgba(255, 236, 197, 0.18),
+    0 0 16px rgba(255, 122, 0, 0.45),
+    0 0 32px rgba(255, 122, 0, 0.18);
+}
+
+.top-sand {
+  top: 10px;
+  height: calc(100% - var(--sand-progress));
+  min-height: 0%;
+  border-radius: 18px 18px 11px 11px;
+  clip-path: polygon(0 0, 100% 0, 78% 100%, 22% 100%);
+  transition: height 0.45s ease;
+}
+
+.bottom-sand {
+  bottom: 8px;
+  height: var(--sand-progress);
+  min-height: 0%;
+  border-radius: 12px 12px 18px 18px;
+  clip-path: polygon(22% 0, 78% 0, 100% 100%, 0 100%);
+  transition: height 0.45s ease;
+}
+
+.hourglass-neck {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.falling-line {
+  width: 3px;
+  height: 20px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255, 206, 120, 0.95), #ff7a00);
+  box-shadow:
+    0 0 10px rgba(255, 122, 0, 0.78),
+    0 0 20px rgba(255, 122, 0, 0.30);
+  opacity: 0.34;
+}
+
+.timer-running .falling-line {
+  opacity: 1;
+  animation: sandLinePulse 0.72s ease-in-out infinite;
+}
+
+.falling-particle {
+  position: absolute;
+  top: -1px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #ff9f1c;
+  box-shadow:
+    0 0 9px rgba(255, 122, 0, 0.92),
+    0 0 16px rgba(255, 122, 0, 0.34);
+  opacity: 0;
+}
+
+.timer-running .falling-particle {
+  animation: particleFall 1.25s linear infinite;
+}
+
+.particle-one {
+  margin-left: -9px;
+  animation-delay: 0s !important;
+}
+
+.particle-two {
+  margin-left: 7px;
+  animation-delay: 0.32s !important;
+}
+
+.particle-three {
+  margin-left: 0;
+  animation-delay: 0.68s !important;
+}
+
+.hourglass-timer-card.timer-running .hourglass {
+  animation: hourglassBreath 2.8s ease-in-out infinite;
+}
+
+.hourglass-timer-card.timer-paused .falling-line,
+.hourglass-timer-card.timer-paused .falling-particle,
+.hourglass-timer-card.timer-paused .hourglass {
+  animation-play-state: paused !important;
+}
+
+@keyframes particleFall {
+  0% {
+    transform: translateY(0) scale(0.65);
+    opacity: 0;
+  }
+
+  18% {
+    opacity: 1;
+  }
+
+  82% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(23px) scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes sandLinePulse {
+  0%, 100% {
+    transform: scaleY(0.86);
+    filter: brightness(0.94);
+  }
+
+  50% {
+    transform: scaleY(1.12);
+    filter: brightness(1.25);
+  }
+}
+
+@keyframes hourglassBreath {
+  0%, 100% {
+    transform: translateY(0) rotate(-0.4deg);
+  }
+
+  50% {
+    transform: translateY(-2px) rotate(0.4deg);
+  }
+}
+
+@keyframes hourglassGlow {
+  0%, 100% {
+    opacity: 0.55;
+    transform: scale(0.96);
+  }
+
+  50% {
+    opacity: 0.9;
+    transform: scale(1.04);
+  }
+}
+
+@media (max-width: 720px) {
+  .hourglass-timer-card {
+    width: 200px;
+    min-height: 260px;
+  }
+
+  .hourglass-stage {
+    transform: scale(0.92);
+  }
+}

@@ -1595,6 +1595,8 @@ function setTimer(minutes) {
   timerPaused = false;
   timerInterval = null;
 
+  if (timerProgressRing) timerProgressRing.classList.remove("timer-running", "timer-paused");
+
   if (pauseTimerBtn) pauseTimerBtn.textContent = "Pausar";
   if (startTimerBtn) {
     startTimerBtn.textContent = "Start";
@@ -1611,6 +1613,8 @@ function startTimer() {
   if (timerInterval) return;
 
   timerPaused = false;
+  if (timerProgressRing) timerProgressRing.classList.add("timer-running");
+  if (timerProgressRing) timerProgressRing.classList.remove("timer-paused");
   if (pauseTimerBtn) pauseTimerBtn.textContent = "Pausar";
   if (startTimerBtn) {
     startTimerBtn.textContent = "En curso";
@@ -1630,6 +1634,8 @@ function startTimer() {
       localStorage.setItem("englishTrainerStudySeconds", String(studySeconds));
       localStorage.setItem("englishTrainerWeeklySeconds", String(weeklySeconds));
       logActivity(`Sesión de estudio: ${Math.round(timerInitialSeconds / 60)} minutos`);
+      if (timerProgressRing) timerProgressRing.classList.remove("timer-running", "timer-paused");
+
       if (startTimerBtn) {
         startTimerBtn.textContent = "Start";
         startTimerBtn.disabled = false;
@@ -1647,7 +1653,10 @@ function updateTimerUI() {
 
   const progress = timerInitialSeconds ? (timerInitialSeconds - remaining) / timerInitialSeconds : 0;
   const degrees = Math.round(progress * 360);
-  if (timerProgressRing) timerProgressRing.style.setProperty("--timer-progress", `${degrees}deg`);
+  if (timerProgressRing) {
+    timerProgressRing.style.setProperty("--timer-progress", `${degrees}deg`);
+    timerProgressRing.style.setProperty("--sand-progress", `${Math.round(progress * 100)}%`);
+  }
 }
 
 if (timerToggleBtn) timerToggleBtn.addEventListener("click", toggleTimerPanel);
@@ -1664,6 +1673,8 @@ if (pauseTimerBtn) {
     if (!timerInterval) return;
     timerPaused = !timerPaused;
     pauseTimerBtn.textContent = timerPaused ? "Continuar" : "Pausar";
+    if (timerProgressRing) timerProgressRing.classList.toggle("timer-paused", timerPaused);
+    if (timerProgressRing) timerProgressRing.classList.toggle("timer-running", !timerPaused);
     if (startTimerBtn) startTimerBtn.textContent = timerPaused ? "Pausado" : "En curso";
   });
 }
@@ -1675,6 +1686,7 @@ if (resetTimerBtn) {
     timerSecondsLeft = 0;
     timerInitialSeconds = 0;
     timerPaused = false;
+    if (timerProgressRing) timerProgressRing.classList.remove("timer-running", "timer-paused");
     if (pauseTimerBtn) pauseTimerBtn.textContent = "Pausar";
     if (startTimerBtn) {
       startTimerBtn.textContent = "Start";
