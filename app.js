@@ -4973,138 +4973,13 @@ setTimeout(() => {
 
 
 /* =========================================================
-   PRACTICE TOPIC V19
-   Asegura que cada oración de Práctica muestre siempre
-   el tiempo verbal / estructura correspondiente.
+   FIX V21
+   - Timer circular visible tanto si el HTML usa #timerVisual como #timerProgressRing.
+   - Botones Nueva oración / Corregir / Ver modelo con listeners directos.
+   - Práctica por ciclo de 17 tiempos verbales, sin "Tiempo verbal: práctica".
 ========================================================= */
 
-function inferQuickPracticeTopicV19(item = {}) {
-  const base = `${item.topic || ""} ${item.es || ""} ${item.answer || ""}`.toLowerCase();
-
-  if (base.includes("future perfect continuous") || base.includes("will have been")) return "Future Perfect Continuous";
-  if (base.includes("future perfect") || base.includes("will have")) return "Future Perfect";
-  if (base.includes("future continuous") || base.includes("will be")) return "Future Continuous";
-  if (base.includes("going to") || base.includes("va a")) return "Going To";
-  if (base.includes("future simple") || base.includes("will ")) return "Future Simple";
-
-  if (base.includes("present perfect continuous") || base.includes("has been") || base.includes("have been")) return "Present Perfect Continuous";
-  if (base.includes("present perfect") || base.includes("has ") || base.includes("have ")) return "Present Perfect";
-
-  if (base.includes("past perfect continuous") || base.includes("had been")) return "Past Perfect Continuous";
-  if (base.includes("past perfect") || base.includes("had ")) return "Past Perfect";
-  if (base.includes("past continuous") || base.includes("was ") || base.includes("were ")) return "Past Continuous";
-  if (base.includes("past simple") || base.includes("yesterday") || base.includes("ayer")) return "Past Simple";
-
-  if (base.includes("present continuous") || base.includes("is ") || base.includes("are ") || base.includes("am ")) return "Present Continuous";
-
-  if (base.includes("third conditional") || base.includes("would have") || base.includes("hubiera")) return "Third Conditional";
-  if (base.includes("second conditional") || base.includes("would ") || base.includes("tuviera")) return "Second Conditional";
-  if (base.includes("first conditional") || (base.includes("if") && base.includes("will"))) return "First Conditional";
-  if (base.includes("zero conditional") || (base.includes("if") && base.includes("boils"))) return "Zero Conditional";
-
-  if (base.includes("modal") || base.includes("should") || base.includes("could") || base.includes("might") || base.includes("must")) return "Modal Verbs";
-
-  return item.topic || "Present Simple";
-}
-
-function renderQuickPracticeTopicV19(item) {
-  const topic = inferQuickPracticeTopicV19(item);
-  const quickTopicEl = document.getElementById("quickTopic");
-
-  if (!quickTopicEl) return;
-
-  quickTopicEl.textContent = `Tiempo verbal: ${topic}`;
-  quickTopicEl.title = topic;
-  quickTopicEl.classList.add("quick-topic-pill");
-}
-
-if (typeof renderQuickPractice === "function") {
-  const previousRenderQuickPracticeV19 = renderQuickPractice;
-
-  renderQuickPractice = function renderQuickPracticeWithTopicV19() {
-    previousRenderQuickPracticeV19();
-
-    const item = Array.isArray(quickPracticeQueue)
-      ? quickPracticeQueue[currentQuickIndex]
-      : null;
-
-    renderQuickPracticeTopicV19(item || {});
-  };
-}
-
-setTimeout(() => {
-  const item = Array.isArray(quickPracticeQueue)
-    ? quickPracticeQueue[currentQuickIndex]
-    : null;
-
-  renderQuickPracticeTopicV19(item || {});
-}, 0);
-
-
-/* =========================================================
-   TIMER + PRACTICE V20
-   - Timer circular sin aguja.
-   - El consumo comienza desde las 12 y avanza en sentido horario.
-   - Práctica: 17 estructuras exactas, sin "Tiempo verbal: práctica".
-   - Cada nueva oración cambia de estructura dentro de un ciclo mezclado.
-========================================================= */
-
-function ensureCircleTimerMarkupV20() {
-  const ring = document.getElementById("timerProgressRing");
-  if (!ring) return;
-
-  ring.classList.remove("digital-timer-card", "hourglass-timer-card");
-  ring.classList.add("circle-timer-card");
-
-  ring.innerHTML = `
-    <div class="circle-timer-time">
-      <span id="timerDisplay" class="timer-display">00:00</span>
-      <small>sesión de foco</small>
-    </div>
-
-    <div class="circle-timer-orb" aria-hidden="true">
-      <div class="circle-timer-face">
-        <span class="circle-inner-glow"></span>
-      </div>
-    </div>
-
-    <p class="circle-timer-caption">El relleno se consume desde arriba.</p>
-  `;
-}
-
-ensureHourglassTimerMarkup = ensureCircleTimerMarkupV20;
-ensureCircleTimerMarkupV18 = ensureCircleTimerMarkupV20;
-
-updateTimerUI = function updateCircleTimerUIV20() {
-  const remaining = Math.max(timerSecondsLeft, 0);
-  const minutes = Math.floor(remaining / 60);
-  const seconds = remaining % 60;
-
-  const ring = document.getElementById("timerProgressRing");
-  if (ring && !ring.querySelector(".circle-timer-orb")) {
-    ensureCircleTimerMarkupV20();
-  }
-
-  const timerDisplayEl = document.getElementById("timerDisplay");
-  const timerRingEl = document.getElementById("timerProgressRing");
-
-  if (timerDisplayEl) {
-    timerDisplayEl.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-  }
-
-  const progress = timerInitialSeconds
-    ? (timerInitialSeconds - remaining) / timerInitialSeconds
-    : 0;
-
-  const elapsedDegrees = Math.max(0, Math.min(360, progress * 360));
-
-  if (timerRingEl) {
-    timerRingEl.style.setProperty("--timer-elapsed", `${elapsedDegrees}deg`);
-    timerRingEl.style.setProperty("--timer-progress-ratio", String(progress));
-  }
-};
-
-const quickPracticeTopicsV20 = [
+const quickPracticeTopicsV21 = [
   "Present Simple",
   "Present Continuous",
   "Past Simple",
@@ -5124,7 +4999,7 @@ const quickPracticeTopicsV20 = [
   "Third Conditional"
 ];
 
-const quickPracticeBlueprintsV20 = {
+const quickPracticeBlueprintsV21 = {
   "Present Simple": [
     ["Yo estudio inglés todos los días.", "I study English every day.", ["I study English every day.", "I practise English every day.", "I practice English every day."], ["study", "english", "every day"]],
     ["Nosotros repasamos vocabulario cada mañana.", "We review vocabulary every morning.", ["We review vocabulary every morning.", "We revise vocabulary every morning.", "We go over vocabulary every morning."], ["review", "vocabulary"]],
@@ -5212,17 +5087,70 @@ const quickPracticeBlueprintsV20 = {
   ]
 };
 
-let quickPracticeTopicCycleV20 = [];
-let currentQuickItemV20 = null;
-let quickPracticeRoundV20 = 0;
+let quickPracticeTopicCycleV21 = [];
+let currentQuickItemV21 = null;
 
-function buildQuickPracticePool() {
+function getTimerRootV21() {
+  return document.getElementById("timerVisual") || document.getElementById("timerProgressRing");
+}
+
+function ensureCircleTimerMarkupV21() {
+  const root = getTimerRootV21();
+  if (!root) return;
+
+  root.classList.remove("water-hourglass", "digital-timer-card", "hourglass-timer-card");
+  root.classList.add("circle-timer-card");
+
+  if (root.querySelector(".circle-timer-orb")) return;
+
+  root.innerHTML = `
+    <div class="circle-timer-time">
+      <span id="timerDisplay" class="timer-display">00:00</span>
+      <small>sesión de foco</small>
+    </div>
+
+    <div class="circle-timer-orb" aria-hidden="true">
+      <div class="circle-timer-face">
+        <span class="circle-inner-glow"></span>
+      </div>
+    </div>
+
+    <p class="circle-timer-caption">El relleno se consume desde arriba.</p>
+  `;
+}
+
+function updateTimerUIV21() {
+  const remaining = Math.max(timerSecondsLeft || 0, 0);
+  const minutes = Math.floor(remaining / 60);
+  const seconds = remaining % 60;
+
+  ensureCircleTimerMarkupV21();
+
+  const display = document.getElementById("timerDisplay");
+  const root = getTimerRootV21();
+
+  if (display) {
+    display.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  }
+
+  const progress = timerInitialSeconds
+    ? (timerInitialSeconds - remaining) / timerInitialSeconds
+    : 0;
+
+  const elapsedDegrees = Math.max(0, Math.min(360, progress * 360));
+
+  if (root) {
+    root.style.setProperty("--timer-elapsed", `${elapsedDegrees}deg`);
+    root.style.setProperty("--timer-progress-ratio", String(progress));
+  }
+}
+
+function buildQuickPracticePoolV21() {
   const pool = [];
 
-  quickPracticeTopicsV20.forEach((topic) => {
-    const rows = quickPracticeBlueprintsV20[topic] || [];
-    for (let i = 0; i < 30; i++) {
-      const row = rows[i % rows.length];
+  quickPracticeTopicsV21.forEach((topic) => {
+    const rows = quickPracticeBlueprintsV21[topic] || [];
+    rows.forEach((row) => {
       pool.push({
         topic,
         es: row[0],
@@ -5230,60 +5158,64 @@ function buildQuickPracticePool() {
         acceptedAnswers: row[2],
         keywords: row[3]
       });
-    }
+    });
   });
 
   return pool;
 }
 
-function resetQuickPracticeTopicCycleV20() {
-  quickPracticeTopicCycleV20 = shuffleArray([...quickPracticeTopicsV20]);
+function resetQuickPracticeTopicCycleV21() {
+  quickPracticeTopicCycleV21 = shuffleArray([...quickPracticeTopicsV21]);
 }
 
-function pickQuickPracticeItemByTopicV20(topic) {
+function pickQuickPracticeItemV21(topic) {
   const matches = quickPracticePool.filter((item) => item.topic === topic);
-  const list = matches.length ? matches : quickPracticePool;
+  const list = matches.length ? matches : buildQuickPracticePoolV21().filter((item) => item.topic === topic);
   return list[Math.floor(Math.random() * list.length)];
 }
 
-function renderQuickPracticeTopicV20(item) {
-  const quickTopicEl = document.getElementById("quickTopic");
-  if (!quickTopicEl) return;
-
-  quickTopicEl.textContent = item?.topic || "Present Simple";
-  quickTopicEl.title = item?.topic || "Present Simple";
-  quickTopicEl.classList.add("quick-topic-pill");
+function setQuickPracticeTopicV21(topic) {
+  const el = document.getElementById("quickTopic");
+  if (!el) return;
+  el.textContent = topic || "Present Simple";
+  el.title = topic || "Present Simple";
+  el.classList.add("quick-topic-pill");
 }
 
-function renderQuickPractice() {
-  if (!quickPracticePool.length) quickPracticePool = buildQuickPracticePool();
-  if (!currentQuickItemV20) nextQuickPractice(false);
+function renderQuickPracticeV21() {
+  if (!currentQuickItemV21) nextQuickPracticeV21(false);
 
-  const item = currentQuickItemV20;
+  const item = currentQuickItemV21;
   if (!item) return;
 
-  if (quickTopic) quickTopic.textContent = item.topic;
+  if (quickTopic) setQuickPracticeTopicV21(item.topic);
   if (quickPrompt) quickPrompt.textContent = item.es;
   if (quickAnswer) quickAnswer.value = "";
   if (quickFeedback) quickFeedback.innerHTML = "";
-
-  renderQuickPracticeTopicV20(item);
 }
 
-function nextQuickPractice(shouldRender = true) {
-  if (!quickPracticePool.length) quickPracticePool = buildQuickPracticePool();
-  if (!quickPracticeTopicCycleV20.length) resetQuickPracticeTopicCycleV20();
+function nextQuickPracticeV21(shouldRender = true) {
+  if (!quickPracticePool || !quickPracticePool.length) {
+    quickPracticePool = buildQuickPracticePoolV21();
+  }
 
-  const nextTopic = quickPracticeTopicCycleV20.shift();
-  currentQuickItemV20 = pickQuickPracticeItemByTopicV20(nextTopic);
-  currentQuickIndex = quickPracticeRoundV20;
-  quickPracticeRoundV20 += 1;
+  if (!quickPracticeTopicCycleV21.length) resetQuickPracticeTopicCycleV21();
 
-  if (shouldRender) renderQuickPractice();
+  const topic = quickPracticeTopicCycleV21.shift();
+  currentQuickItemV21 = pickQuickPracticeItemV21(topic);
+
+  if (shouldRender) renderQuickPracticeV21();
 }
 
-function checkQuickPractice(showAnswer = false) {
-  const item = currentQuickItemV20;
+function getCurrentQuickItemV21() {
+  if (currentQuickItemV21) return currentQuickItemV21;
+  if (quickPracticeQueue && quickPracticeQueue[currentQuickIndex]) return quickPracticeQueue[currentQuickIndex];
+  nextQuickPracticeV21(false);
+  return currentQuickItemV21;
+}
+
+function checkQuickPracticeV21(showAnswer = false) {
+  const item = getCurrentQuickItemV21();
   if (!item || !quickFeedback) return;
 
   if (showAnswer) {
@@ -5293,6 +5225,7 @@ function checkQuickPractice(showAnswer = false) {
       <p>${escapeHTML(item.answer)}</p>
       ${variants.length > 1 ? `<p><strong>También se aceptan:</strong> ${variants.slice(1).map(escapeHTML).join(" · ")}</p>` : ""}
     `;
+    setQuickPracticeTopicV21(item.topic);
     return;
   }
 
@@ -5332,16 +5265,69 @@ function checkQuickPractice(showAnswer = false) {
     ${best && normalizeText(best) !== normalizeText(item.answer) ? `<p><strong>Variante compatible:</strong> ${escapeHTML(best)}</p>` : ""}
   `;
 
+  setQuickPracticeTopicV21(item.topic);
   if (typeof logActivity === "function") logActivity(`Práctica rápida · ${item.topic}`);
 }
 
-setTimeout(() => {
-  ensureCircleTimerMarkupV20();
-  updateTimerUI();
+// Sobrescribo funciones globales para que los listeners existentes también funcionen.
+updateTimerUI = updateTimerUIV21;
+ensureHourglassTimerMarkup = ensureCircleTimerMarkupV21;
+if (typeof ensureCircleTimerMarkupV18 !== "undefined") ensureCircleTimerMarkupV18 = ensureCircleTimerMarkupV21;
+if (typeof ensureCircleTimerMarkupV20 !== "undefined") ensureCircleTimerMarkupV20 = ensureCircleTimerMarkupV21;
+renderQuickPractice = renderQuickPracticeV21;
+nextQuickPractice = nextQuickPracticeV21;
+checkQuickPractice = checkQuickPracticeV21;
+buildQuickPracticePool = buildQuickPracticePoolV21;
 
-  quickPracticePool = buildQuickPracticePool();
-  resetQuickPracticeTopicCycleV20();
-  currentQuickItemV20 = null;
-  nextQuickPractice(false);
-  renderQuickPractice();
+function bindPracticeButtonsV21() {
+  const newBtn = document.getElementById("newQuickBtn");
+  const checkBtn = document.getElementById("checkQuickBtn");
+  const modelBtn = document.getElementById("showQuickAnswerBtn");
+
+  if (newBtn) {
+    newBtn.onclick = (event) => {
+      event.preventDefault();
+      nextQuickPracticeV21(true);
+    };
+  }
+
+  if (checkBtn) {
+    checkBtn.onclick = (event) => {
+      event.preventDefault();
+      checkQuickPracticeV21(false);
+    };
+  }
+
+  if (modelBtn) {
+    modelBtn.onclick = (event) => {
+      event.preventDefault();
+      checkQuickPracticeV21(true);
+    };
+  }
+}
+
+setTimeout(() => {
+  ensureCircleTimerMarkupV21();
+  updateTimerUIV21();
+
+  quickPracticePool = buildQuickPracticePoolV21();
+  resetQuickPracticeTopicCycleV21();
+  currentQuickItemV21 = null;
+  nextQuickPracticeV21(false);
+  renderQuickPracticeV21();
+  bindPracticeButtonsV21();
 }, 0);
+
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    ensureCircleTimerMarkupV21();
+    updateTimerUIV21();
+
+    quickPracticePool = buildQuickPracticePoolV21();
+    resetQuickPracticeTopicCycleV21();
+    currentQuickItemV21 = null;
+    nextQuickPracticeV21(false);
+    renderQuickPracticeV21();
+    bindPracticeButtonsV21();
+  }, 50);
+});
