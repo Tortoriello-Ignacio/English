@@ -21,17 +21,12 @@
       <button id="timerCloseBtn" class="icon-btn" type="button" aria-label="Cerrar timer">✕</button>
     </div>
 
-    <div class="analog-clock" aria-hidden="true">
-      <span class="tick tick-12">12</span>
-      <span class="tick tick-3">3</span>
-      <span class="tick tick-6">6</span>
-      <span class="tick tick-9">9</span>
-      <div id="minuteHand" class="clock-hand minute-hand"></div>
-      <div id="secondHand" class="clock-hand second-hand"></div>
-      <div class="clock-center"></div>
+    <div id="timerProgressRing" class="digital-timer-card" aria-label="Tiempo restante del timer">
+      <div class="digital-timer-inner">
+        <span id="timerDisplay" class="timer-display">00:00</span>
+        <small>sesión de foco</small>
+      </div>
     </div>
-
-    <div id="timerDisplay" class="timer-display">00:00</div>
 
     <div class="timer-presets">
       <button class="preset-btn" type="button" data-minutes="5">5 min</button>
@@ -287,16 +282,7 @@
       <p>
         Esta es una landing separada del dashboard principal. Acá podés alojar apuntes, listas de estudio y prácticas guardadas.
       </p>
-      <button class="ghost-btn" type="button" data-go-dashboard>← Volver al dashboard</button>
     </section>
-
-    <nav class="resources-tabs">
-      <button class="resource-tab active" type="button" data-tab="apuntes">Apuntes varios</button>
-      <button class="resource-tab" type="button" data-tab="phrasals">Phrasal verbs</button>
-      <button class="resource-tab" type="button" data-tab="modals">Modales / auxiliares</button>
-      <button class="resource-tab" type="button" data-tab="conditionals">Condicionales</button>
-      <button class="resource-tab" type="button" data-tab="biblioteca">Párrafos guardados</button>
-    </nav>
 
     <main class="main-content resource-content">
       <section id="tab-apuntes" class="resource-pane active-pane section">
@@ -364,30 +350,6 @@
               </tr>
             </thead>
             <tbody id="modalsTableBody"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <section id="tab-conditionals" class="resource-pane section">
-        <div class="section-header">
-          <div>
-            <span class="eyebrow">If clauses</span>
-            <h3>Condicionales</h3>
-            <p>Resumen de Zero, First, Second y Third Conditional.</p>
-          </div>
-        </div>
-
-        <div class="table-card">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Tipo</th>
-                <th>Estructura</th>
-                <th>Uso</th>
-                <th>Ejemplo</th>
-              </tr>
-            </thead>
-            <tbody id="conditionalsTableBody"></tbody>
           </table>
         </div>
       </section>
