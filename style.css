@@ -2975,7 +2975,7 @@ body[data-theme="black"] {
 
 /* Slider fluido, sin sensación de tramos */
 .intensity-range {
-  background:
+background:
     var(--theme-range-gradient, linear-gradient(90deg, var(--accent-dark), var(--accent), var(--accent-soft))) !important;
   background-size: 100% 100% !important;
   animation: none !important;
@@ -3611,4 +3611,28 @@ body[data-theme="black"] {
   #timerProgressRing .timer-display{
     font-size:2.35rem;
   }
+}
+
+
+/* =========================================================
+   FINAL V17 CLEANUPS
+========================================================= */
+.flashcard-pronunciation {
+  display: block;
+  margin-top: 10px;
+  font-size: 0.95rem;
+  color: var(--muted);
+  font-style: italic;
+  letter-spacing: 0.01em;
+}
+
+.flashcard.show-back .flashcard-pronunciation {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Slider: step va en HTML, no en CSS */
+.intensity-range {
+  background:
+    var(--theme-range-gradient, linear-gradient(90deg, var(--accent-dark), var(--accent), var(--accent-soft))) !important;
 }

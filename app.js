@@ -4508,3 +4508,394 @@ if (typeof buildFlashcards === "function") buildFlashcards();
 if (typeof renderQuickPractice === "function") renderQuickPractice();
 if (typeof ensureHourglassTimerMarkup === "function") ensureHourglassTimerMarkup();
 if (typeof updateTimerUI === "function") updateTimerUI();
+
+
+/* =========================================================
+   FINAL V17 PATCH
+   - Flashcards: fonética en itálica, sin texto "Pronunciación aprox.".
+   - Práctica: ejercicios azarosos de todos los tiempos verbales.
+   - Corrección: acepta variantes/sinónimos cercanos.
+========================================================= */
+
+(function finalV17Patch() {
+  const extraQuickTemplatesV17 = [
+    {
+      topic: "Present Simple",
+      make: (s) => ({
+        es: `${capV17(s.es)} trabaja todos los días.`,
+        answer: `${capV17(s.en)} works every day.`,
+        acceptedAnswers: [`${capV17(s.en)} works every day.`, `${capV17(s.en)} works daily.`],
+        keywords: [s.en, "works"]
+      })
+    },
+    {
+      topic: "Present Continuous",
+      make: (s) => ({
+        es: `${capV17(s.es)} está estudiando ahora.`,
+        answer: `${capV17(s.en)} is studying now.`,
+        acceptedAnswers: [`${capV17(s.en)} is studying now.`, `${capV17(s.en)} is currently studying.`],
+        keywords: [s.en, "studying", "now"]
+      })
+    },
+    {
+      topic: "Past Simple",
+      make: (s) => ({
+        es: `${capV17(s.es)} terminó el informe ayer.`,
+        answer: `${capV17(s.en)} finished the report yesterday.`,
+        acceptedAnswers: [`${capV17(s.en)} finished the report yesterday.`, `${capV17(s.en)} completed the report yesterday.`],
+        keywords: [s.en, "finished", "report"]
+      })
+    },
+    {
+      topic: "Past Continuous",
+      make: (s) => ({
+        es: `${capV17(s.es)} estaba leyendo cuando llamaste.`,
+        answer: `${capV17(s.en)} was reading when you called.`,
+        acceptedAnswers: [`${capV17(s.en)} was reading when you called.`, `${capV17(s.en)} was studying when you called.`],
+        keywords: [s.en, "was", "reading", "called"]
+      })
+    },
+    {
+      topic: "Present Perfect",
+      make: (s) => ({
+        es: `${capV17(s.es)} ha visitado ese laboratorio varias veces.`,
+        answer: `${capV17(s.en)} has visited that laboratory several times.`,
+        acceptedAnswers: [`${capV17(s.en)} has visited that laboratory several times.`, `${capV17(s.en)} has been to that laboratory several times.`],
+        keywords: [s.en, "has", "visited"]
+      })
+    },
+    {
+      topic: "Present Perfect Continuous",
+      make: (s) => ({
+        es: `${capV17(s.es)} ha estado practicando durante dos horas.`,
+        answer: `${capV17(s.en)} has been practicing for two hours.`,
+        acceptedAnswers: [`${capV17(s.en)} has been practicing for two hours.`, `${capV17(s.en)} has been training for two hours.`],
+        keywords: [s.en, "has been", "practicing"]
+      })
+    },
+    {
+      topic: "Past Perfect",
+      make: (s) => ({
+        es: `${capV17(s.es)} ya había salido cuando llegamos.`,
+        answer: `${capV17(s.en)} had already left when we arrived.`,
+        acceptedAnswers: [`${capV17(s.en)} had already left when we arrived.`, `${capV17(s.en)} had gone already when we arrived.`],
+        keywords: [s.en, "had", "left"]
+      })
+    },
+    {
+      topic: "Past Perfect Continuous",
+      make: (s) => ({
+        es: `${capV17(s.es)} había estado trabajando durante horas.`,
+        answer: `${capV17(s.en)} had been working for hours.`,
+        acceptedAnswers: [`${capV17(s.en)} had been working for hours.`, `${capV17(s.en)} had been studying for hours.`],
+        keywords: [s.en, "had been", "working"]
+      })
+    },
+    {
+      topic: "Future Simple",
+      make: (s) => ({
+        es: `${capV17(s.es)} ayudará mañana.`,
+        answer: `${capV17(s.en)} will help tomorrow.`,
+        acceptedAnswers: [`${capV17(s.en)} will help tomorrow.`, `${capV17(s.en)} will assist tomorrow.`],
+        keywords: [s.en, "will", "help"]
+      })
+    },
+    {
+      topic: "Going To",
+      make: (s) => ({
+        es: `${capV17(s.es)} va a empezar un nuevo curso.`,
+        answer: `${capV17(s.en)} is going to start a new course.`,
+        acceptedAnswers: [`${capV17(s.en)} is going to start a new course.`, `${capV17(s.en)} is going to begin a new course.`],
+        keywords: [s.en, "going to", "start"]
+      })
+    },
+    {
+      topic: "Future Continuous",
+      make: (s) => ({
+        es: `${capV17(s.es)} estará trabajando mañana a esta hora.`,
+        answer: `${capV17(s.en)} will be working at this time tomorrow.`,
+        acceptedAnswers: [`${capV17(s.en)} will be working at this time tomorrow.`, `${capV17(s.en)} will be studying at this time tomorrow.`],
+        keywords: [s.en, "will be", "working"]
+      })
+    },
+    {
+      topic: "Future Perfect",
+      make: (s) => ({
+        es: `${capV17(s.es)} habrá terminado para mañana.`,
+        answer: `${capV17(s.en)} will have finished by tomorrow.`,
+        acceptedAnswers: [`${capV17(s.en)} will have finished by tomorrow.`, `${capV17(s.en)} will have completed it by tomorrow.`],
+        keywords: [s.en, "will have", "finished"]
+      })
+    },
+    {
+      topic: "Future Perfect Continuous",
+      make: (s) => ({
+        es: `${capV17(s.es)} habrá estado estudiando durante un año.`,
+        answer: `${capV17(s.en)} will have been studying for a year.`,
+        acceptedAnswers: [`${capV17(s.en)} will have been studying for a year.`, `${capV17(s.en)} will have been learning for a year.`],
+        keywords: [s.en, "will have been", "studying"]
+      })
+    }
+  ];
+
+  const fixedConditionalsV17 = [
+    {
+      topic: "Zero Conditional",
+      es: "Si calentás agua, hierve.",
+      answer: "If you heat water, it boils.",
+      acceptedAnswers: ["If you heat water, it boils.", "Water boils if you heat it."],
+      keywords: ["if", "heat", "boils"]
+    },
+    {
+      topic: "First Conditional",
+      es: "Si llueve mañana, nos quedaremos en casa.",
+      answer: "If it rains tomorrow, we will stay at home.",
+      acceptedAnswers: ["If it rains tomorrow, we will stay at home.", "If it rains tomorrow, we will stay home.", "We will stay at home if it rains tomorrow."],
+      keywords: ["if", "rains", "will stay"]
+    },
+    {
+      topic: "Second Conditional",
+      es: "Si tuviera más tiempo, viajaría más.",
+      answer: "If I had more time, I would travel more.",
+      acceptedAnswers: ["If I had more time, I would travel more.", "I would travel more if I had more time."],
+      keywords: ["if", "had", "would"]
+    },
+    {
+      topic: "Third Conditional",
+      es: "Si hubiera estudiado más, habría aprobado el examen.",
+      answer: "If I had studied more, I would have passed the exam.",
+      acceptedAnswers: ["If I had studied more, I would have passed the exam.", "If I had prepared more, I would have passed the exam.", "I would have passed the exam if I had studied more."],
+      keywords: ["if", "had studied", "would have"]
+    },
+    {
+      topic: "Modal Verbs",
+      es: "Deberías descansar un poco antes del examen.",
+      answer: "You should rest a little before the exam.",
+      acceptedAnswers: ["You should rest a little before the exam.", "You ought to rest a little before the exam.", "You should take a short break before the exam."],
+      keywords: ["should", "rest", "exam"]
+    }
+  ];
+
+  const subjectsV17 = [
+    { es: "yo", en: "I" },
+    { es: "ella", en: "she" },
+    { es: "él", en: "he" },
+    { es: "nosotros", en: "we" },
+    { es: "ellos", en: "they" },
+    { es: "los estudiantes", en: "the students" },
+    { es: "el equipo", en: "the team" },
+    { es: "mi hermano", en: "my brother" },
+    { es: "mi amiga", en: "my friend" },
+    { es: "la empresa", en: "the company" }
+  ];
+
+  function capV17(text) {
+    return String(text).charAt(0).toUpperCase() + String(text).slice(1);
+  }
+
+  function buildQuickPracticePoolV17() {
+    const generated = [];
+    for (let i = 0; i < 520; i++) {
+      const template = extraQuickTemplatesV17[i % extraQuickTemplatesV17.length];
+      const subject = subjectsV17[i % subjectsV17.length];
+      generated.push(template.make(subject));
+      if (i % 13 === 0) generated.push(fixedConditionalsV17[(i / 13) % fixedConditionalsV17.length | 0]);
+    }
+    return generated.slice(0, 540);
+  }
+
+  function shuffleQuickV17(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function normalizeV17(text = "") {
+    return String(text)
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[’']/g, "")
+      .replace(/[^a-z0-9\s]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function textSimilarityV17(a, b) {
+    const aTokens = normalizeV17(a).split(" ").filter(Boolean);
+    const bTokens = normalizeV17(b).split(" ").filter(Boolean);
+    if (!aTokens.length || !bTokens.length) return 0;
+    const aSet = new Set(aTokens);
+    const bSet = new Set(bTokens);
+    let common = 0;
+    aSet.forEach((token) => { if (bSet.has(token)) common++; });
+    return ((common / aSet.size) + (common / bSet.size)) / 2;
+  }
+
+  const originalQuickSentences = Array.isArray(quickSentences) ? quickSentences : [];
+  const finalQuickPool = [...buildQuickPracticePoolV17(), ...originalQuickSentences];
+  let quickQueueV17 = shuffleQuickV17(finalQuickPool);
+
+  renderQuickPractice = function renderQuickPracticeV17() {
+    if (!quickQueueV17.length) quickQueueV17 = shuffleQuickV17(finalQuickPool);
+    const index = (typeof currentQuickIndex === "number" ? currentQuickIndex : 0) % quickQueueV17.length;
+    const item = quickQueueV17[index];
+    if (quickTopic) quickTopic.textContent = item.topic;
+    if (quickPrompt) quickPrompt.textContent = item.es;
+    if (quickAnswer) quickAnswer.value = "";
+    if (quickFeedback) quickFeedback.innerHTML = "";
+  };
+
+  checkQuickPractice = function checkQuickPracticeV17(showAnswer = false) {
+    const index = (typeof currentQuickIndex === "number" ? currentQuickIndex : 0) % quickQueueV17.length;
+    const item = quickQueueV17[index];
+    if (!item || !quickFeedback) return;
+
+    const accepted = [...new Set([item.answer, ...(item.acceptedAnswers || [])])];
+
+    if (showAnswer) {
+      quickFeedback.innerHTML = `
+        <strong>Respuesta modelo</strong>
+        <p>${escapeHTML(item.answer)}</p>
+        ${accepted.length > 1 ? `<p><strong>También se aceptan:</strong> ${accepted.slice(1, 4).map(escapeHTML).join(" · ")}</p>` : ""}
+      `;
+      return;
+    }
+
+    const user = quickAnswer?.value || "";
+    if (!user.trim()) {
+      alert("Escribí tu traducción antes de corregir.");
+      return;
+    }
+
+    let best = "";
+    let bestScore = 0;
+    accepted.forEach((option) => {
+      const score = textSimilarityV17(user, option);
+      if (score > bestScore) {
+        bestScore = score;
+        best = option;
+      }
+    });
+
+    const keywordScore = item.keywords?.length
+      ? item.keywords.filter((kw) => normalizeV17(user).includes(normalizeV17(kw))).length / item.keywords.length
+      : 0;
+
+    const finalScore = Math.round(Math.max(bestScore, keywordScore) * 100);
+    const acceptedAnswer = bestScore >= 0.74 || keywordScore >= 0.75;
+
+    quickFeedback.innerHTML = `
+      <strong>${acceptedAnswer ? "Muy bien" : "Ajustá un poco más la traducción"}</strong>
+      <p>${acceptedAnswer
+        ? `Tu respuesta entra dentro de las variantes válidas. Coincidencia aproximada: ${finalScore}%.`
+        : `Coincidencia aproximada: ${finalScore}%. Revisá el tiempo verbal, auxiliar o verbo principal.`}
+      </p>
+      <p><strong>Modelo base:</strong> ${escapeHTML(item.answer)}</p>
+      ${best && normalizeV17(best) !== normalizeV17(item.answer) ? `<p><strong>Variante compatible:</strong> ${escapeHTML(best)}</p>` : ""}
+    `;
+  };
+
+  const specialPronunciationV17 = {
+    "run out of": "ran aut ov",
+    "give up": "guiv ap",
+    "look for": "luk for",
+    "find out": "faind aut",
+    "put off": "put of",
+    "take off": "teik of",
+    "work out": "uork aut",
+    "look forward to": "luk fórward tu",
+    "get along with": "guet alóng uid",
+    "put up with": "put ap uid"
+  };
+
+  function toCastilianPronunciationFinal(text = "") {
+    const lower = String(text).toLowerCase().trim();
+    if (specialPronunciationV17[lower]) return specialPronunciationV17[lower];
+    if (typeof toCastilianPronunciationV16 === "function") return toCastilianPronunciationV16(text);
+    return lower
+      .replace(/ing\b/g, "in")
+      .replace(/tion/g, "shon")
+      .replace(/th/g, "d")
+      .replace(/ou/g, "au")
+      .replace(/ow/g, "au")
+      .replace(/ay/g, "ei")
+      .replace(/w/g, "u")
+      .replace(/y/g, "i");
+  }
+
+  buildFlashcards = function buildFlashcardsV17() {
+    const source = flashcardSource?.value || "all";
+    const phrasalCards = phrasalVerbs.map(([front, back, example]) => ({
+      type: "Phrasal verb",
+      front,
+      back,
+      example,
+      pronunciation: toCastilianPronunciationFinal(front)
+    }));
+    const modalCards = modalVerbs.map(([front, back]) => ({
+      type: "Modal / auxiliar",
+      front,
+      back,
+      example: "",
+      pronunciation: toCastilianPronunciationFinal(front)
+    }));
+    const vocabCards = vocabulary.map((item) => ({
+      type: item.category || "Vocabulario",
+      front: item.word,
+      back: item.meaning,
+      example: item.example || "",
+      pronunciation: toCastilianPronunciationFinal(item.word)
+    }));
+
+    if (source === "phrasals") currentFlashcards = phrasalCards;
+    else if (source === "modals") currentFlashcards = modalCards;
+    else if (source === "vocabulario") currentFlashcards = vocabCards;
+    else currentFlashcards = [...phrasalCards, ...modalCards, ...vocabCards];
+
+    flashcardIndex = 0;
+    flashcardShowingBack = false;
+    renderFlashcard();
+  };
+
+  renderFlashcard = function renderFlashcardV17() {
+    if (!flashcardFront) return;
+    const pronunciationNode = typeof ensureFlashcardPronunciationNodeV16 === "function"
+      ? ensureFlashcardPronunciationNodeV16()
+      : document.getElementById("flashcardPronunciation");
+
+    if (!currentFlashcards.length) {
+      setText("flashcardType", "Sin tarjetas");
+      setText("flashcardFront", "Agregá vocabulario o cambiá la fuente");
+      setText("flashcardBack", "");
+      setText("flashcardExample", "");
+      if (pronunciationNode) pronunciationNode.innerHTML = "";
+      if (flashcard) flashcard.classList.remove("show-back");
+      return;
+    }
+
+    const card = currentFlashcards[flashcardIndex % currentFlashcards.length];
+    setText("flashcardType", card.type);
+    setText("flashcardFront", card.front);
+    setText("flashcardBack", card.back);
+    setText("flashcardExample", card.example || "");
+    if (flashcardStats) flashcardStats.textContent = `${flashcardIndex + 1} / ${currentFlashcards.length}`;
+
+    if (pronunciationNode) {
+      pronunciationNode.innerHTML = flashcardShowingBack
+        ? `<em>${escapeHTML(card.pronunciation || toCastilianPronunciationFinal(card.front))}</em>`
+        : "";
+    }
+
+    if (flashcard) flashcard.classList.toggle("show-back", flashcardShowingBack);
+  };
+
+  // Re-render with final behavior after previous initializers.
+  setTimeout(() => {
+    if (typeof buildFlashcards === "function") buildFlashcards();
+    if (typeof renderQuickPractice === "function") renderQuickPractice();
+  }, 0);
+})();
