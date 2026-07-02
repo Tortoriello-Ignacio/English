@@ -4335,3 +4335,22 @@ background:
     filter: saturate(1.08);
   }
 }
+
+
+/* =========================================================
+   PRACTICE BUTTONS FIX V23
+========================================================= */
+
+#showQuickAnswerBtn.model-visible {
+  color: var(--text) !important;
+  border-color: rgba(var(--accent-rgb), 0.36) !important;
+  background: rgba(var(--accent-rgb), 0.13) !important;
+}
+
+.quick-feedback strong {
+  color: var(--text);
+}
+
+.quick-feedback p {
+  margin: 8px 0 0;
+}

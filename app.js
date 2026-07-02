@@ -5931,3 +5931,466 @@ window.addEventListener("load", () => {
     setTimeout(bootStableFix, 80);
   });
 })();
+
+
+/* =========================================================
+   PRACTICE BUTTONS FIX V23
+   - Corregir respuesta queda funcional y no depende de listeners viejos.
+   - Ver respuesta modelo funciona como toggle: ver / ocultar.
+   - Nueva oración mantiene ciclo mezclado de los 17 tiempos verbales.
+   - Este bloque usa captura sobre document para evitar conflictos con
+     handlers duplicados de versiones anteriores.
+========================================================= */
+
+(function practiceButtonsFixV23() {
+  const TOPICS_V23 = [
+    "Present Simple",
+    "Present Continuous",
+    "Past Simple",
+    "Past Continuous",
+    "Present Perfect",
+    "Present Perfect Continuous",
+    "Past Perfect",
+    "Past Perfect Continuous",
+    "Future Simple",
+    "Going To",
+    "Future Continuous",
+    "Future Perfect",
+    "Future Perfect Continuous",
+    "Zero Conditional",
+    "First Conditional",
+    "Second Conditional",
+    "Third Conditional"
+  ];
+
+  const FALLBACK_POOL_V23 = [
+    {
+      topic: "Present Simple",
+      es: "Yo estudio inglés todos los días.",
+      answer: "I study English every day.",
+      acceptedAnswers: ["I study English every day.", "I practise English every day.", "I practice English every day."],
+      keywords: ["study", "english", "every day"]
+    },
+    {
+      topic: "Present Continuous",
+      es: "Estoy escribiendo una respuesta ahora.",
+      answer: "I am writing an answer now.",
+      acceptedAnswers: ["I am writing an answer now.", "I'm writing an answer now.", "I am currently writing an answer."],
+      keywords: ["am", "writing", "now"]
+    },
+    {
+      topic: "Past Simple",
+      es: "Terminé el informe ayer.",
+      answer: "I finished the report yesterday.",
+      acceptedAnswers: ["I finished the report yesterday.", "I completed the report yesterday."],
+      keywords: ["finished", "report", "yesterday"]
+    },
+    {
+      topic: "Past Continuous",
+      es: "Estaba leyendo cuando me llamaste.",
+      answer: "I was reading when you called me.",
+      acceptedAnswers: ["I was reading when you called me.", "I was studying when you called me."],
+      keywords: ["was", "reading", "called"]
+    },
+    {
+      topic: "Present Perfect",
+      es: "He terminado el ejercicio.",
+      answer: "I have finished the exercise.",
+      acceptedAnswers: ["I have finished the exercise.", "I've finished the exercise.", "I have completed the exercise."],
+      keywords: ["have", "finished"]
+    },
+    {
+      topic: "Present Perfect Continuous",
+      es: "He estado estudiando durante dos horas.",
+      answer: "I have been studying for two hours.",
+      acceptedAnswers: ["I have been studying for two hours.", "I've been studying for two hours.", "I have been practicing for two hours."],
+      keywords: ["have", "been", "studying"]
+    },
+    {
+      topic: "Past Perfect",
+      es: "Ya había terminado cuando empezó la clase.",
+      answer: "I had already finished when the class started.",
+      acceptedAnswers: ["I had already finished when the class started.", "I had already completed it when the class started."],
+      keywords: ["had", "finished"]
+    },
+    {
+      topic: "Past Perfect Continuous",
+      es: "Había estado practicando durante horas.",
+      answer: "I had been practicing for hours.",
+      acceptedAnswers: ["I had been practicing for hours.", "I had been studying for hours.", "I had been training for hours."],
+      keywords: ["had", "been", "practicing"]
+    },
+    {
+      topic: "Future Simple",
+      es: "Te ayudaré después de la clase.",
+      answer: "I will help you after class.",
+      acceptedAnswers: ["I will help you after class.", "I'll help you after class.", "I will assist you after class."],
+      keywords: ["will", "help"]
+    },
+    {
+      topic: "Going To",
+      es: "Voy a empezar un curso nuevo.",
+      answer: "I am going to start a new course.",
+      acceptedAnswers: ["I am going to start a new course.", "I'm going to begin a new course."],
+      keywords: ["going", "to", "start"]
+    },
+    {
+      topic: "Future Continuous",
+      es: "Estaré trabajando mañana a esta hora.",
+      answer: "I will be working at this time tomorrow.",
+      acceptedAnswers: ["I will be working at this time tomorrow.", "I'll be working at this time tomorrow."],
+      keywords: ["will", "be", "working"]
+    },
+    {
+      topic: "Future Perfect",
+      es: "Habré terminado el documento para mañana.",
+      answer: "I will have finished the document by tomorrow.",
+      acceptedAnswers: ["I will have finished the document by tomorrow.", "I'll have finished the document by tomorrow.", "I will have completed the document by tomorrow."],
+      keywords: ["will", "have", "finished"]
+    },
+    {
+      topic: "Future Perfect Continuous",
+      es: "Habré estado estudiando durante un año.",
+      answer: "I will have been studying for a year.",
+      acceptedAnswers: ["I will have been studying for a year.", "I'll have been studying for a year.", "I will have been learning for a year."],
+      keywords: ["will", "have", "been", "studying"]
+    },
+    {
+      topic: "Zero Conditional",
+      es: "Si calentás agua, hierve.",
+      answer: "If you heat water, it boils.",
+      acceptedAnswers: ["If you heat water, it boils.", "Water boils if you heat it."],
+      keywords: ["if", "heat", "boils"]
+    },
+    {
+      topic: "First Conditional",
+      es: "Si llueve mañana, nos quedaremos en casa.",
+      answer: "If it rains tomorrow, we will stay at home.",
+      acceptedAnswers: ["If it rains tomorrow, we will stay at home.", "If it rains tomorrow, we'll stay home.", "We will stay at home if it rains tomorrow."],
+      keywords: ["if", "rains", "will"]
+    },
+    {
+      topic: "Second Conditional",
+      es: "Si tuviera más tiempo, viajaría más.",
+      answer: "If I had more time, I would travel more.",
+      acceptedAnswers: ["If I had more time, I would travel more.", "I would travel more if I had more time."],
+      keywords: ["if", "had", "would"]
+    },
+    {
+      topic: "Third Conditional",
+      es: "Si hubiera estudiado más, habría aprobado el examen.",
+      answer: "If I had studied more, I would have passed the exam.",
+      acceptedAnswers: ["If I had studied more, I would have passed the exam.", "If I had prepared more, I would have passed the exam.", "I would have passed the exam if I had studied more."],
+      keywords: ["if", "had", "would", "passed"]
+    }
+  ];
+
+  let cycle = [];
+  let currentItem = null;
+  let modelVisible = false;
+
+  function getEl(id) {
+    return document.getElementById(id);
+  }
+
+  function safeNormalize(text = "") {
+    if (typeof normalizeText === "function") return normalizeText(text);
+
+    return String(text)
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[’']/g, "")
+      .replace(/[^a-z0-9\s]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function safeEscape(text = "") {
+    if (typeof escapeHTML === "function") return escapeHTML(text);
+
+    return String(text)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;");
+  }
+
+  function shuffle(array) {
+    const arr = [...array];
+
+    for (let i = arr.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+
+    return arr;
+  }
+
+  function getPool() {
+    let pool = [];
+
+    try {
+      if (Array.isArray(quickPracticePool) && quickPracticePool.length) {
+        pool = quickPracticePool;
+      } else if (typeof buildQuickPracticePool === "function") {
+        pool = buildQuickPracticePool();
+        quickPracticePool = pool;
+      }
+    } catch (error) {
+      pool = [];
+    }
+
+    const filtered = pool.filter((item) => {
+      return item
+        && typeof item.topic === "string"
+        && TOPICS_V23.includes(item.topic)
+        && item.es
+        && item.answer;
+    });
+
+    return filtered.length ? filtered : FALLBACK_POOL_V23;
+  }
+
+  function resetCycle() {
+    cycle = shuffle(TOPICS_V23);
+  }
+
+  function pickItemByTopic(topic) {
+    const pool = getPool();
+    const options = pool.filter((item) => item.topic === topic);
+    const source = options.length ? options : FALLBACK_POOL_V23.filter((item) => item.topic === topic);
+
+    return source[Math.floor(Math.random() * source.length)] || FALLBACK_POOL_V23[0];
+  }
+
+  function setTopic(topic) {
+    const topicEl = getEl("quickTopic");
+    if (!topicEl) return;
+
+    topicEl.textContent = topic || "Present Simple";
+    topicEl.title = topic || "Present Simple";
+    topicEl.classList.add("quick-topic-pill");
+  }
+
+  function setModelButtonState() {
+    const modelBtn = getEl("showQuickAnswerBtn");
+    if (!modelBtn) return;
+
+    modelBtn.textContent = modelVisible ? "Ocultar respuesta modelo" : "Ver respuesta modelo";
+    modelBtn.classList.toggle("model-visible", modelVisible);
+  }
+
+  function clearFeedback() {
+    const feedbackEl = getEl("quickFeedback");
+    if (feedbackEl) feedbackEl.innerHTML = "";
+  }
+
+  function renderCurrentItem() {
+    if (!currentItem) nextItem(false);
+
+    const promptEl = getEl("quickPrompt");
+    const answerEl = getEl("quickAnswer");
+
+    setTopic(currentItem.topic);
+
+    if (promptEl) promptEl.textContent = currentItem.es;
+    if (answerEl) answerEl.value = "";
+
+    modelVisible = false;
+    setModelButtonState();
+    clearFeedback();
+  }
+
+  function nextItem(shouldRender = true) {
+    if (!cycle.length) resetCycle();
+
+    const topic = cycle.shift();
+    currentItem = pickItemByTopic(topic);
+
+    if (shouldRender) renderCurrentItem();
+  }
+
+  function similarity(a, b) {
+    const aTokens = safeNormalize(a).split(" ").filter(Boolean);
+    const bTokens = safeNormalize(b).split(" ").filter(Boolean);
+
+    if (!aTokens.length || !bTokens.length) return 0;
+
+    const aSet = new Set(aTokens);
+    const bSet = new Set(bTokens);
+    let common = 0;
+
+    aSet.forEach((token) => {
+      if (bSet.has(token)) common += 1;
+    });
+
+    return ((common / aSet.size) + (common / bSet.size)) / 2;
+  }
+
+  function getAcceptedAnswers(item) {
+    return [...new Set([item.answer, ...(Array.isArray(item.acceptedAnswers) ? item.acceptedAnswers : [])])];
+  }
+
+  function showModelAnswer() {
+    if (!currentItem) nextItem(false);
+
+    const feedbackEl = getEl("quickFeedback");
+    if (!feedbackEl || !currentItem) return;
+
+    const accepted = getAcceptedAnswers(currentItem);
+
+    feedbackEl.innerHTML = `
+      <strong>Respuesta modelo</strong>
+      <p>${safeEscape(currentItem.answer)}</p>
+      ${accepted.length > 1 ? `<p><strong>También se aceptan:</strong> ${accepted.slice(1, 4).map(safeEscape).join(" · ")}</p>` : ""}
+    `;
+
+    setTopic(currentItem.topic);
+  }
+
+  function hideModelAnswer() {
+    clearFeedback();
+  }
+
+  function toggleModelAnswer() {
+    modelVisible = !modelVisible;
+
+    if (modelVisible) {
+      showModelAnswer();
+    } else {
+      hideModelAnswer();
+    }
+
+    setModelButtonState();
+  }
+
+  function correctAnswer() {
+    if (!currentItem) nextItem(false);
+
+    const feedbackEl = getEl("quickFeedback");
+    const answerEl = getEl("quickAnswer");
+
+    if (!feedbackEl || !currentItem) return;
+
+    const user = answerEl?.value?.trim() || "";
+
+    modelVisible = false;
+    setModelButtonState();
+
+    if (!user) {
+      feedbackEl.innerHTML = `
+        <strong>Escribí una respuesta primero</strong>
+        <p>Completá la traducción en la caja de texto y después tocá nuevamente <strong>Corregir respuesta</strong>.</p>
+      `;
+      setTopic(currentItem.topic);
+      return;
+    }
+
+    const accepted = getAcceptedAnswers(currentItem);
+    let best = "";
+    let bestScore = 0;
+
+    accepted.forEach((option) => {
+      const score = similarity(user, option);
+      if (score > bestScore) {
+        bestScore = score;
+        best = option;
+      }
+    });
+
+    const keywordScore = Array.isArray(currentItem.keywords) && currentItem.keywords.length
+      ? currentItem.keywords.filter((keyword) => safeNormalize(user).includes(safeNormalize(keyword))).length / currentItem.keywords.length
+      : 0;
+
+    const finalScore = Math.round(Math.max(bestScore, keywordScore) * 100);
+    const acceptedAnswer = bestScore >= 0.74 || keywordScore >= 0.75;
+
+    feedbackEl.innerHTML = `
+      <strong>${acceptedAnswer ? "Muy bien" : "Ajustá un poco más la traducción"}</strong>
+      <p>${acceptedAnswer
+        ? `Tu respuesta entra dentro de las variantes válidas. Coincidencia aproximada: ${finalScore}%.`
+        : `Coincidencia aproximada: ${finalScore}%. Revisá el tiempo verbal, el auxiliar o la elección del verbo principal.`}
+      </p>
+      <p><strong>Tiempo verbal:</strong> ${safeEscape(currentItem.topic)}</p>
+      <p><strong>Modelo base:</strong> ${safeEscape(currentItem.answer)}</p>
+      ${best && safeNormalize(best) !== safeNormalize(currentItem.answer) ? `<p><strong>Variante compatible:</strong> ${safeEscape(best)}</p>` : ""}
+    `;
+
+    setTopic(currentItem.topic);
+
+    if (typeof logActivity === "function") {
+      logActivity(`Práctica rápida · ${currentItem.topic}`);
+    }
+  }
+
+  function bindPracticeButtons() {
+    const newBtn = getEl("newQuickBtn");
+    const checkBtn = getEl("checkQuickBtn");
+    const modelBtn = getEl("showQuickAnswerBtn");
+
+    if (checkBtn) checkBtn.textContent = "Corregir respuesta";
+    setModelButtonState();
+
+    [newBtn, checkBtn, modelBtn].forEach((button) => {
+      if (!button) return;
+      button.dataset.practiceV23Bound = "true";
+    });
+  }
+
+  function handlePracticeClick(event) {
+    const newBtn = event.target.closest("#newQuickBtn");
+    const checkBtn = event.target.closest("#checkQuickBtn");
+    const modelBtn = event.target.closest("#showQuickAnswerBtn");
+
+    if (!newBtn && !checkBtn && !modelBtn) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+
+    if (newBtn) {
+      nextItem(true);
+      return;
+    }
+
+    if (checkBtn) {
+      correctAnswer();
+      return;
+    }
+
+    if (modelBtn) {
+      toggleModelAnswer();
+    }
+  }
+
+  function boot() {
+    if (!cycle.length) resetCycle();
+
+    if (!currentItem) {
+      nextItem(false);
+    }
+
+    renderCurrentItem();
+    bindPracticeButtons();
+  }
+
+  // Exponer estas funciones para que cualquier handler viejo que las llame use la versión correcta.
+  renderQuickPractice = renderCurrentItem;
+  nextQuickPractice = nextItem;
+  checkQuickPractice = function checkQuickPracticeV23(showAnswer = false) {
+    if (showAnswer) toggleModelAnswer();
+    else correctAnswer();
+  };
+
+  document.addEventListener("click", handlePracticeClick, true);
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
+
+  window.addEventListener("load", () => {
+    setTimeout(boot, 80);
+  });
+})();
