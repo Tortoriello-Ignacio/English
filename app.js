@@ -5331,3 +5331,603 @@ window.addEventListener("load", () => {
     bindPracticeButtonsV21();
   }, 50);
 });
+
+
+/* =========================================================
+   STABLE FIX V22
+   Final overrides:
+   - Timer circular visible, no aguja, empieza a consumirse desde las 12.
+   - Botones de Práctica funcionan con captura y no quedan pisados por listeners viejos.
+   - Práctica recorre 17 tiempos/condicionales mezclados.
+   - Flashcards sin contador 1/413, arrancan aleatorias por fuente y actualizan progreso.
+========================================================= */
+
+(function stableFixV22() {
+  const topics = [
+    "Present Simple",
+    "Present Continuous",
+    "Past Simple",
+    "Past Continuous",
+    "Present Perfect",
+    "Present Perfect Continuous",
+    "Past Perfect",
+    "Past Perfect Continuous",
+    "Future Simple",
+    "Going To",
+    "Future Continuous",
+    "Future Perfect",
+    "Future Perfect Continuous",
+    "Zero Conditional",
+    "First Conditional",
+    "Second Conditional",
+    "Third Conditional"
+  ];
+
+  const practiceData = {
+    "Present Simple": [
+      ["Yo estudio inglés todos los días.", "I study English every day.", ["I study English every day.", "I practise English every day.", "I practice English every day."], ["study", "english", "every day"]],
+      ["Nosotros repasamos vocabulario cada mañana.", "We review vocabulary every morning.", ["We review vocabulary every morning.", "We revise vocabulary every morning.", "We go over vocabulary every morning."], ["review", "vocabulary"]],
+      ["Ellos trabajan en un laboratorio público.", "They work in a public laboratory.", ["They work in a public laboratory.", "They work at a public laboratory.", "They work in a public lab."], ["they", "work", "laboratory"]]
+    ],
+    "Present Continuous": [
+      ["Yo estoy escribiendo una respuesta ahora.", "I am writing an answer now.", ["I am writing an answer now.", "I'm writing an answer now.", "I am currently writing an answer."], ["writing", "now"]],
+      ["Nosotros estamos practicando para el IELTS esta semana.", "We are practicing for the IELTS this week.", ["We are practicing for the IELTS this week.", "We are preparing for the IELTS this week.", "We're practising for the IELTS this week."], ["are", "practicing", "ielts"]],
+      ["Ella está leyendo las instrucciones con atención.", "She is reading the instructions carefully.", ["She is reading the instructions carefully.", "She is checking the instructions carefully."], ["is", "reading", "instructions"]]
+    ],
+    "Past Simple": [
+      ["Yo terminé el informe ayer.", "I finished the report yesterday.", ["I finished the report yesterday.", "I completed the report yesterday."], ["finished", "report", "yesterday"]],
+      ["Ellos visitaron el laboratorio la semana pasada.", "They visited the laboratory last week.", ["They visited the laboratory last week.", "They went to the laboratory last week."], ["visited", "last week"]],
+      ["Nosotros aprendimos muchas palabras nuevas.", "We learned many new words.", ["We learned many new words.", "We learnt many new words."], ["learned", "words"]]
+    ],
+    "Past Continuous": [
+      ["Yo estaba leyendo cuando me llamaste.", "I was reading when you called me.", ["I was reading when you called me.", "I was studying when you called me."], ["was", "reading", "called"]],
+      ["Ellos estaban trabajando mientras nosotros esperábamos.", "They were working while we were waiting.", ["They were working while we were waiting.", "They were working while we waited."], ["were", "working", "waiting"]],
+      ["Nosotros estábamos repasando antes del examen.", "We were reviewing before the exam.", ["We were reviewing before the exam.", "We were revising before the exam.", "We were studying before the exam."], ["were", "reviewing", "exam"]]
+    ],
+    "Present Perfect": [
+      ["Yo he terminado el ejercicio.", "I have finished the exercise.", ["I have finished the exercise.", "I've finished the exercise.", "I have completed the exercise."], ["have", "finished"]],
+      ["Nosotros hemos visitado ese lugar varias veces.", "We have visited that place several times.", ["We have visited that place several times.", "We've been to that place several times."], ["have", "visited"]],
+      ["Ella ha mejorado mucho este mes.", "She has improved a lot this month.", ["She has improved a lot this month.", "She's improved a lot this month.", "She has gotten much better this month."], ["has", "improved"]]
+    ],
+    "Present Perfect Continuous": [
+      ["Yo he estado estudiando durante dos horas.", "I have been studying for two hours.", ["I have been studying for two hours.", "I've been studying for two hours.", "I have been practicing for two hours."], ["have", "been", "studying"]],
+      ["Ella ha estado trabajando toda la mañana.", "She has been working all morning.", ["She has been working all morning.", "She's been working all morning."], ["has", "been", "working"]],
+      ["Nosotros hemos estado practicando desde temprano.", "We have been practicing since early morning.", ["We have been practicing since early morning.", "We've been practising since early morning.", "We have been training since early morning."], ["have", "been", "practicing"]]
+    ],
+    "Past Perfect": [
+      ["Yo ya había terminado cuando empezó la clase.", "I had already finished when the class started.", ["I had already finished when the class started.", "I had already completed it when the class started."], ["had", "finished"]],
+      ["Ellos habían salido antes de que llegáramos.", "They had left before we arrived.", ["They had left before we arrived.", "They had gone before we arrived."], ["had", "left"]],
+      ["Nosotros habíamos leído el texto antes del examen.", "We had read the text before the exam.", ["We had read the text before the exam.", "We had gone through the text before the exam."], ["had", "read"]]
+    ],
+    "Past Perfect Continuous": [
+      ["Yo había estado practicando durante horas.", "I had been practicing for hours.", ["I had been practicing for hours.", "I had been studying for hours.", "I had been training for hours."], ["had", "been", "practicing"]],
+      ["La empresa había estado trabajando durante meses.", "The company had been working for months.", ["The company had been working for months.", "The company had been developing the project for months."], ["had", "been", "working"]],
+      ["Nosotros habíamos estado esperando desde las ocho.", "We had been waiting since eight o'clock.", ["We had been waiting since eight o'clock.", "We had been waiting since eight."], ["had", "been", "waiting"]]
+    ],
+    "Future Simple": [
+      ["Yo te ayudaré después de la clase.", "I will help you after class.", ["I will help you after class.", "I'll help you after class.", "I will assist you after class."], ["will", "help"]],
+      ["Ellos enviarán el correo mañana.", "They will send the email tomorrow.", ["They will send the email tomorrow.", "They'll send the email tomorrow."], ["will", "send"]],
+      ["Nosotros revisaremos las respuestas luego.", "We will review the answers later.", ["We will review the answers later.", "We'll check the answers later.", "We will go over the answers later."], ["will", "review"]]
+    ],
+    "Going To": [
+      ["Yo voy a empezar un curso nuevo.", "I am going to start a new course.", ["I am going to start a new course.", "I'm going to begin a new course."], ["going", "to", "start"]],
+      ["Nosotros vamos a practicar speaking esta noche.", "We are going to practice speaking tonight.", ["We are going to practice speaking tonight.", "We're going to practise speaking tonight."], ["going", "to", "practice"]],
+      ["Ella va a presentar el proyecto mañana.", "She is going to present the project tomorrow.", ["She is going to present the project tomorrow.", "She's going to present the project tomorrow."], ["going", "to", "present"]]
+    ],
+    "Future Continuous": [
+      ["Yo estaré trabajando mañana a esta hora.", "I will be working at this time tomorrow.", ["I will be working at this time tomorrow.", "I'll be working at this time tomorrow."], ["will", "be", "working"]],
+      ["Nosotros estaremos viajando el viernes.", "We will be travelling on Friday.", ["We will be travelling on Friday.", "We will be traveling on Friday.", "We'll be travelling on Friday."], ["will", "be", "travelling"]],
+      ["Ellos estarán estudiando durante la tarde.", "They will be studying during the afternoon.", ["They will be studying during the afternoon.", "They'll be studying in the afternoon."], ["will", "be", "studying"]]
+    ],
+    "Future Perfect": [
+      ["Yo habré terminado el documento para mañana.", "I will have finished the document by tomorrow.", ["I will have finished the document by tomorrow.", "I'll have finished the document by tomorrow.", "I will have completed the document by tomorrow."], ["will", "have", "finished"]],
+      ["Nosotros habremos llegado antes de las ocho.", "We will have arrived before eight o'clock.", ["We will have arrived before eight o'clock.", "We'll have arrived before eight."], ["will", "have", "arrived"]],
+      ["Ellos habrán resuelto el problema para la próxima semana.", "They will have solved the problem by next week.", ["They will have solved the problem by next week.", "They will have fixed the problem by next week."], ["will", "have", "solved"]]
+    ],
+    "Future Perfect Continuous": [
+      ["Yo habré estado estudiando durante un año.", "I will have been studying for a year.", ["I will have been studying for a year.", "I'll have been studying for a year.", "I will have been learning for a year."], ["will", "have", "been", "studying"]],
+      ["Nosotros habremos estado trabajando durante diez horas.", "We will have been working for ten hours.", ["We will have been working for ten hours.", "We'll have been working for ten hours."], ["will", "have", "been", "working"]],
+      ["Ella habrá estado practicando durante meses.", "She will have been practicing for months.", ["She will have been practicing for months.", "She'll have been practising for months.", "She will have been training for months."], ["will", "have", "been", "practicing"]]
+    ],
+    "Zero Conditional": [
+      ["Si calentás agua, hierve.", "If you heat water, it boils.", ["If you heat water, it boils.", "Water boils if you heat it."], ["if", "heat", "boils"]],
+      ["Si no dormís bien, te sentís cansado.", "If you don't sleep well, you feel tired.", ["If you don't sleep well, you feel tired.", "You feel tired if you don't sleep well."], ["if", "sleep", "feel"]],
+      ["Si practicás todos los días, mejorás.", "If you practice every day, you improve.", ["If you practice every day, you improve.", "You improve if you practice every day."], ["if", "practice", "improve"]]
+    ],
+    "First Conditional": [
+      ["Si llueve mañana, nos quedaremos en casa.", "If it rains tomorrow, we will stay at home.", ["If it rains tomorrow, we will stay at home.", "If it rains tomorrow, we'll stay home.", "We will stay at home if it rains tomorrow."], ["if", "rains", "will"]],
+      ["Si terminás temprano, te llamaré.", "If you finish early, I will call you.", ["If you finish early, I will call you.", "If you finish early, I'll call you."], ["if", "finish", "will"]],
+      ["Si practicamos más, mejoraremos rápido.", "If we practice more, we will improve quickly.", ["If we practice more, we will improve quickly.", "If we practise more, we'll improve quickly."], ["if", "practice", "will"]]
+    ],
+    "Second Conditional": [
+      ["Si tuviera más tiempo, viajaría más.", "If I had more time, I would travel more.", ["If I had more time, I would travel more.", "I would travel more if I had more time."], ["if", "had", "would"]],
+      ["Si ella hablara inglés con fluidez, conseguiría el trabajo.", "If she spoke English fluently, she would get the job.", ["If she spoke English fluently, she would get the job.", "If she were fluent in English, she would get the job."], ["if", "spoke", "would"]],
+      ["Si viviéramos cerca, iríamos caminando.", "If we lived nearby, we would walk.", ["If we lived nearby, we would walk.", "We would walk if we lived nearby."], ["if", "lived", "would"]]
+    ],
+    "Third Conditional": [
+      ["Si hubiera estudiado más, habría aprobado el examen.", "If I had studied more, I would have passed the exam.", ["If I had studied more, I would have passed the exam.", "If I had prepared more, I would have passed the exam.", "I would have passed the exam if I had studied more."], ["if", "had", "would", "passed"]],
+      ["Si hubiéramos salido antes, no habríamos perdido el tren.", "If we had left earlier, we would not have missed the train.", ["If we had left earlier, we would not have missed the train.", "If we had left earlier, we wouldn't have missed the train."], ["if", "had", "would", "missed"]],
+      ["Si ella hubiera leído las instrucciones, habría evitado el error.", "If she had read the instructions, she would have avoided the mistake.", ["If she had read the instructions, she would have avoided the mistake.", "If she had checked the instructions, she would have avoided the mistake."], ["if", "had", "would", "avoided"]]
+    ]
+  };
+
+  let practiceCycle = [];
+  let currentPracticeItem = null;
+
+  function stableShuffle(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function getTimerRoot() {
+    return document.getElementById("timerProgressRing") || document.getElementById("timerVisual");
+  }
+
+  function ensureCircleTimer() {
+    const root = getTimerRoot();
+    if (!root) return;
+
+    root.id = "timerProgressRing";
+    root.className = "circle-timer-card";
+    root.setAttribute("aria-label", "Tiempo restante del timer");
+
+    if (!root.querySelector(".circle-timer-orb")) {
+      root.innerHTML = `
+        <div class="circle-timer-time">
+          <span id="timerDisplay" class="timer-display">00:00</span>
+          <small>sesión de foco</small>
+        </div>
+
+        <div class="circle-timer-orb" aria-hidden="true">
+          <div class="circle-timer-face">
+            <span class="circle-inner-glow"></span>
+          </div>
+        </div>
+
+        <p class="circle-timer-caption">El relleno se consume desde arriba.</p>
+      `;
+    }
+  }
+
+  function updateCircleTimer() {
+    ensureCircleTimer();
+
+    const root = getTimerRoot();
+    const display = document.getElementById("timerDisplay");
+
+    const remaining = Math.max(Number(timerSecondsLeft) || 0, 0);
+    const minutes = Math.floor(remaining / 60);
+    const seconds = remaining % 60;
+
+    if (display) {
+      display.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+    }
+
+    const progress = timerInitialSeconds
+      ? (timerInitialSeconds - remaining) / timerInitialSeconds
+      : 0;
+
+    const elapsedDegrees = Math.max(0, Math.min(360, progress * 360));
+
+    if (root) {
+      root.style.setProperty("--timer-elapsed", `${elapsedDegrees}deg`);
+      root.style.setProperty("--timer-progress-ratio", String(progress));
+    }
+  }
+
+  function buildPracticePool() {
+    const pool = [];
+    topics.forEach((topic) => {
+      (practiceData[topic] || []).forEach((row) => {
+        pool.push({
+          topic,
+          es: row[0],
+          answer: row[1],
+          acceptedAnswers: row[2],
+          keywords: row[3]
+        });
+      });
+    });
+    return pool;
+  }
+
+  function refillPracticeCycle() {
+    practiceCycle = stableShuffle([...topics]);
+  }
+
+  function pickPracticeItem(topic) {
+    const list = (quickPracticePool || []).filter((item) => item.topic === topic);
+    const fallback = buildPracticePool().filter((item) => item.topic === topic);
+    const source = list.length ? list : fallback;
+    return source[Math.floor(Math.random() * source.length)];
+  }
+
+  function setPracticeTopic(topic) {
+    const topicEl = document.getElementById("quickTopic");
+    if (!topicEl) return;
+    topicEl.textContent = topic || "Present Simple";
+    topicEl.title = topic || "Present Simple";
+    topicEl.classList.add("quick-topic-pill");
+  }
+
+  function renderPracticeItem() {
+    if (!currentPracticeItem) nextPracticeItem(false);
+    if (!currentPracticeItem) return;
+
+    const promptEl = document.getElementById("quickPrompt");
+    const answerEl = document.getElementById("quickAnswer");
+    const feedbackEl = document.getElementById("quickFeedback");
+
+    setPracticeTopic(currentPracticeItem.topic);
+    if (promptEl) promptEl.textContent = currentPracticeItem.es;
+    if (answerEl) answerEl.value = "";
+    if (feedbackEl) feedbackEl.innerHTML = "";
+  }
+
+  function nextPracticeItem(shouldRender = true) {
+    if (!quickPracticePool || !quickPracticePool.length) {
+      quickPracticePool = buildPracticePool();
+    }
+
+    if (!practiceCycle.length) refillPracticeCycle();
+
+    const nextTopic = practiceCycle.shift();
+    currentPracticeItem = pickPracticeItem(nextTopic);
+
+    if (shouldRender) renderPracticeItem();
+  }
+
+  function getSimilarity(a, b) {
+    const aTokens = normalizeText(a).split(" ").filter(Boolean);
+    const bTokens = normalizeText(b).split(" ").filter(Boolean);
+    if (!aTokens.length || !bTokens.length) return 0;
+
+    const aSet = new Set(aTokens);
+    const bSet = new Set(bTokens);
+    let common = 0;
+
+    aSet.forEach((token) => {
+      if (bSet.has(token)) common += 1;
+    });
+
+    return ((common / aSet.size) + (common / bSet.size)) / 2;
+  }
+
+  function checkPractice(showAnswer = false) {
+    if (!currentPracticeItem) nextPracticeItem(false);
+
+    const item = currentPracticeItem;
+    const feedbackEl = document.getElementById("quickFeedback");
+    const answerEl = document.getElementById("quickAnswer");
+
+    if (!item || !feedbackEl) return;
+
+    const accepted = [...new Set([item.answer, ...(item.acceptedAnswers || [])])];
+
+    if (showAnswer) {
+      feedbackEl.innerHTML = `
+        <strong>Respuesta modelo</strong>
+        <p>${escapeHTML(item.answer)}</p>
+        ${accepted.length > 1 ? `<p><strong>También se aceptan:</strong> ${accepted.slice(1, 4).map(escapeHTML).join(" · ")}</p>` : ""}
+      `;
+      setPracticeTopic(item.topic);
+      return;
+    }
+
+    const user = answerEl?.value?.trim() || "";
+
+    if (!user) {
+      alert("Escribí tu traducción antes de corregir.");
+      return;
+    }
+
+    let best = "";
+    let bestScore = 0;
+
+    accepted.forEach((option) => {
+      const score = getSimilarity(user, option);
+      if (score > bestScore) {
+        bestScore = score;
+        best = option;
+      }
+    });
+
+    const keywordScore = item.keywords?.length
+      ? item.keywords.filter((kw) => normalizeText(user).includes(normalizeText(kw))).length / item.keywords.length
+      : 0;
+
+    const finalScore = Math.round(Math.max(bestScore, keywordScore) * 100);
+    const acceptedAnswer = bestScore >= 0.74 || keywordScore >= 0.75;
+
+    feedbackEl.innerHTML = `
+      <strong>${acceptedAnswer ? "Muy bien" : "Ajustá un poco más la traducción"}</strong>
+      <p>${acceptedAnswer
+        ? `Tu respuesta entra dentro de las variantes válidas. Coincidencia aproximada: ${finalScore}%.`
+        : `Coincidencia aproximada: ${finalScore}%. Revisá el tiempo verbal, auxiliar o verbo principal.`}
+      </p>
+      <p><strong>Tiempo verbal:</strong> ${escapeHTML(item.topic)}</p>
+      <p><strong>Modelo base:</strong> ${escapeHTML(item.answer)}</p>
+      ${best && normalizeText(best) !== normalizeText(item.answer) ? `<p><strong>Variante compatible:</strong> ${escapeHTML(best)}</p>` : ""}
+    `;
+
+    setPracticeTopic(item.topic);
+    if (typeof logActivity === "function") logActivity(`Práctica rápida · ${item.topic}`);
+  }
+
+  function toPronunciation(text = "") {
+    if (typeof toCastilianPronunciationFinal === "function") return toCastilianPronunciationFinal(text);
+    if (typeof toCastilianPronunciationV16 === "function") return toCastilianPronunciationV16(text);
+
+    return String(text)
+      .toLowerCase()
+      .replace(/ing\b/g, "in")
+      .replace(/tion/g, "shon")
+      .replace(/th/g, "d")
+      .replace(/ou/g, "au")
+      .replace(/ow/g, "au")
+      .replace(/ay/g, "ei")
+      .replace(/w/g, "u")
+      .replace(/y/g, "i");
+  }
+
+  function buildCardsBySource(source) {
+    const phrasalCards = phrasalVerbs.map(([front, back, example]) => ({
+      type: "Phrasal verb",
+      front,
+      back,
+      example,
+      progressKey: "phrasals",
+      pronunciation: toPronunciation(front)
+    }));
+
+    const modalCards = modalVerbs.map(([front, back]) => ({
+      type: "Modal / auxiliar",
+      front,
+      back,
+      example: "",
+      progressKey: "modals",
+      pronunciation: toPronunciation(front)
+    }));
+
+    const vocabCards = vocabulary.map((item) => ({
+      type: item.category || "Vocabulario",
+      front: item.word,
+      back: item.meaning,
+      example: item.example || "",
+      progressKey: "grammar",
+      pronunciation: toPronunciation(item.word)
+    }));
+
+    if (source === "phrasals") return phrasalCards;
+    if (source === "modals") return modalCards;
+    if (source === "vocabulario") return vocabCards;
+
+    return [...phrasalCards, ...modalCards, ...vocabCards];
+  }
+
+  function randomCardIndex() {
+    if (!currentFlashcards.length) return 0;
+    return Math.floor(Math.random() * currentFlashcards.length);
+  }
+
+  function buildFlashcardsStable(randomStart = true) {
+    const source = document.getElementById("flashcardSource")?.value || "all";
+    currentFlashcards = buildCardsBySource(source);
+    flashcardShowingBack = false;
+    flashcardIndex = randomStart ? randomCardIndex() : Math.min(flashcardIndex, Math.max(0, currentFlashcards.length - 1));
+    renderFlashcardStable();
+  }
+
+  function renderFlashcardStable() {
+    const statsEl = document.getElementById("flashcardStats");
+    if (statsEl) {
+      statsEl.textContent = "";
+      statsEl.style.display = "none";
+    }
+
+    if (!flashcardFront) return;
+
+    if (!currentFlashcards.length) {
+      setText("flashcardType", "Sin tarjetas");
+      setText("flashcardFront", "Agregá vocabulario o cambiá la fuente");
+      setText("flashcardBack", "");
+      setText("flashcardExample", "");
+      if (flashcardPronunciation) flashcardPronunciation.innerHTML = "";
+      if (flashcard) flashcard.classList.remove("show-back");
+      return;
+    }
+
+    const card = currentFlashcards[flashcardIndex % currentFlashcards.length];
+
+    setText("flashcardType", card.type);
+    setText("flashcardFront", card.front);
+    setText("flashcardBack", card.back);
+    setText("flashcardExample", card.example || "");
+
+    if (flashcardPronunciation) {
+      flashcardPronunciation.innerHTML = flashcardShowingBack
+        ? `<em>${escapeHTML(card.pronunciation || toPronunciation(card.front))}</em>`
+        : "";
+    }
+
+    if (flashcard) flashcard.classList.toggle("show-back", flashcardShowingBack);
+  }
+
+  function nextFlashcardStable() {
+    if (!currentFlashcards.length) return;
+    flashcardIndex = (flashcardIndex + 1) % currentFlashcards.length;
+    flashcardShowingBack = false;
+    renderFlashcardStable();
+  }
+
+  function updateFlashcardProgress(result) {
+    const card = currentFlashcards[flashcardIndex % currentFlashcards.length];
+    const key = card?.progressKey || "grammar";
+
+    topicStats[key] = topicStats[key] || { correct: 0, total: 0 };
+    topicStats[key].total += 1;
+
+    if (result === "Lo sabía") {
+      topicStats[key].correct += 1;
+      scoreHistory.push(100);
+    } else if (result === "Me costó") {
+      scoreHistory.push(55);
+    } else {
+      scoreHistory.push(70);
+    }
+
+    if (scoreHistory.length > 80) scoreHistory = scoreHistory.slice(-80);
+
+    flashcardCount += 1;
+    studySeconds += 20;
+    weeklySeconds += 20;
+
+    localStorage.setItem("englishTrainerFlashcardCount", String(flashcardCount));
+    localStorage.setItem("englishTrainerTopicStats", JSON.stringify(topicStats));
+    localStorage.setItem("englishTrainerScoreHistory", JSON.stringify(scoreHistory));
+    localStorage.setItem("englishTrainerStudySeconds", String(studySeconds));
+    localStorage.setItem("englishTrainerWeeklySeconds", String(weeklySeconds));
+
+    if (typeof saveProgress === "function") saveProgress();
+    if (typeof logActivity === "function") logActivity(`Flashcard · ${result}`);
+    if (typeof updateProgress === "function") updateProgress();
+  }
+
+  function recordFlashcardStable(result) {
+    updateFlashcardProgress(result);
+    nextFlashcardStable();
+  }
+
+  function bindCaptureEvents() {
+    const newBtn = document.getElementById("newQuickBtn");
+    const checkBtn = document.getElementById("checkQuickBtn");
+    const modelBtn = document.getElementById("showQuickAnswerBtn");
+
+    if (newBtn && !newBtn.dataset.v22Bound) {
+      newBtn.dataset.v22Bound = "true";
+      newBtn.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        nextPracticeItem(true);
+      }, true);
+    }
+
+    if (checkBtn && !checkBtn.dataset.v22Bound) {
+      checkBtn.dataset.v22Bound = "true";
+      checkBtn.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        checkPractice(false);
+      }, true);
+    }
+
+    if (modelBtn && !modelBtn.dataset.v22Bound) {
+      modelBtn.dataset.v22Bound = "true";
+      modelBtn.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        checkPractice(true);
+      }, true);
+    }
+
+    const sourceEl = document.getElementById("flashcardSource");
+    if (sourceEl && !sourceEl.dataset.v22Bound) {
+      sourceEl.dataset.v22Bound = "true";
+      sourceEl.addEventListener("change", (event) => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        buildFlashcardsStable(true);
+      }, true);
+    }
+
+    const nextBtn = document.getElementById("nextCardBtn");
+    if (nextBtn && !nextBtn.dataset.v22Bound) {
+      nextBtn.dataset.v22Bound = "true";
+      nextBtn.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        nextFlashcardStable();
+      }, true);
+    }
+
+    const knownBtn = document.getElementById("knownCardBtn");
+    const hardBtn = document.getElementById("hardCardBtn");
+    const repeatBtn = document.getElementById("repeatCardBtn");
+
+    if (knownBtn && !knownBtn.dataset.v22Bound) {
+      knownBtn.dataset.v22Bound = "true";
+      knownBtn.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        recordFlashcardStable("Lo sabía");
+      }, true);
+    }
+
+    if (hardBtn && !hardBtn.dataset.v22Bound) {
+      hardBtn.dataset.v22Bound = "true";
+      hardBtn.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        recordFlashcardStable("Me costó");
+      }, true);
+    }
+
+    if (repeatBtn && !repeatBtn.dataset.v22Bound) {
+      repeatBtn.dataset.v22Bound = "true";
+      repeatBtn.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        recordFlashcardStable("Repetir después");
+      }, true);
+    }
+
+    document.querySelectorAll("[data-resource='flashcards'], [data-resource-nav='flashcards']").forEach((button) => {
+      if (button.dataset.v22RandomBound) return;
+      button.dataset.v22RandomBound = "true";
+      button.addEventListener("click", () => {
+        setTimeout(() => buildFlashcardsStable(true), 60);
+      });
+    });
+  }
+
+  updateTimerUI = updateCircleTimer;
+  renderQuickPractice = renderPracticeItem;
+  nextQuickPractice = nextPracticeItem;
+  checkQuickPractice = checkPractice;
+  buildQuickPracticePool = buildPracticePool;
+  buildFlashcards = buildFlashcardsStable;
+  renderFlashcard = renderFlashcardStable;
+  nextFlashcard = nextFlashcardStable;
+  recordFlashcard = recordFlashcardStable;
+
+  function bootStableFix() {
+    ensureCircleTimer();
+    updateCircleTimer();
+
+    quickPracticePool = buildPracticePool();
+    refillPracticeCycle();
+    currentPracticeItem = null;
+    nextPracticeItem(false);
+    renderPracticeItem();
+
+    buildFlashcardsStable(true);
+    bindCaptureEvents();
+
+    const statsEl = document.getElementById("flashcardStats");
+    if (statsEl) statsEl.remove();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bootStableFix);
+  } else {
+    bootStableFix();
+  }
+
+  window.addEventListener("load", () => {
+    setTimeout(bootStableFix, 80);
+  });
+})();
