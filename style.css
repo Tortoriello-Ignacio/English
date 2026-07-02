@@ -4354,3 +4354,38 @@ background:
 .quick-feedback p {
   margin: 8px 0 0;
 }
+
+
+/* =========================================================
+   DYNAMIC HERO TITLE V24
+   Título principal cambiante con transición suave.
+========================================================= */
+
+.dynamic-hero-title {
+  transition:
+    opacity 0.28s ease,
+    transform 0.28s ease,
+    filter 0.28s ease;
+  will-change: opacity, transform;
+}
+
+.dynamic-hero-title.title-changing {
+  opacity: 0;
+  transform: translateY(8px);
+  filter: blur(2px);
+}
+
+.hero-copy .dynamic-hero-title {
+  color: transparent !important;
+  background:
+    linear-gradient(
+      90deg,
+      #f5f2ef 0%,
+      #f5f2ef 31%,
+      var(--accent-soft) 47%,
+      var(--accent) 67%,
+      rgba(245, 242, 239, 0.72) 100%
+    ) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+}

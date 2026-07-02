@@ -6394,3 +6394,58 @@ window.addEventListener("load", () => {
     setTimeout(boot, 80);
   });
 })();
+
+
+/* =========================================================
+   DYNAMIC HERO TITLE V24
+   Cambia el título principal cada 10 segundos.
+========================================================= */
+
+(function dynamicHeroTitleV24() {
+  const frases = [
+    "Entrená inglés con claridad, fluidez y precisión",
+    "Domina inglés con foco en escritura y estructura",
+    "Tu inglés más sólido: precisión, escritura y foco",
+    "Aprendé inglés paso a paso, con método y claridad",
+    "Entrenamiento de inglés: estructura, escritura y progreso",
+    "Inglés claro y preciso, pensado para tu examen IELTS",
+    "Convertí tu práctica en inglés seguro y estructurado",
+    "Entrená inglés con foco en resultados y escritura",
+    "Tu inglés listo para IELTS: claridad y precisión.",
+    "Escribí mejor en inglés: estructura y confianza",
+    "Entrená inglés con precisión y escritura efectiva",
+    "Domina inglés con foco en claridad y resultados"
+  ];
+
+  let i = 1;
+  const INTERVALO_TITULO_MS = 10000;
+
+  function cambiarTitulo() {
+    const titulo = document.getElementById("titulo-dinamico");
+    if (!titulo) return;
+
+    titulo.classList.add("title-changing");
+
+    window.setTimeout(() => {
+      titulo.innerText = frases[i];
+      i = (i + 1) % frases.length;
+      titulo.classList.remove("title-changing");
+    }, 280);
+  }
+
+  function iniciarTituloDinamico() {
+    const titulo = document.getElementById("titulo-dinamico");
+    if (!titulo || titulo.dataset.dynamicTitleReady === "true") return;
+
+    titulo.dataset.dynamicTitleReady = "true";
+    titulo.innerText = frases[0];
+
+    window.setInterval(cambiarTitulo, INTERVALO_TITULO_MS);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", iniciarTituloDinamico);
+  } else {
+    iniciarTituloDinamico();
+  }
+})();
