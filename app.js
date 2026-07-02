@@ -1222,6 +1222,7 @@ const timerDisplay = document.getElementById("timerDisplay");
 const timerProgressRing = document.getElementById("timerProgressRing");
 const customMinutes = document.getElementById("customMinutes");
 const customTimerBtn = document.getElementById("customTimerBtn");
+const startTimerBtn = document.getElementById("startTimerBtn");
 const pauseTimerBtn = document.getElementById("pauseTimerBtn");
 const resetTimerBtn = document.getElementById("resetTimerBtn");
 
@@ -1366,11 +1367,15 @@ setInterval(() => {
 ========================= */
 
 function openTimerPanel() {
-  timerPanel.classList.add("open");
+  if (timerPanel) {
+    timerPanel.classList.add("open");
+  }
 }
 
 function closeTimerPanel() {
-  timerPanel.classList.remove("open");
+  if (timerPanel) {
+    timerPanel.classList.remove("open");
+  }
 }
 
 function toggleTimerPanel() {
@@ -1378,7 +1383,7 @@ function toggleTimerPanel() {
   timerPanel.classList.toggle("open");
 }
 
-function startTimer(minutes) {
+function setTimer(minutes) {
   const mins = Number(minutes);
 
   if (!mins || mins < 1) {
@@ -1387,11 +1392,42 @@ function startTimer(minutes) {
   }
 
   clearInterval(timerInterval);
+
   timerInitialSeconds = mins * 60;
   timerSecondsLeft = timerInitialSeconds;
   timerPaused = false;
-  pauseTimerBtn.textContent = "Pausar";
+  timerInterval = null;
+
+  if (pauseTimerBtn) {
+    pauseTimerBtn.textContent = "Pausar";
+  }
+
+  if (startTimerBtn) {
+    startTimerBtn.textContent = "Start";
+    startTimerBtn.disabled = false;
+  }
+
   updateTimerUI();
+}
+
+function startTimer() {
+  if (!timerInitialSeconds || timerInitialSeconds < 1) {
+    alert("Primero elegí 5, 10, 15 minutos o seteá una cantidad personalizada.");
+    return;
+  }
+
+  if (timerInterval) return;
+
+  timerPaused = false;
+
+  if (pauseTimerBtn) {
+    pauseTimerBtn.textContent = "Pausar";
+  }
+
+  if (startTimerBtn) {
+    startTimerBtn.textContent = "En curso";
+    startTimerBtn.disabled = true;
+  }
 
   timerInterval = setInterval(() => {
     if (timerPaused) return;
@@ -1402,9 +1438,17 @@ function startTimer(minutes) {
     if (timerSecondsLeft <= 0) {
       clearInterval(timerInterval);
       timerInterval = null;
+
       studySeconds += timerInitialSeconds;
       localStorage.setItem("englishTrainerStudySeconds", String(studySeconds));
+
       updateProgress();
+
+      if (startTimerBtn) {
+        startTimerBtn.textContent = "Start";
+        startTimerBtn.disabled = false;
+      }
+
       alert("¡Tiempo cumplido! Excelente sesión de estudio.");
     }
   }, 1000);
@@ -1415,9 +1459,14 @@ function updateTimerUI() {
   const minutes = Math.floor(remaining / 60);
   const seconds = remaining % 60;
 
-  timerDisplay.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  if (timerDisplay) {
+    timerDisplay.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  }
 
-  const progress = timerInitialSeconds ? (timerInitialSeconds - remaining) / timerInitialSeconds : 0;
+  const progress = timerInitialSeconds
+    ? (timerInitialSeconds - remaining) / timerInitialSeconds
+    : 0;
+
   const degrees = Math.round(progress * 360);
 
   if (timerProgressRing) {
@@ -1430,27 +1479,55 @@ if (timerToggleBtn) {
 }
 
 document.querySelectorAll(".preset-btn").forEach((button) => {
-  button.addEventListener("click", () => startTimer(button.dataset.minutes));
+  button.addEventListener("click", () => {
+    setTimer(button.dataset.minutes);
+  });
 });
 
-customTimerBtn.addEventListener("click", () => startTimer(customMinutes.value));
+if (customTimerBtn) {
+  customTimerBtn.addEventListener("click", () => {
+    setTimer(customMinutes.value);
+  });
+}
 
-pauseTimerBtn.addEventListener("click", () => {
-  if (!timerInterval) return;
+if (startTimerBtn) {
+  startTimerBtn.addEventListener("click", startTimer);
+}
 
-  timerPaused = !timerPaused;
-  pauseTimerBtn.textContent = timerPaused ? "Continuar" : "Pausar";
-});
+if (pauseTimerBtn) {
+  pauseTimerBtn.addEventListener("click", () => {
+    if (!timerInterval) return;
 
-resetTimerBtn.addEventListener("click", () => {
-  clearInterval(timerInterval);
-  timerInterval = null;
-  timerSecondsLeft = 0;
-  timerInitialSeconds = 0;
-  timerPaused = false;
-  pauseTimerBtn.textContent = "Pausar";
-  updateTimerUI();
-});
+    timerPaused = !timerPaused;
+    pauseTimerBtn.textContent = timerPaused ? "Continuar" : "Pausar";
+
+    if (startTimerBtn) {
+      startTimerBtn.textContent = timerPaused ? "Pausado" : "En curso";
+    }
+  });
+}
+
+if (resetTimerBtn) {
+  resetTimerBtn.addEventListener("click", () => {
+    clearInterval(timerInterval);
+
+    timerInterval = null;
+    timerSecondsLeft = 0;
+    timerInitialSeconds = 0;
+    timerPaused = false;
+
+    if (pauseTimerBtn) {
+      pauseTimerBtn.textContent = "Pausar";
+    }
+
+    if (startTimerBtn) {
+      startTimerBtn.textContent = "Start";
+      startTimerBtn.disabled = false;
+    }
+
+    updateTimerUI();
+  });
+}
 
 /* =========================
    TABLAS

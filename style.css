@@ -1463,3 +1463,64 @@ textarea {
 .timer-toggle {
   cursor: pointer !important;
 }
+
+
+/* =========================================================
+   TIMER V7 - Start manual + neon ring
+   - Los presets solo preparan el tiempo.
+   - Start inicia la cuenta.
+   - Anillo naranja más grueso y más neón.
+========================================================= */
+
+.digital-timer-card,
+#timerProgressRing.digital-timer-card {
+  padding: 7px !important;
+  background:
+    conic-gradient(
+      from -90deg,
+      #ff7a00 var(--timer-progress),
+      rgba(255, 255, 255, 0.085) 0deg
+    ),
+    linear-gradient(145deg, rgba(255,255,255,0.06), rgba(255,255,255,0.018)) !important;
+  box-shadow:
+    0 18px 38px rgba(0, 0, 0, 0.34),
+    0 0 20px rgba(255, 122, 0, 0.16),
+    0 0 44px rgba(255, 122, 0, 0.08),
+    0 0 0 1px rgba(255,255,255,0.04) inset !important;
+}
+
+.digital-timer-inner {
+  border-radius: 23px !important;
+}
+
+.timer-actions-three {
+  grid-template-columns: 1fr 1fr 1fr !important;
+}
+
+#startTimerBtn {
+  color: #111111 !important;
+  background:
+    linear-gradient(135deg, #ff7a00 0%, #ff9f1c 100%) !important;
+  box-shadow:
+    0 10px 24px rgba(255, 122, 0, 0.18),
+    0 0 18px rgba(255, 122, 0, 0.10) !important;
+}
+
+#startTimerBtn:disabled {
+  cursor: default !important;
+  opacity: 0.72 !important;
+  color: rgba(255,255,255,0.76) !important;
+  background: rgba(255,255,255,0.075) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  box-shadow: none !important;
+}
+
+.timer-custom .compact-btn {
+  background:
+    linear-gradient(135deg, rgba(255,122,0,0.95), rgba(255,159,28,0.95)) !important;
+}
+
+.preset-btn:hover {
+  border-color: rgba(255, 122, 0, 0.52) !important;
+  box-shadow: 0 0 18px rgba(255, 122, 0, 0.10) !important;
+}

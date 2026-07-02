@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>English Trainer IELTS | Inglés desde Español</title>
   <meta name="description" content="Entrenador de inglés desde español con tiempos verbales, writing IELTS, recursos, timer y progreso." />
-  <link rel="stylesheet" href="style.css?v=timer-phrasals-v6" />
+  <link rel="stylesheet" href="style.css?v=timer-start-v7" />
 </head>
 
 <body>
@@ -35,10 +35,11 @@
 
     <div class="timer-custom">
       <input id="customMinutes" type="number" min="1" max="180" placeholder="N minutos" />
-      <button id="customTimerBtn" class="primary-btn compact-btn" type="button">Set</button>
+      <button id="customTimerBtn" class="primary-btn compact-btn" type="button">Setear</button>
     </div>
 
-    <div class="timer-actions">
+    <div class="timer-actions timer-actions-three">
+      <button id="startTimerBtn" class="primary-btn" type="button">Start</button>
       <button id="pauseTimerBtn" class="secondary-btn" type="button">Pausar</button>
       <button id="resetTimerBtn" class="danger-btn" type="button">Reset</button>
     </div>
@@ -367,6 +368,6 @@
     </main>
   </div>
 
-  <script src="app.js?v=timer-phrasals-v6"></script>
+  <script src="app.js?v=timer-start-v7"></script>
 </body>
 </html>
