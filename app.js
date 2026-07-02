@@ -1,7 +1,5 @@
 /* =========================================================
    ENGLISH TRAINER IELTS - APP.JS
-   Versión corregida: navegación entre dashboard/recursos,
-   timer digital, progreso, exámenes, apuntes y tablas.
 ========================================================= */
 
 /* =========================
@@ -19,13 +17,7 @@ const tenses = [
       negative: "Subject + do/does not + base verb",
       question: "Do/Does + subject + base verb?"
     },
-    uses: [
-      "Acciones habituales",
-      "Opiniones",
-      "Situaciones permanentes",
-      "Verdades generales",
-      "Horarios"
-    ],
+    uses: ["Acciones habituales", "Opiniones", "Situaciones permanentes", "Verdades generales", "Horarios"],
     examples: [
       ["I usually get up at 7 o’clock.", "Normalmente me levanto a las 7."],
       ["She lives in New York.", "Ella vive en Nueva York."],
@@ -43,12 +35,7 @@ const tenses = [
       negative: "Subject + am/is/are + not + verb + ing",
       question: "Wh + am/is/are + subject + verb + ing?"
     },
-    uses: [
-      "Acción actual",
-      "Situación temporal",
-      "Plan futuro cercano",
-      "Proceso en desarrollo"
-    ],
+    uses: ["Acción actual", "Situación temporal", "Plan futuro cercano", "Proceso en desarrollo"],
     examples: [
       ["What are you doing?", "¿Qué estás haciendo?"],
       ["She is studying hard for her exam.", "Ella está estudiando mucho para su examen."],
@@ -66,12 +53,7 @@ const tenses = [
       negative: "Subject + have/has not + past participle",
       question: "Have/Has + subject + past participle?"
     },
-    uses: [
-      "Experiencia",
-      "Resultado actual",
-      "Acción con for/since",
-      "Pasado conectado al presente"
-    ],
+    uses: ["Experiencia", "Resultado actual", "Acción con for/since", "Pasado conectado al presente"],
     examples: [
       ["I have been here for two hours.", "Estoy acá desde hace dos horas."],
       ["The postman hasn’t come yet.", "El cartero todavía no llegó."],
@@ -89,11 +71,7 @@ const tenses = [
       negative: "Subject + have/has not been + verb + ing",
       question: "Have/Has + subject + been + verb + ing?"
     },
-    uses: [
-      "Duración hasta el presente",
-      "Acción reciente con evidencia",
-      "Proceso continuo"
-    ],
+    uses: ["Duración hasta el presente", "Acción reciente con evidencia", "Proceso continuo"],
     examples: [
       ["I have been waiting for the bus for a long time.", "Hace mucho que estoy esperando el colectivo."],
       ["How long have you been working?", "¿Hace cuánto estás trabajando?"]
@@ -110,11 +88,7 @@ const tenses = [
       negative: "Subject + did not + base verb",
       question: "Did + subject + base verb?"
     },
-    uses: [
-      "Acción terminada",
-      "Secuencia de eventos",
-      "Momento específico en el pasado"
-    ],
+    uses: ["Acción terminada", "Secuencia de eventos", "Momento específico en el pasado"],
     examples: [
       ["I went to Paris last year.", "Fui a París el año pasado."],
       ["They didn’t drive to work.", "No fueron al trabajo en auto."],
@@ -132,11 +106,7 @@ const tenses = [
       negative: "Subject + was/were not + verb + ing",
       question: "Wh + was/were + subject + verb + ing?"
     },
-    uses: [
-      "Acción en progreso en pasado",
-      "Acción larga interrumpida",
-      "Contexto narrativo"
-    ],
+    uses: ["Acción en progreso en pasado", "Acción larga interrumpida", "Contexto narrativo"],
     examples: [
       ["At midnight we were driving home.", "A medianoche estábamos manejando a casa."],
       ["I was studying all day yesterday.", "Estuve estudiando todo el día ayer."]
@@ -153,11 +123,7 @@ const tenses = [
       negative: "Subject + had not + past participle",
       question: "Had + subject + past participle?"
     },
-    uses: [
-      "Acción anterior a otra pasada",
-      "Narración",
-      "Causa o antecedente"
-    ],
+    uses: ["Acción anterior a otra pasada", "Narración", "Causa o antecedente"],
     examples: [
       ["She had cooked lunch before she went to work.", "Ella había cocinado antes de ir al trabajo."],
       ["She hadn’t been to Rome before.", "Ella no había estado en Roma antes."]
@@ -174,11 +140,7 @@ const tenses = [
       negative: "Subject + had not been + verb + ing",
       question: "Had + subject + been + verb + ing?"
     },
-    uses: [
-      "Duración antes de otro pasado",
-      "Causa visible en pasado",
-      "Narrativa avanzada"
-    ],
+    uses: ["Duración antes de otro pasado", "Causa visible en pasado", "Narrativa avanzada"],
     examples: [
       ["We had been waiting for hours when the train arrived.", "Habíamos estado esperando durante horas cuando llegó el tren."],
       ["How long had you been playing tennis?", "¿Cuánto tiempo habías estado jugando al tenis?"]
@@ -195,12 +157,7 @@ const tenses = [
       negative: "Subject + will not + base verb",
       question: "Will + subject + base verb?"
     },
-    uses: [
-      "Predicciones",
-      "Promesas",
-      "Decisiones espontáneas",
-      "Ofrecimientos"
-    ],
+    uses: ["Predicciones", "Promesas", "Decisiones espontáneas", "Ofrecimientos"],
     examples: [
       ["I’ll help you.", "Te voy a ayudar."],
       ["She won’t win the game.", "Ella no ganará el juego."],
@@ -218,11 +175,7 @@ const tenses = [
       negative: "Subject + am/is/are not + going to + base verb",
       question: "Am/Is/Are + subject + going to + base verb?"
     },
-    uses: [
-      "Planes futuros",
-      "Intenciones",
-      "Predicciones con evidencia"
-    ],
+    uses: ["Planes futuros", "Intenciones", "Predicciones con evidencia"],
     examples: [
       ["I’m going to study languages.", "Voy a estudiar idiomas."],
       ["Look at those clouds. It’s going to rain.", "Mirá esas nubes. Va a llover."]
@@ -239,11 +192,7 @@ const tenses = [
       negative: "Subject + will not be + verb + ing",
       question: "Will + subject + be + verb + ing?"
     },
-    uses: [
-      "Acción futura en progreso",
-      "Planes como proceso",
-      "Situaciones temporales futuras"
-    ],
+    uses: ["Acción futura en progreso", "Planes como proceso", "Situaciones temporales futuras"],
     examples: [
       ["Next Friday I will be travelling to London.", "El próximo viernes estaré viajando a Londres."],
       ["This time tomorrow, I’ll be working.", "A esta hora mañana estaré trabajando."]
@@ -260,11 +209,7 @@ const tenses = [
       negative: "Subject + will not have + past participle",
       question: "Will + subject + have + past participle?"
     },
-    uses: [
-      "Acción completada antes de un futuro",
-      "Metas cumplidas",
-      "Resultados proyectados"
-    ],
+    uses: ["Acción completada antes de un futuro", "Metas cumplidas", "Resultados proyectados"],
     examples: [
       ["We will have finished the project by tomorrow.", "Habremos terminado el proyecto para mañana."],
       ["By 2030, I will have learned advanced English.", "Para 2030 habré aprendido inglés avanzado."]
@@ -281,11 +226,7 @@ const tenses = [
       negative: "Subject + will not have been + verb + ing",
       question: "Will + subject + have been + verb + ing?"
     },
-    uses: [
-      "Duración hasta un punto futuro",
-      "Continuidad",
-      "Proyección avanzada"
-    ],
+    uses: ["Duración hasta un punto futuro", "Continuidad", "Proyección avanzada"],
     examples: [
       ["I will have been working here for ten years next month.", "El mes que viene habré estado trabajando acá durante diez años."],
       ["By July, she will have been studying for six months.", "Para julio, ella habrá estado estudiando durante seis meses."]
@@ -302,11 +243,7 @@ const tenses = [
       negative: "If + don’t/doesn’t + verb, don’t/doesn’t + verb",
       question: "What happens if + Present Simple?"
     },
-    uses: [
-      "Hechos generales",
-      "Verdades científicas",
-      "Causa y efecto directo"
-    ],
+    uses: ["Hechos generales", "Verdades científicas", "Causa y efecto directo"],
     examples: [
       ["If you heat water, it boils.", "Si calentás agua, hierve."],
       ["If people don’t sleep well, they feel tired.", "Si la gente no duerme bien, se siente cansada."]
@@ -323,11 +260,7 @@ const tenses = [
       negative: "If + Present Simple, won’t + base verb",
       question: "What will happen if + Present Simple?"
     },
-    uses: [
-      "Futuro probable",
-      "Advertencias",
-      "Promesas condicionadas"
-    ],
+    uses: ["Futuro probable", "Advertencias", "Promesas condicionadas"],
     examples: [
       ["If it rains, I will stay at home.", "Si llueve, me quedaré en casa."],
       ["If she studies hard, she will pass the exam.", "Si ella estudia mucho, aprobará."]
@@ -344,11 +277,7 @@ const tenses = [
       negative: "If + Past Simple, wouldn’t + base verb",
       question: "What would you do if + Past Simple?"
     },
-    uses: [
-      "Situaciones hipotéticas",
-      "Deseos improbables",
-      "Consejos con If I were you"
-    ],
+    uses: ["Situaciones hipotéticas", "Deseos improbables", "Consejos con If I were you"],
     examples: [
       ["If I had money, I would travel.", "Si tuviera dinero, viajaría."],
       ["If I were you, I would study more.", "Si yo fuera vos, estudiaría más."]
@@ -365,11 +294,7 @@ const tenses = [
       negative: "If + Past Perfect, wouldn’t have + past participle",
       question: "What would have happened if + Past Perfect?"
     },
-    uses: [
-      "Pasado hipotético",
-      "Arrepentimientos",
-      "Resultados que no ocurrieron"
-    ],
+    uses: ["Pasado hipotético", "Arrepentimientos", "Resultados que no ocurrieron"],
     examples: [
       ["If I had studied, I would have passed.", "Si hubiera estudiado, habría aprobado."],
       ["If we had left earlier, we wouldn’t have missed the train.", "Si hubiéramos salido antes, no habríamos perdido el tren."]
@@ -452,6 +377,13 @@ const modalVerbs = [
   ["Although / Even though", "Aunque"],
   ["Because of", "Debido a"],
   ["I used to", "Solía"]
+];
+
+const conditionalsRows = [
+  ["Zero Conditional", "If + present, present", "Hechos generales", "If you heat water, it boils."],
+  ["First Conditional", "If + present, will + verbo", "Futuro probable", "If it rains, I will stay at home."],
+  ["Second Conditional", "If + past, would + verbo", "Situaciones hipotéticas", "If I had money, I would travel."],
+  ["Third Conditional", "If + had + participio, would have + participio", "Pasado hipotético", "If I had studied, I would have passed."]
 ];
 
 const ieltsPrompts = {
@@ -560,34 +492,22 @@ let timerPaused = false;
 function openResources(tab = "apuntes") {
   dashboardView.hidden = true;
   resourcesView.hidden = false;
-
   activateResourceTab(tab);
   setResourceNavActive(tab);
-
   navLinks.forEach((link) => link.classList.remove("active"));
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function openDashboard(sectionId = "inicio") {
   resourcesView.hidden = true;
   dashboardView.hidden = false;
-
   setResourceNavActive(null);
 
   requestAnimationFrame(() => {
     const target = document.getElementById(sectionId) || document.getElementById("inicio");
-
     if (target) {
-      target.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-
     setActiveLink();
   });
 }
@@ -610,25 +530,26 @@ function activateResourceTab(tab) {
 
 document.addEventListener("click", (event) => {
   const dashboardLink = event.target.closest("[data-dashboard-link]");
-
   if (dashboardLink) {
     event.preventDefault();
-
     const sectionId = dashboardLink.getAttribute("href").replace("#", "");
     openDashboard(sectionId);
     return;
   }
 
   const resourceButton = event.target.closest("[data-resource]");
-
   if (resourceButton) {
-    event.preventDefault();
     openResources(resourceButton.dataset.resource);
     return;
   }
 
-  const resourceTab = event.target.closest(".resource-tab");
+  const dashboardButton = event.target.closest("[data-go-dashboard]");
+  if (dashboardButton) {
+    openDashboard("inicio");
+    return;
+  }
 
+  const resourceTab = event.target.closest(".resource-tab");
   if (resourceTab) {
     activateResourceTab(resourceTab.dataset.tab);
   }
@@ -640,24 +561,16 @@ document.addEventListener("click", (event) => {
 
 function formatStudyTime(seconds) {
   const minutes = Math.floor(seconds / 60);
-
-  if (minutes < 60) {
-    return `${minutes}m`;
-  }
+  if (minutes < 60) return `${minutes}m`;
 
   const hours = Math.floor(minutes / 60);
   const rest = minutes % 60;
-
   return rest ? `${hours}h ${rest}m` : `${hours}h`;
 }
 
 function getAverageScore() {
-  if (!scoreHistory.length) {
-    return 0;
-  }
-
+  if (!scoreHistory.length) return 0;
   const total = scoreHistory.reduce((acc, item) => acc + item, 0);
-
   return Math.round(total / scoreHistory.length);
 }
 
@@ -665,29 +578,19 @@ function updateProgress() {
   const studyMinutes = Math.floor(studySeconds / 60);
   const avgScore = getAverageScore();
 
-  const studyTimeText = document.getElementById("studyTimeText");
-  const studyTimeBar = document.getElementById("studyTimeBar");
-  const grammarCountText = document.getElementById("grammarCountText");
-  const examsCountText = document.getElementById("examsCountText");
-  const examProgressBar = document.getElementById("examProgressBar");
-  const savedParagraphsCount = document.getElementById("savedParagraphsCount");
-  const paragraphProgressBar = document.getElementById("paragraphProgressBar");
-  const avgScoreText = document.getElementById("avgScoreText");
-  const avgScoreBar = document.getElementById("avgScoreBar");
+  document.getElementById("studyTimeText").textContent = formatStudyTime(studySeconds);
+  document.getElementById("studyTimeBar").style.width = `${Math.min((studyMinutes / 600) * 100, 100)}%`;
 
-  if (studyTimeText) studyTimeText.textContent = formatStudyTime(studySeconds);
-  if (studyTimeBar) studyTimeBar.style.width = `${Math.min((studyMinutes / 600) * 100, 100)}%`;
+  document.getElementById("grammarCountText").textContent = tenses.length;
 
-  if (grammarCountText) grammarCountText.textContent = tenses.length;
+  document.getElementById("examsCountText").textContent = examsCompleted;
+  document.getElementById("examProgressBar").style.width = `${Math.min((examsCompleted / 100) * 100, 100)}%`;
 
-  if (examsCountText) examsCountText.textContent = examsCompleted;
-  if (examProgressBar) examProgressBar.style.width = `${Math.min((examsCompleted / 100) * 100, 100)}%`;
+  document.getElementById("savedParagraphsCount").textContent = paragraphs.length;
+  document.getElementById("paragraphProgressBar").style.width = `${Math.min((paragraphs.length / 20) * 100, 100)}%`;
 
-  if (savedParagraphsCount) savedParagraphsCount.textContent = paragraphs.length;
-  if (paragraphProgressBar) paragraphProgressBar.style.width = `${Math.min((paragraphs.length / 20) * 100, 100)}%`;
-
-  if (avgScoreText) avgScoreText.textContent = `${avgScore}%`;
-  if (avgScoreBar) avgScoreBar.style.width = `${avgScore}%`;
+  document.getElementById("avgScoreText").textContent = `${avgScore}%`;
+  document.getElementById("avgScoreBar").style.width = `${avgScore}%`;
 }
 
 setInterval(() => {
@@ -703,15 +606,11 @@ setInterval(() => {
 ========================= */
 
 function openTimerPanel() {
-  if (timerPanel) {
-    timerPanel.classList.add("open");
-  }
+  timerPanel.classList.add("open");
 }
 
 function closeTimerPanel() {
-  if (timerPanel) {
-    timerPanel.classList.remove("open");
-  }
+  timerPanel.classList.remove("open");
 }
 
 function startTimer(minutes) {
@@ -723,15 +622,10 @@ function startTimer(minutes) {
   }
 
   clearInterval(timerInterval);
-
   timerInitialSeconds = mins * 60;
   timerSecondsLeft = timerInitialSeconds;
   timerPaused = false;
-
-  if (pauseTimerBtn) {
-    pauseTimerBtn.textContent = "Pausar";
-  }
-
+  pauseTimerBtn.textContent = "Pausar";
   updateTimerUI();
 
   timerInterval = setInterval(() => {
@@ -743,10 +637,8 @@ function startTimer(minutes) {
     if (timerSecondsLeft <= 0) {
       clearInterval(timerInterval);
       timerInterval = null;
-
       studySeconds += timerInitialSeconds;
       localStorage.setItem("englishTrainerStudySeconds", String(studySeconds));
-
       updateProgress();
       alert("¡Tiempo cumplido! Excelente sesión de estudio.");
     }
@@ -758,14 +650,9 @@ function updateTimerUI() {
   const minutes = Math.floor(remaining / 60);
   const seconds = remaining % 60;
 
-  if (timerDisplay) {
-    timerDisplay.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-  }
+  timerDisplay.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 
-  const progress = timerInitialSeconds
-    ? (timerInitialSeconds - remaining) / timerInitialSeconds
-    : 0;
-
+  const progress = timerInitialSeconds ? (timerInitialSeconds - remaining) / timerInitialSeconds : 0;
   const degrees = Math.round(progress * 360);
 
   if (timerProgressRing) {
@@ -773,75 +660,60 @@ function updateTimerUI() {
   }
 }
 
-if (timerToggleBtn) {
-  timerToggleBtn.addEventListener("click", openTimerPanel);
-}
-
-if (timerCloseBtn) {
-  timerCloseBtn.addEventListener("click", closeTimerPanel);
-}
+timerToggleBtn.addEventListener("click", openTimerPanel);
+timerCloseBtn.addEventListener("click", closeTimerPanel);
 
 document.querySelectorAll(".preset-btn").forEach((button) => {
-  button.addEventListener("click", () => {
-    startTimer(button.dataset.minutes);
-  });
+  button.addEventListener("click", () => startTimer(button.dataset.minutes));
 });
 
-if (customTimerBtn) {
-  customTimerBtn.addEventListener("click", () => {
-    startTimer(customMinutes.value);
-  });
-}
+customTimerBtn.addEventListener("click", () => startTimer(customMinutes.value));
 
-if (pauseTimerBtn) {
-  pauseTimerBtn.addEventListener("click", () => {
-    if (!timerInterval) return;
+pauseTimerBtn.addEventListener("click", () => {
+  if (!timerInterval) return;
 
-    timerPaused = !timerPaused;
-    pauseTimerBtn.textContent = timerPaused ? "Continuar" : "Pausar";
-  });
-}
+  timerPaused = !timerPaused;
+  pauseTimerBtn.textContent = timerPaused ? "Continuar" : "Pausar";
+});
 
-if (resetTimerBtn) {
-  resetTimerBtn.addEventListener("click", () => {
-    clearInterval(timerInterval);
-
-    timerInterval = null;
-    timerSecondsLeft = 0;
-    timerInitialSeconds = 0;
-    timerPaused = false;
-
-    if (pauseTimerBtn) {
-      pauseTimerBtn.textContent = "Pausar";
-    }
-
-    updateTimerUI();
-  });
-}
+resetTimerBtn.addEventListener("click", () => {
+  clearInterval(timerInterval);
+  timerInterval = null;
+  timerSecondsLeft = 0;
+  timerInitialSeconds = 0;
+  timerPaused = false;
+  pauseTimerBtn.textContent = "Pausar";
+  updateTimerUI();
+});
 
 /* =========================
    TABLAS
 ========================= */
 
 function renderTables() {
-  const phrasalTableBody = document.getElementById("phrasalTableBody");
-  const modalsTableBody = document.getElementById("modalsTableBody");
+  document.getElementById("phrasalTableBody").innerHTML = phrasalVerbs.map(([verb, meaning, example]) => `
+    <tr>
+      <td>${escapeHTML(verb)}</td>
+      <td>${escapeHTML(meaning)}</td>
+      <td><em>${escapeHTML(example)}</em></td>
+    </tr>
+  `).join("");
 
-  if (phrasalTableBody) {
-    phrasalTableBody.innerHTML = phrasalVerbs.map(([verb, meaning, example]) => `
+  document.getElementById("modalsTableBody").innerHTML = modalVerbs.map(([word, meaning]) => `
+    <tr>
+      <td>${escapeHTML(word)}</td>
+      <td>${escapeHTML(meaning)}</td>
+    </tr>
+  `).join("");
+
+  const conditionalsBody = document.getElementById("conditionalsTableBody");
+  if (conditionalsBody) {
+    conditionalsBody.innerHTML = conditionalsRows.map(([type, structure, use, example]) => `
       <tr>
-        <td>${escapeHTML(verb)}</td>
-        <td>${escapeHTML(meaning)}</td>
+        <td>${escapeHTML(type)}</td>
+        <td>${escapeHTML(structure)}</td>
+        <td>${escapeHTML(use)}</td>
         <td><em>${escapeHTML(example)}</em></td>
-      </tr>
-    `).join("");
-  }
-
-  if (modalsTableBody) {
-    modalsTableBody.innerHTML = modalVerbs.map(([word, meaning]) => `
-      <tr>
-        <td>${escapeHTML(word)}</td>
-        <td>${escapeHTML(meaning)}</td>
       </tr>
     `).join("");
   }
@@ -852,8 +724,6 @@ function renderTables() {
 ========================= */
 
 function renderTenseCards(filter = "") {
-  if (!tenseGrid) return;
-
   tenseGrid.innerHTML = "";
 
   const query = filter.toLowerCase().trim();
@@ -878,19 +748,10 @@ function renderTenseCards(filter = "") {
 
     card.addEventListener("click", () => {
       selectedTenseId = tense.id;
-
-      renderTenseCards(tenseSearch ? tenseSearch.value : "");
+      renderTenseCards(tenseSearch.value);
       renderTenseDetail(tense.id);
       setPracticeTense(tense.id);
-
-      const structureSection = document.getElementById("estructura");
-
-      if (structureSection) {
-        structureSection.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
-      }
+      document.getElementById("estructura").scrollIntoView({ behavior: "smooth", block: "start" });
     });
 
     tenseGrid.appendChild(card);
@@ -899,36 +760,27 @@ function renderTenseCards(filter = "") {
 
 function renderTenseDetail(tenseId) {
   const tense = tenses.find((item) => item.id === tenseId);
-
   if (!tense) return;
 
-  if (detailTitle) detailTitle.textContent = tense.name;
-  if (detailSummary) detailSummary.textContent = tense.summary;
-  if (detailLevel) detailLevel.textContent = tense.level;
+  detailTitle.textContent = tense.name;
+  detailSummary.textContent = tense.summary;
+  detailLevel.textContent = tense.level;
 
-  if (affirmativeStructure) affirmativeStructure.textContent = tense.structures.affirmative;
-  if (negativeStructure) negativeStructure.textContent = tense.structures.negative;
-  if (questionStructure) questionStructure.textContent = tense.structures.question;
+  affirmativeStructure.textContent = tense.structures.affirmative;
+  negativeStructure.textContent = tense.structures.negative;
+  questionStructure.textContent = tense.structures.question;
 
-  if (usageList) {
-    usageList.innerHTML = tense.uses.map((use) => `
-      <li>${escapeHTML(use)}</li>
-    `).join("");
-  }
+  usageList.innerHTML = tense.uses.map((use) => `<li>${escapeHTML(use)}</li>`).join("");
 
-  if (examplesList) {
-    examplesList.innerHTML = tense.examples.map(([english, spanish]) => `
-      <article class="example-item">
-        <strong>${escapeHTML(english)}</strong>
-        <span>${escapeHTML(spanish)}</span>
-      </article>
-    `).join("");
-  }
+  examplesList.innerHTML = tense.examples.map(([english, spanish]) => `
+    <article class="example-item">
+      <strong>${escapeHTML(english)}</strong>
+      <span>${escapeHTML(spanish)}</span>
+    </article>
+  `).join("");
 }
 
 function renderPracticeOptions() {
-  if (!practiceTense) return;
-
   practiceTense.innerHTML = tenses.map((tense) => {
     return `<option value="${tense.id}">${escapeHTML(tense.name)}</option>`;
   }).join("");
@@ -938,22 +790,16 @@ function renderPracticeOptions() {
 
 function setPracticeTense(tenseId) {
   const tense = tenses.find((item) => item.id === tenseId);
-
-  if (!tense || !practiceTense) return;
+  if (!tense) return;
 
   practiceTense.value = tense.id;
   generatePrompt();
 }
 
 function generatePrompt() {
-  if (!ieltsLevel || !practiceTense || !practicePrompt) return;
-
   const level = ieltsLevel.value;
   const tense = tenses.find((item) => item.id === practiceTense.value);
   const prompts = ieltsPrompts[level];
-
-  if (!tense || !prompts) return;
-
   const prompt = prompts[Math.floor(Math.random() * prompts.length)];
 
   practicePrompt.textContent = `${prompt} Try to include: ${tense.name}.`;
@@ -968,16 +814,11 @@ function getWords(text) {
 }
 
 function updateWordCounter() {
-  if (!practiceText || !wordCounter) return;
-
   const words = getWords(practiceText.value);
-
   wordCounter.textContent = `${words.length} palabra${words.length === 1 ? "" : "s"}`;
 }
 
 function saveParagraph() {
-  if (!practiceText || !practiceTense) return;
-
   const text = practiceText.value.trim();
 
   if (!text) {
@@ -989,24 +830,20 @@ function saveParagraph() {
 
   paragraphs.unshift({
     id: createId(),
-    title: `Writing practice · ${tense ? tense.name : "General"}`,
-    tense: tense ? tense.name : "General",
+    title: `Writing practice · ${tense.name}`,
+    tense: tense.name,
     date: new Date().toLocaleDateString("es-AR"),
     text
   });
 
   localStorage.setItem("englishTrainerParagraphs", JSON.stringify(paragraphs));
-
   practiceText.value = "";
-
   updateWordCounter();
   renderParagraphs();
   updateProgress();
 }
 
 function runAICorrection() {
-  if (!practiceText || !aiFeedback) return;
-
   const text = practiceText.value.trim();
 
   if (!text) {
@@ -1019,24 +856,14 @@ function runAICorrection() {
   const sentences = text.split(/[.!?]+/).filter((sentence) => sentence.trim().length > 0);
 
   const connectors = [
-    "however",
-    "therefore",
-    "moreover",
-    "although",
-    "because",
-    "while",
-    "whereas",
-    "in addition",
-    "for example",
-    "as a result",
-    "on the other hand"
+    "however", "therefore", "moreover", "although", "because", "while",
+    "whereas", "in addition", "for example", "as a result", "on the other hand"
   ];
 
   const foundConnectors = connectors.filter((connector) => lower.includes(connector));
   const issues = detectCommonIssues(text);
 
   let band = 5;
-
   if (words.length >= 80) band += 0.5;
   if (words.length >= 130) band += 0.5;
   if (sentences.length >= 4) band += 0.5;
@@ -1044,7 +871,6 @@ function runAICorrection() {
   if (foundConnectors.length >= 4) band += 0.5;
   if (hasComplexSentence(text)) band += 0.5;
   if (words.length < 60) band -= 0.75;
-
   band -= issues.length * 0.25;
   band = Math.max(4, Math.min(8.5, Math.round(band * 2) / 2));
 
@@ -1061,10 +887,8 @@ function runAICorrection() {
   ];
 
   aiFeedback.classList.remove("hidden");
-
   aiFeedback.innerHTML = `
     <h4>Feedback de IA Coach</h4>
-
     <p class="coach-message">${intro}</p>
 
     <div class="ai-feedback-grid">
@@ -1130,7 +954,6 @@ function detectCommonIssues(text) {
   }
 
   const veryImportantMatches = text.match(/\bvery important\b/gi);
-
   if (veryImportantMatches && veryImportantMatches.length > 1) {
     issues.push("Repetís “very important”; podés variar con “essential”, “crucial” o “highly relevant”.");
   }
@@ -1190,8 +1013,6 @@ function saveNote(title, text) {
 }
 
 function saveNoteFromEditor() {
-  if (!noteTitle || !noteText) return;
-
   const title = noteTitle.value.trim() || "Apunte personal";
   const text = noteText.value.trim();
 
@@ -1201,22 +1022,15 @@ function saveNoteFromEditor() {
   }
 
   saveNote(title, text);
-
   noteTitle.value = "";
   noteText.value = "";
 }
 
 function renderNotes() {
-  if (!notesList) return;
-
   notesList.innerHTML = "";
 
   if (!notes.length) {
-    notesList.innerHTML = `
-      <div class="empty-state">
-        Todavía no guardaste apuntes.
-      </div>
-    `;
+    notesList.innerHTML = `<div class="empty-state">Todavía no guardaste apuntes.</div>`;
     return;
   }
 
@@ -1232,25 +1046,17 @@ function renderNotes() {
       <p>${escapeHTML(note.text)}</p>
 
       <div class="item-actions">
-        <button class="small-danger-btn" type="button" data-delete-note="${note.id}">
-          Borrar apunte
-        </button>
+        <button class="small-danger-btn" type="button" data-delete-note="${note.id}">Borrar apunte</button>
       </div>
     </article>
   `).join("");
 }
 
 function renderParagraphs() {
-  if (!savedParagraphsList) return;
-
   savedParagraphsList.innerHTML = "";
 
   if (!paragraphs.length) {
-    savedParagraphsList.innerHTML = `
-      <div class="empty-state">
-        Todavía no guardaste párrafos.
-      </div>
-    `;
+    savedParagraphsList.innerHTML = `<div class="empty-state">Todavía no guardaste párrafos.</div>`;
     return;
   }
 
@@ -1266,9 +1072,7 @@ function renderParagraphs() {
       <p>${escapeHTML(paragraph.text)}</p>
 
       <div class="item-actions">
-        <button class="small-danger-btn" type="button" data-delete-paragraph="${paragraph.id}">
-          Borrar párrafo
-        </button>
+        <button class="small-danger-btn" type="button" data-delete-paragraph="${paragraph.id}">Borrar párrafo</button>
       </div>
     </article>
   `).join("");
@@ -1292,8 +1096,6 @@ function deleteParagraph(id) {
 ========================= */
 
 function renderExamSelector() {
-  if (!examSelector) return;
-
   examSelector.innerHTML = "";
 
   for (let i = 1; i <= 100; i++) {
@@ -1402,7 +1204,6 @@ function generateQuestionBank() {
 function getExamQuestions(examNumber) {
   const bank = generateQuestionBank();
   const start = (examNumber - 1) * 10;
-
   return bank.slice(start, start + 10);
 }
 
@@ -1411,10 +1212,8 @@ function seededShuffle(array, seed) {
 
   for (let i = result.length - 1; i > 0; i--) {
     seed = (seed * 9301 + 49297) % 233280;
-
     const random = seed / 233280;
     const j = Math.floor(random * (i + 1));
-
     [result[i], result[j]] = [result[j], result[i]];
   }
 
@@ -1422,13 +1221,8 @@ function seededShuffle(array, seed) {
 }
 
 function renderQuiz() {
-  if (!quizContainer || !examSelector) return;
-
   quizContainer.innerHTML = "";
-
-  if (quizResult) {
-    quizResult.textContent = "";
-  }
+  quizResult.textContent = "";
 
   const examNumber = Number(examSelector.value || 1);
   currentQuiz = getExamQuestions(examNumber);
@@ -1436,7 +1230,6 @@ function renderQuiz() {
   quizContainer.innerHTML = currentQuiz.map((question, index) => `
     <article class="quiz-question" data-index="${index}">
       <h4>${index + 1}. ${escapeHTML(question.question)}</h4>
-
       <div class="quiz-options">
         ${question.options.map((option, optionIndex) => `
           <label>
@@ -1452,8 +1245,6 @@ function renderQuiz() {
 }
 
 function updateQuizProgress() {
-  if (!quizProgress) return;
-
   const answered = currentQuiz.filter((_, index) => {
     return document.querySelector(`input[name="question-${index}"]:checked`);
   }).length;
@@ -1467,8 +1258,6 @@ function submitQuiz() {
   currentQuiz.forEach((question, index) => {
     const questionElement = document.querySelector(`.quiz-question[data-index="${index}"]`);
     const selected = document.querySelector(`input[name="question-${index}"]:checked`);
-
-    if (!questionElement) return;
 
     questionElement.classList.remove("correct", "incorrect");
 
@@ -1486,10 +1275,7 @@ function submitQuiz() {
   });
 
   const percentage = Math.round((correct / currentQuiz.length) * 100);
-
-  if (quizResult) {
-    quizResult.textContent = `${correct}/10 correctas · ${percentage}%`;
-  }
+  quizResult.textContent = `${correct}/10 correctas · ${percentage}%`;
 
   examsCompleted += 1;
   scoreHistory.push(percentage);
@@ -1505,7 +1291,7 @@ function submitQuiz() {
 ========================= */
 
 function setActiveLink() {
-  if (!dashboardView || dashboardView.hidden) return;
+  if (dashboardView.hidden) return;
 
   let current = "inicio";
 
@@ -1531,9 +1317,7 @@ function revealOnScroll() {
 }
 
 function createId() {
-  return crypto.randomUUID
-    ? crypto.randomUUID()
-    : String(Date.now() + Math.random());
+  return crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random());
 }
 
 function escapeHTML(text) {
@@ -1547,115 +1331,57 @@ function escapeHTML(text) {
    EVENTOS
 ========================= */
 
-if (tenseSearch) {
-  tenseSearch.addEventListener("input", () => {
-    renderTenseCards(tenseSearch.value);
-  });
-}
+tenseSearch.addEventListener("input", () => renderTenseCards(tenseSearch.value));
+ieltsLevel.addEventListener("change", generatePrompt);
+practiceTense.addEventListener("change", generatePrompt);
+newPromptBtn.addEventListener("click", generatePrompt);
+practiceText.addEventListener("input", updateWordCounter);
 
-if (ieltsLevel) {
-  ieltsLevel.addEventListener("change", generatePrompt);
-}
+clearTextBtn.addEventListener("click", () => {
+  practiceText.value = "";
+  updateWordCounter();
+  aiFeedback.classList.add("hidden");
+});
 
-if (practiceTense) {
-  practiceTense.addEventListener("change", generatePrompt);
-}
+saveParagraphBtn.addEventListener("click", saveParagraph);
+aiCorrectBtn.addEventListener("click", runAICorrection);
 
-if (newPromptBtn) {
-  newPromptBtn.addEventListener("click", generatePrompt);
-}
+saveNoteBtn.addEventListener("click", saveNoteFromEditor);
 
-if (practiceText) {
-  practiceText.addEventListener("input", updateWordCounter);
-}
+clearNoteEditorBtn.addEventListener("click", () => {
+  noteTitle.value = "";
+  noteText.value = "";
+});
 
-if (clearTextBtn) {
-  clearTextBtn.addEventListener("click", () => {
-    practiceText.value = "";
-    updateWordCounter();
+clearNotesBtn.addEventListener("click", () => {
+  if (!confirm("¿Seguro que querés borrar todos los apuntes?")) return;
+  notes = [];
+  localStorage.removeItem("englishTrainerNotes");
+  renderNotes();
+});
 
-    if (aiFeedback) {
-      aiFeedback.classList.add("hidden");
-    }
-  });
-}
+clearParagraphsBtn.addEventListener("click", () => {
+  if (!confirm("¿Seguro que querés borrar todos los párrafos guardados?")) return;
+  paragraphs = [];
+  localStorage.removeItem("englishTrainerParagraphs");
+  renderParagraphs();
+  updateProgress();
+});
 
-if (saveParagraphBtn) {
-  saveParagraphBtn.addEventListener("click", saveParagraph);
-}
+notesList.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-delete-note]");
+  if (button) deleteNote(button.dataset.deleteNote);
+});
 
-if (aiCorrectBtn) {
-  aiCorrectBtn.addEventListener("click", runAICorrection);
-}
+savedParagraphsList.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-delete-paragraph]");
+  if (button) deleteParagraph(button.dataset.deleteParagraph);
+});
 
-if (saveNoteBtn) {
-  saveNoteBtn.addEventListener("click", saveNoteFromEditor);
-}
-
-if (clearNoteEditorBtn) {
-  clearNoteEditorBtn.addEventListener("click", () => {
-    noteTitle.value = "";
-    noteText.value = "";
-  });
-}
-
-if (clearNotesBtn) {
-  clearNotesBtn.addEventListener("click", () => {
-    if (!confirm("¿Seguro que querés borrar todos los apuntes?")) return;
-
-    notes = [];
-    localStorage.removeItem("englishTrainerNotes");
-    renderNotes();
-  });
-}
-
-if (clearParagraphsBtn) {
-  clearParagraphsBtn.addEventListener("click", () => {
-    if (!confirm("¿Seguro que querés borrar todos los párrafos guardados?")) return;
-
-    paragraphs = [];
-    localStorage.removeItem("englishTrainerParagraphs");
-
-    renderParagraphs();
-    updateProgress();
-  });
-}
-
-if (notesList) {
-  notesList.addEventListener("click", (event) => {
-    const button = event.target.closest("[data-delete-note]");
-
-    if (button) {
-      deleteNote(button.dataset.deleteNote);
-    }
-  });
-}
-
-if (savedParagraphsList) {
-  savedParagraphsList.addEventListener("click", (event) => {
-    const button = event.target.closest("[data-delete-paragraph]");
-
-    if (button) {
-      deleteParagraph(button.dataset.deleteParagraph);
-    }
-  });
-}
-
-if (examSelector) {
-  examSelector.addEventListener("change", renderQuiz);
-}
-
-if (quizContainer) {
-  quizContainer.addEventListener("change", updateQuizProgress);
-}
-
-if (submitQuizBtn) {
-  submitQuizBtn.addEventListener("click", submitQuiz);
-}
-
-if (resetQuizBtn) {
-  resetQuizBtn.addEventListener("click", renderQuiz);
-}
+examSelector.addEventListener("change", renderQuiz);
+quizContainer.addEventListener("change", updateQuizProgress);
+submitQuizBtn.addEventListener("click", submitQuiz);
+resetQuizBtn.addEventListener("click", renderQuiz);
 
 window.addEventListener("scroll", () => {
   setActiveLink();

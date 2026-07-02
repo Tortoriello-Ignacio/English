@@ -144,7 +144,8 @@ button {
 
 .nav-link:hover,
 .nav-link.active,
-.resource-nav-btn:hover {
+.resource-nav-btn:hover,
+.resource-nav-btn.active {
   color: var(--text);
   background: rgba(249, 115, 22, 0.12);
 }
@@ -234,72 +235,54 @@ button {
   color: var(--text);
 }
 
-.analog-clock {
-  width: 170px;
-  height: 170px;
-  border-radius: 50%;
-  margin: 8px auto 18px;
-  position: relative;
+ .digital-timer-card {
+  --timer-progress: 0deg;
+  width: 196px;
+  height: 196px;
+  margin: 10px auto 20px;
+  border-radius: 34px;
+  padding: 1px;
   background:
-    radial-gradient(circle, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.03) 42%, rgba(0,0,0,0.25) 100%);
-  border: 4px solid rgba(249, 115, 22, 0.75);
+    conic-gradient(from -90deg, var(--orange) var(--timer-progress), rgba(255,255,255,0.08) 0deg),
+    linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.025));
   box-shadow:
-    inset 0 0 30px rgba(0,0,0,0.72),
-    0 0 26px rgba(249, 115, 22, 0.18);
+    inset 0 0 0 1px rgba(255,255,255,0.07),
+    0 22px 44px rgba(0,0,0,0.34),
+    0 0 28px rgba(249, 115, 22, 0.08);
 }
 
-.tick {
-  position: absolute;
-  color: var(--muted);
-  font-weight: 900;
-  font-size: 0.8rem;
-}
-
-.tick-12 { top: 10px; left: 50%; transform: translateX(-50%); }
-.tick-3 { right: 13px; top: 50%; transform: translateY(-50%); }
-.tick-6 { bottom: 10px; left: 50%; transform: translateX(-50%); }
-.tick-9 { left: 13px; top: 50%; transform: translateY(-50%); }
-
-.clock-hand {
-  position: absolute;
-  bottom: 50%;
-  left: 50%;
-  transform-origin: bottom center;
-  border-radius: 999px;
-  transform: translateX(-50%) rotate(0deg);
-}
-
-.minute-hand {
-  width: 5px;
-  height: 58px;
-  background: #f4f4f5;
-}
-
-.second-hand {
-  width: 2px;
-  height: 72px;
-  background: var(--red);
-}
-
-.clock-center {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--orange);
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%,-50%);
-  box-shadow: 0 0 14px rgba(249, 115, 22, 0.5);
+.digital-timer-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 33px;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  background:
+    radial-gradient(circle at 30% 14%, rgba(255,255,255,0.06), transparent 34%),
+    linear-gradient(145deg, rgba(25,25,25,0.98), rgba(15,15,15,0.98));
 }
 
 .timer-display {
-  text-align: center;
-  color: var(--orange-soft);
-  font-size: 2.4rem;
-  font-weight: 950;
-  letter-spacing: 0.05em;
-  margin-bottom: 18px;
+  display: block;
+  color: #f3eee8;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  font-size: 2.36rem;
+  line-height: 1;
+  font-weight: 520;
+  letter-spacing: 0.015em;
+  font-variant-numeric: tabular-nums lining-nums;
+  text-shadow: 0 0 12px rgba(249, 115, 22, 0.14);
+}
+
+.digital-timer-inner small {
+  display: block;
+  margin-top: 12px;
+  color: rgba(214, 211, 209, 0.68);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.115em;
+  text-transform: uppercase;
 }
 
 .timer-presets,
@@ -1077,29 +1060,32 @@ textarea {
 
 .notes-layout {
   display: grid;
-  grid-template-columns: minmax(340px, 0.95fr) 1.05fr;
-  gap: 18px;
+  grid-template-columns: 1fr;
+  gap: 22px;
 }
 
 .notes-editor {
   display: grid;
-  gap: 12px;
+  gap: 14px;
 }
 
 .notes-editor input {
   width: 100%;
+  min-height: 54px;
+  font-size: 1rem;
 }
 
 .notes-editor textarea {
-  min-height: 360px;
+  min-height: 460px;
 }
 
 .notes-list {
   display: grid;
   gap: 14px;
   align-content: start;
-  max-height: 640px;
-  overflow: auto;
+  min-height: 520px;
+  max-height: none;
+  overflow: visible;
 }
 
 .saved-meta,
@@ -1319,4 +1305,25 @@ textarea {
   .section-header {
     flex-direction: column;
   }
+}
+/* Ajustes de navegación solicitados */
+.resources-tabs { display: none !important; }
+.resource-nav-btn.active { color: #151515; background: linear-gradient(135deg, var(--orange), var(--amber)); }
+
+
+
+/* Ajuste fino v3: timer más sobrio */
+.timer-head h3 {
+  font-weight: 760;
+  letter-spacing: -0.02em;
+}
+
+.preset-btn {
+  font-weight: 760;
+}
+
+.timer-actions .secondary-btn,
+.timer-actions .danger-btn,
+.timer-custom .compact-btn {
+  font-weight: 760;
 }
