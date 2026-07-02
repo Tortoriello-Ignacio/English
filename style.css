@@ -1437,3 +1437,29 @@ textarea {
   font-weight: 760 !important;
   letter-spacing: 0.10em !important;
 }
+
+
+/* =========================================================
+   TIMER V6 - ajustes solicitados
+   - La misma pestaña Timer abre/cierra.
+   - Sin botón X.
+   - Anillo naranja más grueso.
+========================================================= */
+
+#timerCloseBtn,
+.timer-head .icon-btn {
+  display: none !important;
+}
+
+.digital-timer-card,
+#timerProgressRing.digital-timer-card {
+  padding: 5px !important;
+}
+
+.digital-timer-inner {
+  border-radius: 25px !important;
+}
+
+.timer-toggle {
+  cursor: pointer !important;
+}

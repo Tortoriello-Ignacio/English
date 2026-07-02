@@ -304,79 +304,839 @@ const tenses = [
 ];
 
 const phrasalVerbs = [
-  ["pick up", "levantar, recoger", "She picked up the book from the floor."],
-  ["turn on / turn off", "encender / apagar", "Turn off the lights before you leave."],
-  ["look for", "buscar", "I’m looking for my keys."],
-  ["find out", "descubrir, averiguar", "I found out the truth yesterday."],
-  ["give up", "rendirse, dejar de hacer algo", "Don’t give up on your dreams."],
-  ["put on / take off", "ponerse / quitarse ropa", "He put on his jacket."],
-  ["run out of", "quedarse sin", "We ran out of milk."],
-  ["come back", "regresar", "She came back home late."],
-  ["get along with", "llevarse bien", "I get along with my coworkers."],
-  ["set up", "organizar, montar", "They set up a new company."],
-  ["take care of", "cuidar", "She takes care of her little brother."],
-  ["wake up", "despertarse", "I wake up at 7 a.m."],
-  ["carry on", "continuar", "Carry on with your work."],
-  ["check out", "revisar, mirar", "Check out this new song."],
-  ["break down", "averiarse, descomponerse", "My car broke down yesterday."],
-  ["bring up", "sacar un tema, mencionar", "She brought up an interesting point."],
-  ["call off", "cancelar", "They called off the meeting."],
-  ["come across", "encontrarse con algo/alguien", "I came across an old photo."],
-  ["drop off", "dejar a alguien en un lugar", "He dropped me off at the station."],
-  ["get over", "superar una enfermedad o problema", "It took her weeks to get over the flu."],
-  ["go on", "continuar", "Please, go on with your story."],
-  ["look after", "cuidar", "She looks after her grandmother."],
-  ["make up", "inventar / reconciliarse", "He made up an excuse. / They made up after the fight."],
-  ["put off", "posponer", "We had to put off the trip."],
-  ["show up", "aparecer, presentarse", "He didn’t show up to class."],
-  ["take up", "empezar una actividad", "She took up painting last year."],
-  ["work out", "hacer ejercicio / resolver", "I work out three times a week. / We worked out the problem."],
-  ["hand in", "entregar tarea o documento", "Please hand in your homework."],
-  ["look forward to", "esperar con ilusión", "I look forward to meeting you."],
-  ["turn up", "aparecer / subir volumen", "She turned up unexpectedly. / Turn up the radio."],
-  ["take off", "despegar / quitarse ropa", "The plane took off at 9 a.m."],
-  ["put up with", "tolerar", "I can’t put up with the noise."],
-  ["break up", "terminar una relación", "They broke up last month."],
-  ["catch up with", "ponerse al día", "I need to catch up with my studies."],
-  ["hold on", "esperar", "Hold on a minute, please."],
-  ["keep up with", "mantener el ritmo", "She runs fast; I can’t keep up with her."],
-  ["take over", "asumir control", "He took over the family business."],
-  ["turn down", "rechazar / bajar volumen", "She turned down the job offer. / Turn down the TV."],
-  ["write down", "anotar", "Write down the phone number."],
-  ["put away", "guardar", "I had to put away the groceries."]
+  [
+    "pick up",
+    "levantar, recoger / aprender de forma casual",
+    "She picked up the book from the floor."
+  ],
+  [
+    "turn on / turn off",
+    "encender / apagar",
+    "Turn off the lights before you leave."
+  ],
+  [
+    "look for",
+    "buscar",
+    "I’m looking for my keys."
+  ],
+  [
+    "find out",
+    "descubrir, averiguar",
+    "I found out the truth yesterday."
+  ],
+  [
+    "give up",
+    "rendirse, dejar de hacer algo",
+    "Don’t give up on your dreams."
+  ],
+  [
+    "put on",
+    "ponerse ropa / ganar peso",
+    "He put on his jacket."
+  ],
+  [
+    "take off",
+    "despegar / quitarse ropa / tener éxito rápido",
+    "The plane took off at 9 a.m."
+  ],
+  [
+    "run out of",
+    "quedarse sin",
+    "We ran out of milk."
+  ],
+  [
+    "come back",
+    "regresar",
+    "She came back home late."
+  ],
+  [
+    "get along with",
+    "llevarse bien",
+    "I get along with my coworkers."
+  ],
+  [
+    "set up",
+    "organizar, montar, fundar",
+    "They set up a new company."
+  ],
+  [
+    "take care of",
+    "cuidar, hacerse cargo",
+    "She takes care of her little brother."
+  ],
+  [
+    "wake up",
+    "despertarse",
+    "I wake up at 7 a.m."
+  ],
+  [
+    "carry on",
+    "continuar",
+    "Carry on with your work."
+  ],
+  [
+    "check out",
+    "revisar, mirar / salir de hotel",
+    "Check out this new song."
+  ],
+  [
+    "break down",
+    "averiarse / descomponerse emocionalmente",
+    "My car broke down yesterday."
+  ],
+  [
+    "bring up",
+    "sacar un tema / criar",
+    "She brought up an interesting point."
+  ],
+  [
+    "call off",
+    "cancelar",
+    "They called off the meeting."
+  ],
+  [
+    "come across",
+    "encontrarse con algo/alguien por casualidad",
+    "I came across an old photo."
+  ],
+  [
+    "drop off",
+    "dejar a alguien / quedarse dormido",
+    "He dropped me off at the station."
+  ],
+  [
+    "get over",
+    "superar una enfermedad, problema o ruptura",
+    "It took her weeks to get over the flu."
+  ],
+  [
+    "go on",
+    "continuar / suceder",
+    "Please, go on with your story."
+  ],
+  [
+    "look after",
+    "cuidar",
+    "She looks after her grandmother."
+  ],
+  [
+    "make up",
+    "inventar / reconciliarse / maquillarse",
+    "He made up an excuse."
+  ],
+  [
+    "put off",
+    "posponer",
+    "We had to put off the trip."
+  ],
+  [
+    "show up",
+    "aparecer, presentarse",
+    "He didn’t show up to class."
+  ],
+  [
+    "take up",
+    "empezar una actividad / ocupar espacio",
+    "She took up painting last year."
+  ],
+  [
+    "work out",
+    "hacer ejercicio / resolver / resultar",
+    "We worked out the problem."
+  ],
+  [
+    "hand in",
+    "entregar tarea o documento",
+    "Please hand in your homework."
+  ],
+  [
+    "look forward to",
+    "esperar con ilusión",
+    "I look forward to meeting you."
+  ],
+  [
+    "turn up",
+    "aparecer / subir volumen",
+    "She turned up unexpectedly."
+  ],
+  [
+    "put up with",
+    "tolerar",
+    "I can’t put up with the noise."
+  ],
+  [
+    "break up",
+    "terminar una relación / separar",
+    "They broke up last month."
+  ],
+  [
+    "catch up with",
+    "ponerse al día / alcanzar",
+    "I need to catch up with my studies."
+  ],
+  [
+    "hold on",
+    "esperar / aferrarse",
+    "Hold on a minute, please."
+  ],
+  [
+    "keep up with",
+    "mantener el ritmo",
+    "She runs fast; I can’t keep up with her."
+  ],
+  [
+    "take over",
+    "asumir control",
+    "He took over the family business."
+  ],
+  [
+    "turn down",
+    "rechazar / bajar volumen",
+    "She turned down the job offer."
+  ],
+  [
+    "write down",
+    "anotar",
+    "Write down the phone number."
+  ],
+  [
+    "put away",
+    "guardar",
+    "I had to put away the groceries."
+  ],
+  [
+    "ask for",
+    "pedir, solicitar",
+    "He asked for more information."
+  ],
+  [
+    "back up",
+    "respaldar / hacer copia",
+    "Can you back up your argument with evidence?"
+  ],
+  [
+    "blow up",
+    "explotar / agrandar / enojarse mucho",
+    "The old building blew up."
+  ],
+  [
+    "bring back",
+    "traer de vuelta / recordar",
+    "This song brings back memories."
+  ],
+  [
+    "bring about",
+    "provocar, causar",
+    "The policy brought about major changes."
+  ],
+  [
+    "bring down",
+    "reducir / derribar",
+    "The government tried to bring down inflation."
+  ],
+  [
+    "bring in",
+    "introducir / generar dinero",
+    "The company brought in new rules."
+  ],
+  [
+    "brush up on",
+    "repasar, refrescar conocimiento",
+    "I need to brush up on my grammar."
+  ],
+  [
+    "calm down",
+    "calmarse",
+    "Please calm down and explain what happened."
+  ],
+  [
+    "carry out",
+    "llevar a cabo",
+    "The researchers carried out an experiment."
+  ],
+  [
+    "come up with",
+    "idear, proponer",
+    "She came up with a great solution."
+  ],
+  [
+    "come up",
+    "surgir",
+    "A new issue came up during the meeting."
+  ],
+  [
+    "count on",
+    "contar con",
+    "You can count on me."
+  ],
+  [
+    "cut down on",
+    "reducir consumo",
+    "I’m trying to cut down on sugar."
+  ],
+  [
+    "deal with",
+    "lidiar con, encargarse de",
+    "We need to deal with this problem."
+  ],
+  [
+    "do without",
+    "arreglárselas sin",
+    "I can’t do without my phone."
+  ],
+  [
+    "dress up",
+    "vestirse elegante / disfrazarse",
+    "They dressed up for the party."
+  ],
+  [
+    "end up",
+    "terminar resultando",
+    "We ended up staying at home."
+  ],
+  [
+    "fall apart",
+    "desmoronarse / romperse",
+    "The plan fell apart."
+  ],
+  [
+    "fall behind",
+    "quedarse atrás",
+    "He fell behind in his studies."
+  ],
+  [
+    "figure out",
+    "descifrar, entender",
+    "I finally figured out the answer."
+  ],
+  [
+    "fill in",
+    "completar un formulario",
+    "Please fill in this form."
+  ],
+  [
+    "fill out",
+    "completar un documento",
+    "You must fill out the application."
+  ],
+  [
+    "get away",
+    "escaparse / irse de viaje",
+    "We got away for the weekend."
+  ],
+  [
+    "get away with",
+    "salirse con la suya",
+    "He got away with cheating."
+  ],
+  [
+    "get back",
+    "volver / recuperar",
+    "I’ll get back to you tomorrow."
+  ],
+  [
+    "get by",
+    "arreglárselas",
+    "I can get by in English."
+  ],
+  [
+    "get in",
+    "entrar / subir a un vehículo",
+    "Get in the car."
+  ],
+  [
+    "get off",
+    "bajarse / salir del trabajo",
+    "I get off work at six."
+  ],
+  [
+    "get on",
+    "subirse / llevarse",
+    "Get on the bus."
+  ],
+  [
+    "get out",
+    "salir",
+    "Get out of the room."
+  ],
+  [
+    "get through",
+    "superar / comunicarse",
+    "She got through a difficult year."
+  ],
+  [
+    "give away",
+    "regalar / revelar",
+    "He gave away the secret."
+  ],
+  [
+    "give back",
+    "devolver",
+    "Please give back my book."
+  ],
+  [
+    "give in",
+    "ceder, rendirse",
+    "She finally gave in."
+  ],
+  [
+    "go ahead",
+    "seguir adelante / autorizar",
+    "Go ahead and start."
+  ],
+  [
+    "go back",
+    "volver",
+    "We went back to the hotel."
+  ],
+  [
+    "go over",
+    "repasar, revisar",
+    "Let’s go over the lesson again."
+  ],
+  [
+    "grow up",
+    "crecer",
+    "He grew up in Buenos Aires."
+  ],
+  [
+    "hang out",
+    "pasar el rato",
+    "We hung out after class."
+  ],
+  [
+    "join in",
+    "sumarse, participar",
+    "Everyone joined in the discussion."
+  ],
+  [
+    "keep on",
+    "seguir haciendo",
+    "Keep on practicing."
+  ],
+  [
+    "let down",
+    "decepcionar",
+    "Don’t let me down."
+  ],
+  [
+    "log in / log out",
+    "iniciar / cerrar sesión",
+    "Log in with your password."
+  ],
+  [
+    "look into",
+    "investigar",
+    "The police are looking into the case."
+  ],
+  [
+    "look up",
+    "buscar información / mejorar",
+    "Look up the word in a dictionary."
+  ],
+  [
+    "look up to",
+    "admirar",
+    "She looks up to her teacher."
+  ],
+  [
+    "look down on",
+    "menospreciar",
+    "He looks down on people unfairly."
+  ],
+  [
+    "make out",
+    "distinguir / entender",
+    "I can’t make out what he is saying."
+  ],
+  [
+    "move on",
+    "seguir adelante",
+    "It’s time to move on."
+  ],
+  [
+    "pass away",
+    "fallecer",
+    "His grandfather passed away last year."
+  ],
+  [
+    "pass out",
+    "desmayarse / repartir",
+    "He passed out during the ceremony."
+  ],
+  [
+    "pay back",
+    "devolver dinero",
+    "I’ll pay you back tomorrow."
+  ],
+  [
+    "point out",
+    "señalar",
+    "She pointed out a mistake."
+  ],
+  [
+    "pull over",
+    "detener el auto al costado",
+    "The driver pulled over."
+  ],
+  [
+    "put down",
+    "anotar / criticar",
+    "Put down your name here."
+  ],
+  [
+    "put out",
+    "apagar fuego / publicar",
+    "Firefighters put out the fire."
+  ],
+  [
+    "rely on",
+    "depender de, confiar en",
+    "You can rely on her."
+  ],
+  [
+    "rule out",
+    "descartar",
+    "The doctor ruled out infection."
+  ],
+  [
+    "run into",
+    "encontrarse con alguien / chocar",
+    "I ran into an old friend."
+  ],
+  [
+    "run over",
+    "atropellar / revisar rápido",
+    "Let’s run over the plan."
+  ],
+  [
+    "send back",
+    "devolver, reenviar",
+    "I sent the package back."
+  ],
+  [
+    "sort out",
+    "resolver, ordenar",
+    "We need to sort out this issue."
+  ],
+  [
+    "stand out",
+    "destacarse",
+    "Her essay stands out."
+  ],
+  [
+    "stand for",
+    "significar / representar",
+    "IELTS stands for International English Language Testing System."
+  ],
+  [
+    "take after",
+    "parecerse a un familiar",
+    "She takes after her mother."
+  ],
+  [
+    "take back",
+    "retirar lo dicho / devolver",
+    "I take back what I said."
+  ],
+  [
+    "take in",
+    "absorber / entender / alojar",
+    "It was hard to take in all the information."
+  ],
+  [
+    "take on",
+    "asumir responsabilidad",
+    "She took on a new role."
+  ],
+  [
+    "talk over",
+    "discutir, conversar",
+    "We should talk it over."
+  ],
+  [
+    "think over",
+    "pensar detenidamente",
+    "Think it over before deciding."
+  ],
+  [
+    "throw away",
+    "tirar a la basura",
+    "Don’t throw away those notes."
+  ],
+  [
+    "try on",
+    "probarse ropa",
+    "Can I try on this jacket?"
+  ],
+  [
+    "try out",
+    "probar algo",
+    "I want to try out this method."
+  ],
+  [
+    "use up",
+    "agotar, consumir todo",
+    "We used up all the paper."
+  ],
+  [
+    "watch out",
+    "tener cuidado",
+    "Watch out! The floor is wet."
+  ],
+  [
+    "wear out",
+    "desgastar / agotar",
+    "The long trip wore me out."
+  ],
+  [
+    "wipe out",
+    "eliminar por completo",
+    "The disease wiped out the population."
+  ]
 ];
 
 const modalVerbs = [
-  ["Can / Could", "Poder / Podría"],
-  ["Want to / Would like to", "Querer / Gustaría"],
-  ["Do / Does / Did", "Hacer - auxiliar y acción"],
-  ["Make", "Hacer, crear, tomar una decisión"],
-  ["Have to / Must", "Tener que / Deber"],
-  ["Had to", "Tuvo que"],
-  ["Should / Ought to", "Debería / Debería formal"],
-  ["May / Might", "Poder, posibilidad o permiso"],
-  ["Shall", "Debería / Haré - formal"],
-  ["Wish", "Ojalá / Deseo"],
-  ["Hope", "Espero que"],
-  ["Would rather", "Preferiría"],
-  ["Might", "Capaz / Tal vez"],
-  ["Had better", "Más vale que"],
-  ["Thus", "Entonces / Por lo tanto"],
-  ["Often", "A menudo"],
-  ["Huge", "Enorme"],
-  ["Loss", "Pérdida"],
-  ["Improve my skills", "Mejorar mis habilidades"],
-  ["Shape", "Estar en forma"],
-  ["Enhancing", "Mejorando"],
-  ["Following", "Siguiente"],
-  ["Kind", "Tipo / Amable"],
-  ["Then", "Entonces"],
-  ["To realize", "Darse cuenta"],
-  ["Despite / In spite of", "A pesar de"],
-  ["It seemed", "Parecía"],
-  ["Although / Even though", "Aunque"],
-  ["Because of", "Debido a"],
-  ["I used to", "Solía"]
+  [
+    "Can",
+    "Poder / capacidad presente: I can swim."
+  ],
+  [
+    "Could",
+    "Podía / podría / pedido educado: Could you help me?"
+  ],
+  [
+    "Be able to",
+    "Ser capaz de / poder: I will be able to travel."
+  ],
+  [
+    "May",
+    "Puede que / permiso formal: May I come in?"
+  ],
+  [
+    "Might",
+    "Podría / posibilidad menor: It might rain."
+  ],
+  [
+    "Must",
+    "Debe / obligación fuerte o deducción: You must study."
+  ],
+  [
+    "Have to",
+    "Tener que / obligación externa: I have to work."
+  ],
+  [
+    "Had to",
+    "Tuve que / obligación pasada: I had to leave."
+  ],
+  [
+    "Need to",
+    "Necesitar hacer algo: You need to practice."
+  ],
+  [
+    "Needn’t",
+    "No hace falta: You needn’t worry."
+  ],
+  [
+    "Don’t have to",
+    "No tener obligación: You don’t have to come."
+  ],
+  [
+    "Mustn’t",
+    "No deber / prohibición: You mustn’t smoke here."
+  ],
+  [
+    "Should",
+    "Debería / consejo: You should rest."
+  ],
+  [
+    "Should have",
+    "Debería haber: You should have called."
+  ],
+  [
+    "Ought to",
+    "Debería / consejo formal: You ought to apologize."
+  ],
+  [
+    "Had better",
+    "Más vale que: You had better hurry."
+  ],
+  [
+    "Would",
+    "Condicional / hábitos pasados / cortesía: I would travel."
+  ],
+  [
+    "Would like to",
+    "Me gustaría: I would like to improve."
+  ],
+  [
+    "Would rather",
+    "Preferiría: I would rather stay home."
+  ],
+  [
+    "Would have",
+    "Habría: I would have helped."
+  ],
+  [
+    "Will",
+    "Futuro / voluntad: I will help you."
+  ],
+  [
+    "Won’t",
+    "No será / negativa futura: She won’t come."
+  ],
+  [
+    "Shall",
+    "Futuro formal / sugerencia: Shall we begin?"
+  ],
+  [
+    "Shouldn’t",
+    "No debería: You shouldn’t give up."
+  ],
+  [
+    "May have",
+    "Puede haber: He may have forgotten."
+  ],
+  [
+    "Might have",
+    "Podría haber: She might have left."
+  ],
+  [
+    "Must have",
+    "Debe haber: He must have been tired."
+  ],
+  [
+    "Could have",
+    "Podría haber: I could have helped."
+  ],
+  [
+    "Can’t have",
+    "No puede haber: He can’t have said that."
+  ],
+  [
+    "Used to",
+    "Solía: I used to play tennis."
+  ],
+  [
+    "Be used to",
+    "Estar acostumbrado a: I am used to studying."
+  ],
+  [
+    "Get used to",
+    "Acostumbrarse a: I’m getting used to English."
+  ],
+  [
+    "Do / Does",
+    "Auxiliar de presente simple: Do you speak English?"
+  ],
+  [
+    "Did",
+    "Auxiliar de pasado simple: Did you go?"
+  ],
+  [
+    "Have / Has",
+    "Auxiliar de perfectos: I have finished."
+  ],
+  [
+    "Had",
+    "Auxiliar de past perfect: She had left."
+  ],
+  [
+    "Am / Is / Are",
+    "Auxiliar de continuous y verbo to be: She is working."
+  ],
+  [
+    "Was / Were",
+    "Auxiliar pasado de to be: They were studying."
+  ],
+  [
+    "Be",
+    "Ser/estar o auxiliar pasivo: It can be done."
+  ],
+  [
+    "Being",
+    "Siendo / forma continua: He is being careful."
+  ],
+  [
+    "Been",
+    "Participio de be: I have been busy."
+  ],
+  [
+    "Let",
+    "Permitir / dejar: Let me explain."
+  ],
+  [
+    "Make",
+    "Hacer que alguien haga / crear: This makes me think."
+  ],
+  [
+    "Help",
+    "Ayudar a: This helps me improve."
+  ],
+  [
+    "Want to",
+    "Querer: I want to learn."
+  ],
+  [
+    "Hope to",
+    "Esperar hacer algo: I hope to pass."
+  ],
+  [
+    "Wish",
+    "Ojalá / desear: I wish I spoke better."
+  ],
+  [
+    "Prefer to",
+    "Preferir: I prefer to study at night."
+  ],
+  [
+    "Be supposed to",
+    "Se supone que / deber esperado: I’m supposed to arrive early."
+  ],
+  [
+    "Be likely to",
+    "Ser probable que: It is likely to rain."
+  ],
+  [
+    "Be allowed to",
+    "Tener permiso para: We are allowed to leave."
+  ],
+  [
+    "Be going to",
+    "Futuro planeado: I’m going to study."
+  ],
+  [
+    "Manage to",
+    "Lograr hacer algo: I managed to finish."
+  ],
+  [
+    "Fail to",
+    "No lograr: He failed to answer."
+  ],
+  [
+    "Seem to",
+    "Parecer: It seems to be correct."
+  ],
+  [
+    "Tend to",
+    "Tender a: People tend to forget."
+  ],
+  [
+    "Be about to",
+    "Estar por: I’m about to start."
+  ],
+  [
+    "Be willing to",
+    "Estar dispuesto a: I’m willing to help."
+  ],
+  [
+    "Be due to",
+    "Tener previsto / debido a: The train is due to arrive."
+  ],
+  [
+    "Be meant to",
+    "Estar pensado para / se supone que: This is meant to help."
+  ]
 ];
 
 const conditionalsRows = [
@@ -613,6 +1373,11 @@ function closeTimerPanel() {
   timerPanel.classList.remove("open");
 }
 
+function toggleTimerPanel() {
+  if (!timerPanel) return;
+  timerPanel.classList.toggle("open");
+}
+
 function startTimer(minutes) {
   const mins = Number(minutes);
 
@@ -660,8 +1425,9 @@ function updateTimerUI() {
   }
 }
 
-timerToggleBtn.addEventListener("click", openTimerPanel);
-timerCloseBtn.addEventListener("click", closeTimerPanel);
+if (timerToggleBtn) {
+  timerToggleBtn.addEventListener("click", toggleTimerPanel);
+}
 
 document.querySelectorAll(".preset-btn").forEach((button) => {
   button.addEventListener("click", () => startTimer(button.dataset.minutes));
