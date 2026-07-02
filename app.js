@@ -2510,14 +2510,43 @@ const themePalettes = {
 
 const intensityNames = ["muy oscuro", "oscuro", "medio", "claro", "luminoso"];
 
+function mixHexColors(colorA, colorB, amount) {
+  const a = hexToRgb(colorA);
+  const b = hexToRgb(colorB);
+  const t = Math.max(0, Math.min(Number(amount), 1));
+
+  const r = Math.round(a.r + (b.r - a.r) * t);
+  const g = Math.round(a.g + (b.g - a.g) * t);
+  const bValue = Math.round(a.b + (b.b - a.b) * t);
+
+  return rgbToHex(r, g, bValue);
+}
+
+function getContinuousColor(palette, value) {
+  const numericValue = Math.max(0, Math.min(Number(value), palette.length - 1));
+  const lowerIndex = Math.floor(numericValue);
+  const upperIndex = Math.min(palette.length - 1, lowerIndex + 1);
+  const localAmount = numericValue - lowerIndex;
+
+  return mixHexColors(palette[lowerIndex], palette[upperIndex], localAmount);
+}
+
+function rgbToHex(r, g, b) {
+  return "#" + [r, g, b].map((value) => {
+    const hex = value.toString(16);
+    return hex.length === 1 ? "0" + hex : hex;
+  }).join("");
+}
+
 function applyTheme(theme = selectedTheme, intensity = selectedIntensity) {
   selectedTheme = theme;
-  selectedIntensity = Number(intensity);
+  selectedIntensity = Math.max(0, Math.min(Number(intensity), 4));
 
   const palette = themePalettes[selectedTheme] || themePalettes.orange;
-  const accent = palette[selectedIntensity] || palette[2];
-  const accentDark = palette[Math.max(0, selectedIntensity - 1)] || palette[1];
-  const accentSoft = palette[Math.min(4, selectedIntensity + 1)] || palette[3];
+
+  const accent = getContinuousColor(palette, selectedIntensity);
+  const accentDark = getContinuousColor(palette, Math.max(0, selectedIntensity - 0.85));
+  const accentSoft = getContinuousColor(palette, Math.min(4, selectedIntensity + 0.85));
 
   const rgb = hexToRgb(accent);
   const softRgb = hexToRgb(accentSoft);
@@ -2534,9 +2563,9 @@ function applyTheme(theme = selectedTheme, intensity = selectedIntensity) {
   document.documentElement.style.setProperty("--accent-soft", accentSoft);
   document.documentElement.style.setProperty("--accent-rgb", `${rgb.r}, ${rgb.g}, ${rgb.b}`);
   document.documentElement.style.setProperty("--accent-soft-rgb", `${softRgb.r}, ${softRgb.g}, ${softRgb.b}`);
+  document.documentElement.style.setProperty("--theme-range-gradient", `linear-gradient(90deg, ${palette.join(", ")})`);
 
   if (themeIntensity) themeIntensity.value = String(selectedIntensity);
-  if (themeIntensityLabel) themeIntensityLabel.textContent = intensityNames[selectedIntensity] || "medio";
 
   document.querySelectorAll(".theme-swatch").forEach((button) => {
     button.classList.toggle("active", button.dataset.theme === selectedTheme);
@@ -2552,16 +2581,16 @@ function renderPalettePreview() {
   if (!palettePreview) return;
 
   const palette = themePalettes[selectedTheme] || themePalettes.orange;
+  const gradient = `linear-gradient(90deg, ${palette.join(", ")})`;
+  const position = (Number(selectedIntensity) / 4) * 100;
 
-  palettePreview.innerHTML = palette.map((color, index) => `
-    <button
-      type="button"
-      class="palette-cell ${index === selectedIntensity ? "active" : ""}"
-      data-intensity="${index}"
-      style="background:${color}"
-      aria-label="Intensidad ${index + 1}">
-    </button>
-  `).join("");
+  palettePreview.style.setProperty("--palette-gradient", gradient);
+  palettePreview.style.setProperty("--palette-position", `${position}%`);
+
+  palettePreview.innerHTML = `
+    <div class="palette-continuous" aria-hidden="true"></div>
+    <div class="palette-selector" style="left:${position}%"></div>
+  `;
 }
 
 function toggleSettingsPanel() {
@@ -2775,9 +2804,9 @@ function bindEvents() {
   });
 
   palettePreview?.addEventListener("click", (event) => {
-    const cell = event.target.closest("[data-intensity]");
-    if (!cell) return;
-    applyTheme(selectedTheme, Number(cell.dataset.intensity));
+    const rect = palettePreview.getBoundingClientRect();
+    const ratio = Math.max(0, Math.min((event.clientX - rect.left) / rect.width, 1));
+    applyTheme(selectedTheme, ratio * 4);
   });
 
   document.addEventListener("click", (event) => {

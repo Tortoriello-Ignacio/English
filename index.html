@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>English Trainer IELTS | Inglés desde Español</title>
   <meta name="description" content="Entrenador de inglés desde español con tiempos verbales, writing IELTS, recursos, timer, flashcards, vocabulario y progreso." />
-  <link rel="stylesheet" href="style.css?v=theme-options-v12" />
+  <link rel="stylesheet" href="style.css?v=timer-palette-v14" />
 </head>
 
 <body>
@@ -120,15 +120,10 @@
         <button type="button" class="theme-swatch" data-theme="red" title="Rojo"></button>
         <button type="button" class="theme-swatch" data-theme="green" title="Verde"></button>
         <button type="button" class="theme-swatch" data-theme="purple" title="Morado"></button>
-        <button type="button" class="theme-swatch" data-theme="white" title="Más blanco"></button>
-        <button type="button" class="theme-swatch" data-theme="black" title="Más negro"></button>
       </div>
 
-      <label class="intensity-label" for="themeIntensity">
-        Intensidad
-        <span id="themeIntensityLabel">medio</span>
-      </label>
-      <input id="themeIntensity" class="intensity-range" type="range" min="0" max="4" step="1" value="2" />
+      <label class="intensity-label" for="themeIntensity">Intensidad</label>
+      <input id="themeIntensity" class="intensity-range" type="range" min="0" max="4" step="0.01" value="2" />
 
       <div class="palette-preview" id="palettePreview" aria-hidden="true"></div>
     </div>
@@ -607,6 +602,6 @@
     </main>
   </div>
 
-  <script src="app.js?v=theme-options-v12"></script>
+  <script src="app.js?v=timer-palette-v14"></script>
 </body>
 </html>
