@@ -4,121 +4,162 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>English Trainer IELTS | Inglés desde Español</title>
-  <meta name="description" content="Entrenador de inglés desde español con tiempos verbales, escritura IELTS, corrección asistida, multiple choice y apuntes personales." />
+  <meta name="description" content="Entrenador de inglés desde español con tiempos verbales, writing IELTS, recursos, timer y progreso." />
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
+  <!-- TIMER LATERAL -->
+  <button id="timerToggleBtn" class="timer-toggle" type="button" aria-label="Abrir timer">Timer</button>
 
-  <!-- BOTÓN Y PANEL DEL TIMER FLOTANTE (LATERAL IZQUIERDO) -->
-  <button id="timerToggleBtn" class="timer-trigger" title="Abrir Timer">⏱️</button>
-  <div id="timerPanel" class="timer-panel">
-    <div class="timer-header">
-      <h4>Focus Timer</h4>
-      <button id="closeTimerBtn" class="close-btn">✕</button>
+  <aside id="timerPanel" class="timer-panel" aria-label="Focus timer">
+    <div class="timer-head">
+      <div>
+        <span>Focus</span>
+        <h3>Timer de estudio</h3>
+      </div>
+      <button id="timerCloseBtn" class="icon-btn" type="button" aria-label="Cerrar timer">✕</button>
     </div>
-    
-    <div class="analog-clock">
+
+    <div class="analog-clock" aria-hidden="true">
+      <span class="tick tick-12">12</span>
+      <span class="tick tick-3">3</span>
+      <span class="tick tick-6">6</span>
+      <span class="tick tick-9">9</span>
+      <div id="minuteHand" class="clock-hand minute-hand"></div>
+      <div id="secondHand" class="clock-hand second-hand"></div>
       <div class="clock-center"></div>
-      <div class="hand min-hand" id="minHand"></div>
-      <div class="hand sec-hand" id="secHand"></div>
     </div>
-    <div class="timer-display" id="timerText">00:00</div>
 
-    <div class="timer-controls">
-      <div class="timer-presets">
-        <button class="preset-btn" data-mins="5">5m</button>
-        <button class="preset-btn" data-mins="10">10m</button>
-        <button class="preset-btn" data-mins="15">15m</button>
-      </div>
-      <div class="timer-custom">
-        <input type="number" id="customMins" placeholder="N min" min="1" max="120" />
-        <button id="startCustomTimerBtn" class="primary-btn small-btn">Set</button>
-      </div>
-      <button id="stopTimerBtn" class="danger-btn full-btn">Detener</button>
+    <div id="timerDisplay" class="timer-display">00:00</div>
+
+    <div class="timer-presets">
+      <button class="preset-btn" type="button" data-minutes="5">5 min</button>
+      <button class="preset-btn" type="button" data-minutes="10">10 min</button>
+      <button class="preset-btn" type="button" data-minutes="15">15 min</button>
     </div>
-  </div>
 
+    <div class="timer-custom">
+      <input id="customMinutes" type="number" min="1" max="180" placeholder="N minutos" />
+      <button id="customTimerBtn" class="primary-btn compact-btn" type="button">Set</button>
+    </div>
+
+    <div class="timer-actions">
+      <button id="pauseTimerBtn" class="secondary-btn" type="button">Pausar</button>
+      <button id="resetTimerBtn" class="danger-btn" type="button">Reset</button>
+    </div>
+  </aside>
+
+  <!-- NAVBAR -->
   <header class="top-navbar">
     <div class="brand">
-      <div class="brand-icon">EN</div>
+      <button class="brand-icon" type="button" data-go-dashboard>EN</button>
       <div>
         <h1>English Trainer</h1>
         <p>IELTS Path · Inglés desde español</p>
       </div>
     </div>
 
-    <!-- Navegación principal -->
-    <nav class="top-nav" id="mainNav">
-      <a href="#inicio" class="nav-link active">Inicio</a>
-      <a href="#tiempos" class="nav-link">Tiempos verbales</a>
-      <a href="#estructura" class="nav-link">Estructura</a>
-      <a href="#writing" class="nav-link">Writing IELTS</a>
-      <a href="#examen" class="nav-link">Multiple Choice</a>
-      <button id="navToResources" class="primary-btn nav-resource-btn">Centro de Recursos</button>
+    <nav class="top-nav">
+      <a href="#inicio" class="nav-link active" data-dashboard-link>Inicio</a>
+      <a href="#tiempos" class="nav-link" data-dashboard-link>Tiempos</a>
+      <a href="#writing" class="nav-link" data-dashboard-link>Writing</a>
+      <a href="#examen" class="nav-link" data-dashboard-link>Examen</a>
+
+      <span class="nav-divider"></span>
+
+      <button class="resource-nav-btn" type="button" data-resource="apuntes">Apuntes varios</button>
+      <button class="resource-nav-btn" type="button" data-resource="phrasals">Phrasal verbs</button>
+      <button class="resource-nav-btn" type="button" data-resource="modals">Modales</button>
     </nav>
   </header>
 
-  <!-- ==========================================
-       VISTA 1: APLICACIÓN PRINCIPAL (DASHBOARD)
-  =========================================== -->
-  <div id="appView" class="view-container active-view">
+  <!-- DASHBOARD PRINCIPAL -->
+  <div id="dashboardView">
     <main class="main-content">
+
       <section id="inicio" class="section hero-section reveal">
         <div class="hero-copy">
           <span class="eyebrow">IELTS Training Dashboard</span>
-          <h2>Entrená inglés con foco en <span>estructura, escritura y precisión</span></h2>
+          <h2>
+            Entrená inglés con foco en
+            <span>estructura, escritura y precisión</span>
+          </h2>
           <p>
-            Estudiá tiempos verbales, practicá párrafos tipo IELTS, recibí feedback orientativo
-            como si fuera de un entrenador y resolvé exámenes multiple choice de 10 preguntas.
+            Estudiá tiempos verbales, condicionales, phrasal verbs, modales y writing IELTS.
+            Además, llevá registro de tu tiempo de estudio, exámenes y prácticas guardadas.
           </p>
+
           <div class="hero-actions">
             <a href="#tiempos" class="primary-btn">Estudiar tiempos</a>
             <a href="#writing" class="secondary-btn">Practicar writing</a>
-            <button class="ghost-btn open-resources-btn" data-target="apuntes">Mis Apuntes</button>
+            <button class="ghost-btn" type="button" data-resource="apuntes">Abrir apuntes</button>
           </div>
         </div>
 
-        <!-- NUEVA SECCIÓN DE PROGRESO -->
-        <div class="hero-progress-panel">
-          <h3>Tu Progreso Acumulado</h3>
-          
-          <div class="progress-item">
-            <div class="progress-labels">
-              <span>Tiempo de estudio activo</span>
-              <span id="studyTimeText">0 min</span>
+        <div class="progress-panel">
+          <article class="progress-card">
+            <div>
+              <strong id="studyTimeText">0m</strong>
+              <span>Tiempo acumulado</span>
             </div>
-            <div class="progress-track"><div class="progress-fill time-fill" id="studyTimeBar"></div></div>
-          </div>
+            <div class="bar-track"><div id="studyTimeBar" class="bar-fill orange-fill"></div></div>
+            <small>Meta sugerida: 10 horas</small>
+          </article>
 
-          <div class="progress-item">
-            <div class="progress-labels">
-              <span>Exámenes completados (Score Promedio)</span>
-              <span id="quizAvgText">0%</span>
+          <article class="progress-card">
+            <div>
+              <strong id="grammarCountText">17</strong>
+              <span>Tiempos y condicionales</span>
             </div>
-            <div class="progress-track"><div class="progress-fill quiz-fill" id="quizAvgBar"></div></div>
-          </div>
+            <div class="bar-track"><div class="bar-fill gray-fill" style="width:100%"></div></div>
+            <small>Mapa gramatical completo</small>
+          </article>
 
-          <div class="progress-item">
-            <div class="progress-labels">
-              <span>Textos escritos (IELTS)</span>
-              <span id="writingCountText">0</span>
+          <article class="progress-card">
+            <div>
+              <strong id="examsCountText">0</strong>
+              <span>Exámenes completados</span>
             </div>
-            <div class="progress-track"><div class="progress-fill write-fill" id="writingCountBar"></div></div>
-          </div>
+            <div class="bar-track"><div id="examProgressBar" class="bar-fill green-fill"></div></div>
+            <small>Banco de 100 exámenes</small>
+          </article>
+
+          <article class="progress-card">
+            <div>
+              <strong id="savedParagraphsCount">0</strong>
+              <span>Párrafos guardados</span>
+            </div>
+            <div class="bar-track"><div id="paragraphProgressBar" class="bar-fill blue-fill"></div></div>
+            <small>Meta sugerida: 20 writings</small>
+          </article>
+
+          <article class="progress-card wide-card">
+            <div>
+              <strong id="avgScoreText">0%</strong>
+              <span>Promedio global</span>
+            </div>
+            <div class="bar-track"><div id="avgScoreBar" class="bar-fill purple-fill"></div></div>
+            <small>Resultado acumulado de tus exámenes</small>
+          </article>
         </div>
       </section>
 
       <section id="tiempos" class="section reveal">
         <div class="section-header">
           <div>
-            <span class="eyebrow">Mapa gramatical y Condicionales</span>
-            <h3>Tiempos verbales principales</h3>
-            <p>Seleccioná un tiempo verbal o condicional para ver su estructura, uso, ejemplos y aplicación.</p>
+            <span class="eyebrow">Mapa gramatical</span>
+            <h3>Tiempos verbales y condicionales</h3>
+            <p>
+              Incluye presentes, pasados, futuros, perfectos, continuos y condicionales con “if”.
+            </p>
           </div>
+
           <div class="search-box">
-            <input type="text" id="tenseSearch" placeholder="Buscar: present, perfect, if..." />
+            <input id="tenseSearch" type="text" placeholder="Buscar: present, if, perfect..." />
           </div>
         </div>
+
         <div id="tenseGrid" class="tense-grid"></div>
       </section>
 
@@ -127,28 +168,30 @@
           <div>
             <span class="eyebrow">Estructura sintáctica y semántica</span>
             <h3 id="detailTitle">Seleccioná un tiempo verbal</h3>
-            <p id="detailSummary">Al elegir un tiempo verbal, acá vas a ver formación, usos y ejemplos.</p>
+            <p id="detailSummary">Al elegir una estructura, acá vas a ver formación, usos y ejemplos.</p>
           </div>
           <span id="detailLevel" class="level-pill">Nivel</span>
         </div>
 
         <div class="detail-layout">
-          <div class="structure-card">
+          <article class="info-card">
             <h4>Estructura</h4>
             <div class="structure-list">
-              <article><span>Afirmativa</span><p id="affirmativeStructure">—</p></article>
-              <article><span>Negativa</span><p id="negativeStructure">—</p></article>
-              <article><span>Pregunta</span><p id="questionStructure">—</p></article>
+              <div><span>Afirmativa</span><p id="affirmativeStructure">—</p></div>
+              <div><span>Negativa</span><p id="negativeStructure">—</p></div>
+              <div><span>Pregunta</span><p id="questionStructure">—</p></div>
             </div>
-          </div>
-          <div class="usage-card">
+          </article>
+
+          <article class="info-card">
             <h4>Usos principales</h4>
-            <ul id="usageList"></ul>
-          </div>
-          <div class="examples-card">
+            <ul id="usageList" class="bullet-list"></ul>
+          </article>
+
+          <article class="info-card">
             <h4>Ejemplos claros</h4>
             <div id="examplesList" class="examples-list"></div>
-          </div>
+          </article>
         </div>
       </section>
 
@@ -156,8 +199,10 @@
         <div class="section-header">
           <div>
             <span class="eyebrow">Writing IELTS</span>
-            <h3>Consignas de escritura y corrección asistida</h3>
-            <p>Elegí nivel IELTS, generá una consigna, escribí tu párrafo y recibí una devolución más humana.</p>
+            <h3>Consignas y corrección asistida</h3>
+            <p>
+              Generá consignas según dificultad IELTS, escribí tu respuesta y recibí una devolución tipo entrenador.
+            </p>
           </div>
         </div>
 
@@ -171,7 +216,7 @@
               <option value="8">Band 8-9 · Avanzado</option>
             </select>
 
-            <label for="practiceTense">Tiempo recomendado</label>
+            <label for="practiceTense">Estructura recomendada</label>
             <select id="practiceTense"></select>
 
             <div class="prompt-box">
@@ -180,22 +225,25 @@
             </div>
 
             <button id="newPromptBtn" class="secondary-btn full-btn" type="button">Nueva consigna</button>
-            <button class="ghost-btn full-btn notes-shortcut open-resources-btn" data-target="apuntes">Tomar apunte rápido</button>
+            <button class="ghost-btn full-btn notes-shortcut" type="button" data-resource="apuntes">Ir a apuntes varios</button>
           </aside>
 
-          <div class="writing-card">
+          <article class="writing-card">
             <div class="writing-top">
               <label for="practiceText">Tu respuesta en inglés</label>
               <span id="wordCounter">0 palabras</span>
             </div>
+
             <textarea id="practiceText" placeholder="Write your IELTS paragraph here..."></textarea>
+
             <div class="writing-tools">
               <button id="clearTextBtn" class="ghost-btn" type="button">Limpiar</button>
               <button id="saveParagraphBtn" class="secondary-btn" type="button">Guardar párrafo</button>
               <button id="aiCorrectBtn" class="primary-btn" type="button">Corregir con IA Coach</button>
             </div>
-          </div>
+          </article>
         </div>
+
         <div id="aiFeedback" class="ai-feedback hidden"></div>
       </section>
 
@@ -204,13 +252,16 @@
           <div>
             <span class="eyebrow">Evaluación</span>
             <h3>Multiple choice · 10 preguntas</h3>
-            <p>Cada examen tiene 10 preguntas. Podés cambiar entre 100 exámenes distintos.</p>
+            <p>Cada examen trae 10 preguntas. Podés cambiar entre 100 exámenes distintos.</p>
           </div>
           <button id="resetQuizBtn" class="secondary-btn" type="button">Reiniciar examen</button>
         </div>
 
         <div class="quiz-toolbar">
-          <label>Examen: <select id="examSelector"></select></label>
+          <label>
+            Examen:
+            <select id="examSelector"></select>
+          </label>
           <span id="quizProgress">0/10 respondidas</span>
         </div>
 
@@ -221,120 +272,138 @@
           <div id="quizResult" class="quiz-result"></div>
         </div>
       </section>
-      
+
       <footer class="footer">
-        <p>English Trainer IELTS · Dashboard Principal</p>
+        <p>English Trainer IELTS · Dashboard principal</p>
       </footer>
     </main>
   </div>
 
-  <!-- ==========================================
-       VISTA 2: CENTRO DE RECURSOS (LANDING PAGE)
-  =========================================== -->
-  <div id="resourcesView" class="view-container hidden-view">
-    <div class="resources-hero">
-      <div class="resources-header-content">
-        <h2>Centro de Recursos</h2>
-        <p>Tu biblioteca personal. Guardá tus apuntes, revisá verbos modales y memorizá los phrasal verbs más importantes.</p>
-        <button id="backToAppBtn" class="ghost-btn">← Volver al Dashboard</button>
-      </div>
-    </div>
+  <!-- LANDING / PESTAÑA DE RECURSOS -->
+  <div id="resourcesView" class="resources-view" hidden>
+    <section class="resources-hero">
+      <span class="eyebrow">Centro de recursos</span>
+      <h2>Apuntes, phrasal verbs y modales</h2>
+      <p>
+        Esta es una landing separada del dashboard principal. Acá podés alojar apuntes, listas de estudio y prácticas guardadas.
+      </p>
+      <button class="ghost-btn" type="button" data-go-dashboard>← Volver al dashboard</button>
+    </section>
 
-    <div class="resources-nav">
-      <button class="resource-tab active" data-tab="apuntes">Apuntes Varios</button>
-      <button class="resource-tab" data-tab="phrasals">Phrasal Verbs</button>
-      <button class="resource-tab" data-tab="modals">Verbos Modales y Aux.</button>
-      <button class="resource-tab" data-tab="biblioteca">Mis Párrafos</button>
-    </div>
+    <nav class="resources-tabs">
+      <button class="resource-tab active" type="button" data-tab="apuntes">Apuntes varios</button>
+      <button class="resource-tab" type="button" data-tab="phrasals">Phrasal verbs</button>
+      <button class="resource-tab" type="button" data-tab="modals">Modales / auxiliares</button>
+      <button class="resource-tab" type="button" data-tab="conditionals">Condicionales</button>
+      <button class="resource-tab" type="button" data-tab="biblioteca">Párrafos guardados</button>
+    </nav>
 
     <main class="main-content resource-content">
-      
-      <!-- TAB: APUNTES VARIOS -->
-      <section id="tab-apuntes" class="resource-pane active-pane">
+      <section id="tab-apuntes" class="resource-pane active-pane section">
         <div class="section-header">
           <div>
             <span class="eyebrow">Notebook</span>
             <h3>Apuntes varios</h3>
-            <p>Guardá textos largos, vocabulario, reglas gramaticales, correcciones o cualquier material.</p>
+            <p>Guardá textos largos, reglas, vocabulario, correcciones o material personal.</p>
           </div>
           <button id="clearNotesBtn" class="danger-btn" type="button">Borrar todos</button>
         </div>
 
         <div class="notes-layout">
           <div class="notes-editor">
-            <input type="text" id="noteTitle" placeholder="Título del apunte: Present Perfect, conectores IELTS, vocabulario..." />
-            <textarea id="noteText" placeholder="Pegá o escribí acá todo el texto que quieras guardar como apunte..."></textarea>
+            <input id="noteTitle" type="text" placeholder="Título del apunte..." />
+            <textarea id="noteText" placeholder="Pegá o escribí acá todo el texto que quieras guardar..."></textarea>
             <div class="notes-actions">
               <button id="saveNoteBtn" class="primary-btn" type="button">Guardar apunte</button>
               <button id="clearNoteEditorBtn" class="ghost-btn" type="button">Limpiar editor</button>
             </div>
           </div>
+
           <div id="notesList" class="notes-list"></div>
         </div>
       </section>
 
-      <!-- TAB: PHRASAL VERBS -->
-      <section id="tab-phrasals" class="resource-pane">
+      <section id="tab-phrasals" class="resource-pane section">
         <div class="section-header">
           <div>
-            <span class="eyebrow">Vocabulario Esencial</span>
-            <h3>Phrasal Verbs Comunes</h3>
-            <p>Lista de los phrasal verbs más utilizados, con su significado en español y ejemplos prácticos.</p>
+            <span class="eyebrow">Vocabulario esencial</span>
+            <h3>Phrasal verbs más usados</h3>
+            <p>Tabla con significado y ejemplo para repasar rápido.</p>
           </div>
         </div>
-        <div class="table-responsive">
+
+        <div class="table-card">
           <table class="data-table">
             <thead>
               <tr>
-                <th>Phrasal Verb</th>
+                <th>Phrasal verb</th>
                 <th>Significado</th>
                 <th>Ejemplo</th>
               </tr>
             </thead>
-            <tbody id="phrasalTableBody">
-              <!-- Se inyecta vía JS -->
-            </tbody>
+            <tbody id="phrasalTableBody"></tbody>
           </table>
         </div>
       </section>
 
-      <!-- TAB: MODALS & AUXILIARIES -->
-      <section id="tab-modals" class="resource-pane">
+      <section id="tab-modals" class="resource-pane section">
         <div class="section-header">
           <div>
-            <span class="eyebrow">Estructura</span>
-            <h3>Verbos Modales, Auxiliares y Conectores</h3>
-            <p>Referencia rápida para expresar posibilidad, obligación, deseo y conexión de ideas.</p>
+            <span class="eyebrow">Estructuras útiles</span>
+            <h3>Verbos modales y auxiliares</h3>
+            <p>Lista de modales, auxiliares y expresiones frecuentes para usar en speaking y writing.</p>
           </div>
         </div>
-        <div class="table-responsive">
+
+        <div class="table-card">
+          <table class="data-table two-col-table">
+            <thead>
+              <tr>
+                <th>Expresión</th>
+                <th>Significado / uso</th>
+              </tr>
+            </thead>
+            <tbody id="modalsTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="tab-conditionals" class="resource-pane section">
+        <div class="section-header">
+          <div>
+            <span class="eyebrow">If clauses</span>
+            <h3>Condicionales</h3>
+            <p>Resumen de Zero, First, Second y Third Conditional.</p>
+          </div>
+        </div>
+
+        <div class="table-card">
           <table class="data-table">
             <thead>
               <tr>
-                <th>Verbo Modal / Expresión</th>
-                <th>Significado / Uso</th>
+                <th>Tipo</th>
+                <th>Estructura</th>
+                <th>Uso</th>
+                <th>Ejemplo</th>
               </tr>
             </thead>
-            <tbody id="modalsTableBody">
-              <!-- Se inyecta vía JS -->
-            </tbody>
+            <tbody id="conditionalsTableBody"></tbody>
           </table>
         </div>
       </section>
 
-      <!-- TAB: MIS PÁRRAFOS -->
-      <section id="tab-biblioteca" class="resource-pane">
+      <section id="tab-biblioteca" class="resource-pane section">
         <div class="section-header">
           <div>
             <span class="eyebrow">Biblioteca personal</span>
             <h3>Párrafos guardados</h3>
-            <p>Acá quedan tus prácticas de writing. Podés revisar y borrar textos individualmente.</p>
+            <p>Revisá tus writings y eliminá individualmente lo que ya no necesites.</p>
           </div>
           <button id="clearParagraphsBtn" class="danger-btn" type="button">Borrar todos</button>
         </div>
+
         <div id="savedParagraphsList" class="saved-list"></div>
       </section>
-
     </main>
   </div>
 
