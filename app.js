@@ -1298,6 +1298,15 @@ const customTimerBtn = document.getElementById("customTimerBtn");
 const startTimerBtn = document.getElementById("startTimerBtn");
 const pauseTimerBtn = document.getElementById("pauseTimerBtn");
 const resetTimerBtn = document.getElementById("resetTimerBtn");
+const settingsToggleBtn = document.getElementById("settingsToggleBtn");
+const settingsPanel = document.getElementById("settingsPanel");
+const settingsCloseBtn = document.getElementById("settingsCloseBtn");
+const themeGrid = document.getElementById("themeGrid");
+const themeIntensity = document.getElementById("themeIntensity");
+const themeIntensityLabel = document.getElementById("themeIntensityLabel");
+const palettePreview = document.getElementById("palettePreview");
+const resetProgressBtn = document.getElementById("resetProgressBtn");
+
 
 const quickTopic = document.getElementById("quickTopic");
 const quickPrompt = document.getElementById("quickPrompt");
@@ -1368,6 +1377,9 @@ let timerSecondsLeft = 0;
 let timerInitialSeconds = 0;
 let timerInterval = null;
 let timerPaused = false;
+let selectedTheme = localStorage.getItem("englishTrainerTheme") || "orange";
+let selectedIntensity = Number(localStorage.getItem("englishTrainerThemeIntensity")) || 2;
+
 
 /* =========================
    VISTAS / NAVEGACIÓN
@@ -1573,6 +1585,49 @@ setInterval(() => {
   }
 }, 15000);
 
+
+function ensureHourglassTimerMarkup() {
+  const ring = document.getElementById("timerProgressRing");
+
+  if (!ring) return;
+
+  ring.classList.remove("digital-timer-card");
+  ring.classList.add("hourglass-timer-card");
+
+  if (ring.querySelector(".hourglass-stage")) return;
+
+  ring.innerHTML = `
+    <div class="hourglass-time">
+      <span id="timerDisplay" class="timer-display">00:00</span>
+      <small>sesión de foco</small>
+    </div>
+
+    <div class="hourglass-stage" aria-hidden="true">
+      <div class="hourglass-glow"></div>
+
+      <div class="hourglass">
+        <div class="hourglass-bulb top-bulb">
+          <div class="sand top-sand"></div>
+        </div>
+
+        <div class="hourglass-neck">
+          <span class="falling-line"></span>
+          <span class="falling-particle particle-one"></span>
+          <span class="falling-particle particle-two"></span>
+          <span class="falling-particle particle-three"></span>
+          <span class="falling-particle particle-four"></span>
+          <span class="falling-particle particle-five"></span>
+          <span class="falling-particle particle-six"></span>
+        </div>
+
+        <div class="hourglass-bulb bottom-bulb">
+          <div class="sand bottom-sand"></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 /* =========================
    TIMER DIGITAL
 ========================= */
@@ -1649,13 +1704,23 @@ function updateTimerUI() {
   const remaining = Math.max(timerSecondsLeft, 0);
   const minutes = Math.floor(remaining / 60);
   const seconds = remaining % 60;
-  if (timerDisplay) timerDisplay.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 
-  const progress = timerInitialSeconds ? (timerInitialSeconds - remaining) / timerInitialSeconds : 0;
+  const timerDisplayEl = document.getElementById("timerDisplay");
+  const timerRingEl = document.getElementById("timerProgressRing");
+
+  if (timerDisplayEl) {
+    timerDisplayEl.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  }
+
+  const progress = timerInitialSeconds
+    ? (timerInitialSeconds - remaining) / timerInitialSeconds
+    : 0;
+
   const degrees = Math.round(progress * 360);
-  if (timerProgressRing) {
-    timerProgressRing.style.setProperty("--timer-progress", `${degrees}deg`);
-    timerProgressRing.style.setProperty("--sand-progress", `${Math.round(progress * 100)}%`);
+
+  if (timerRingEl) {
+    timerRingEl.style.setProperty("--timer-progress", `${degrees}deg`);
+    timerRingEl.style.setProperty("--sand-progress", `${Math.round(progress * 100)}%`);
   }
 }
 
@@ -2426,6 +2491,131 @@ function exportVocabulary() {
   downloadText("english-trainer-vocabulario.txt", text || "Sin vocabulario guardado.");
 }
 
+
+/* =========================
+   OPCIONES / THEMES
+========================= */
+
+const themePalettes = {
+  orange: ["#7c2d12", "#c2410c", "#ff7a00", "#ff9f1c", "#fed7aa"],
+  blue: ["#0f172a", "#1d4ed8", "#2563eb", "#38bdf8", "#dbeafe"],
+  gray: ["#0f0f0f", "#27272a", "#52525b", "#a1a1aa", "#f4f4f5"],
+  gold: ["#422006", "#a16207", "#d97706", "#facc15", "#fef3c7"],
+  red: ["#450a0a", "#b91c1c", "#ef4444", "#fb7185", "#fee2e2"],
+  green: ["#052e16", "#15803d", "#22c55e", "#86efac", "#dcfce7"],
+  purple: ["#2e1065", "#6d28d9", "#8b5cf6", "#c084fc", "#f3e8ff"],
+  white: ["#44403c", "#78716c", "#d6d3d1", "#f5f5f4", "#ffffff"],
+  black: ["#030303", "#0a0a0a", "#171717", "#262626", "#404040"]
+};
+
+const intensityNames = ["muy oscuro", "oscuro", "medio", "claro", "luminoso"];
+
+function applyTheme(theme = selectedTheme, intensity = selectedIntensity) {
+  selectedTheme = theme;
+  selectedIntensity = Number(intensity);
+
+  const palette = themePalettes[selectedTheme] || themePalettes.orange;
+  const accent = palette[selectedIntensity] || palette[2];
+  const accentDark = palette[Math.max(0, selectedIntensity - 1)] || palette[1];
+  const accentSoft = palette[Math.min(4, selectedIntensity + 1)] || palette[3];
+
+  const rgb = hexToRgb(accent);
+  const softRgb = hexToRgb(accentSoft);
+
+  document.body.dataset.theme = selectedTheme;
+  document.body.dataset.intensity = String(selectedIntensity);
+
+  document.documentElement.style.setProperty("--orange", accent);
+  document.documentElement.style.setProperty("--orange-soft", accentSoft);
+  document.documentElement.style.setProperty("--amber", accentSoft);
+  document.documentElement.style.setProperty("--copper", accentDark);
+  document.documentElement.style.setProperty("--accent", accent);
+  document.documentElement.style.setProperty("--accent-dark", accentDark);
+  document.documentElement.style.setProperty("--accent-soft", accentSoft);
+  document.documentElement.style.setProperty("--accent-rgb", `${rgb.r}, ${rgb.g}, ${rgb.b}`);
+  document.documentElement.style.setProperty("--accent-soft-rgb", `${softRgb.r}, ${softRgb.g}, ${softRgb.b}`);
+
+  if (themeIntensity) themeIntensity.value = String(selectedIntensity);
+  if (themeIntensityLabel) themeIntensityLabel.textContent = intensityNames[selectedIntensity] || "medio";
+
+  document.querySelectorAll(".theme-swatch").forEach((button) => {
+    button.classList.toggle("active", button.dataset.theme === selectedTheme);
+  });
+
+  renderPalettePreview();
+
+  localStorage.setItem("englishTrainerTheme", selectedTheme);
+  localStorage.setItem("englishTrainerThemeIntensity", String(selectedIntensity));
+}
+
+function renderPalettePreview() {
+  if (!palettePreview) return;
+
+  const palette = themePalettes[selectedTheme] || themePalettes.orange;
+
+  palettePreview.innerHTML = palette.map((color, index) => `
+    <button
+      type="button"
+      class="palette-cell ${index === selectedIntensity ? "active" : ""}"
+      data-intensity="${index}"
+      style="background:${color}"
+      aria-label="Intensidad ${index + 1}">
+    </button>
+  `).join("");
+}
+
+function toggleSettingsPanel() {
+  if (!settingsPanel) return;
+  settingsPanel.classList.toggle("open");
+}
+
+function closeSettingsPanel() {
+  if (!settingsPanel) return;
+  settingsPanel.classList.remove("open");
+}
+
+function resetProgressCounters() {
+  const confirmed = confirm("¿Seguro que querés reiniciar el progreso? No se borrarán apuntes, writings ni vocabulario.");
+
+  if (!confirmed) return;
+
+  studySeconds = 0;
+  weeklySeconds = 0;
+  examsCompleted = 0;
+  scoreHistory = [];
+  topicStats = {};
+  activityLog = [];
+  lastActivity = "";
+  flashcardCount = 0;
+
+  localStorage.removeItem("englishTrainerStudySeconds");
+  localStorage.removeItem("englishTrainerWeeklySeconds");
+  localStorage.removeItem("englishTrainerExamsCompleted");
+  localStorage.removeItem("englishTrainerScoreHistory");
+  localStorage.removeItem("englishTrainerTopicStats");
+  localStorage.removeItem("englishTrainerActivityLog");
+  localStorage.removeItem("englishTrainerLastActivity");
+  localStorage.removeItem("englishTrainerFlashcardCount");
+
+  updateProgress();
+  renderFlashcard();
+
+  alert("Progreso reiniciado.");
+}
+
+function hexToRgb(hex) {
+  const normalized = hex.replace("#", "");
+  const value = parseInt(normalized.length === 3
+    ? normalized.split("").map((char) => char + char).join("")
+    : normalized, 16);
+
+  return {
+    r: (value >> 16) & 255,
+    g: (value >> 8) & 255,
+    b: value & 255
+  };
+}
+
 /* =========================
    HELPERS / EVENTOS
 ========================= */
@@ -2569,6 +2759,33 @@ function bindEvents() {
   exportProgressBtn?.addEventListener("click", exportProgress);
   exportVocabBtn?.addEventListener("click", exportVocabulary);
 
+
+  settingsToggleBtn?.addEventListener("click", toggleSettingsPanel);
+  settingsCloseBtn?.addEventListener("click", closeSettingsPanel);
+  resetProgressBtn?.addEventListener("click", resetProgressCounters);
+
+  themeGrid?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-theme]");
+    if (!button) return;
+    applyTheme(button.dataset.theme, selectedIntensity);
+  });
+
+  themeIntensity?.addEventListener("input", () => {
+    applyTheme(selectedTheme, Number(themeIntensity.value));
+  });
+
+  palettePreview?.addEventListener("click", (event) => {
+    const cell = event.target.closest("[data-intensity]");
+    if (!cell) return;
+    applyTheme(selectedTheme, Number(cell.dataset.intensity));
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!settingsPanel || !settingsPanel.classList.contains("open")) return;
+    if (event.target.closest("#settingsPanel") || event.target.closest("#settingsToggleBtn")) return;
+    closeSettingsPanel();
+  });
+
   window.addEventListener("scroll", () => {
     setActiveLink();
     revealOnScroll();
@@ -2576,6 +2793,8 @@ function bindEvents() {
 }
 
 window.addEventListener("load", () => {
+  applyTheme(selectedTheme, selectedIntensity);
+  ensureHourglassTimerMarkup();
   setDashboardMode("inicio");
   bindEvents();
   renderTables();

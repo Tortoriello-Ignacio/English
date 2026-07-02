@@ -2231,3 +2231,500 @@ textarea {
     transform: scale(0.92);
   }
 }
+
+
+/* =========================================================
+   HOURGLASS TIMER V11 - FORZADO FINAL
+   Si el HTML viejo queda cacheado, app.js lo convierte igual.
+   Este bloque asegura que el reloj de arena pise cualquier estilo anterior.
+========================================================= */
+
+#timerProgressRing.hourglass-timer-card {
+  --sand-progress: 0%;
+  width: 220px !important;
+  min-height: 282px !important;
+  margin: 8px auto 22px !important;
+  display: grid !important;
+  justify-items: center !important;
+  align-content: start !important;
+  gap: 16px !important;
+  padding: 18px 14px 20px !important;
+  border-radius: 34px !important;
+  background:
+    radial-gradient(circle at 50% 20%, rgba(255, 122, 0, 0.11), transparent 38%),
+    linear-gradient(145deg, rgba(255,255,255,0.065), rgba(255,255,255,0.025)) !important;
+  border: 1px solid rgba(255,255,255,0.085) !important;
+  box-shadow:
+    0 18px 38px rgba(0, 0, 0, 0.34),
+    inset 0 0 0 1px rgba(255,255,255,0.035) !important;
+}
+
+#timerProgressRing .hourglass-time {
+  text-align: center !important;
+  display: grid !important;
+  gap: 8px !important;
+  justify-items: center !important;
+}
+
+#timerProgressRing .hourglass-stage {
+  position: relative !important;
+  width: 132px !important;
+  height: 164px !important;
+  display: grid !important;
+  place-items: center !important;
+}
+
+#timerProgressRing .hourglass {
+  position: relative !important;
+  width: 92px !important;
+  height: 148px !important;
+  display: grid !important;
+  grid-template-rows: 1fr 18px 1fr !important;
+  filter: drop-shadow(0 16px 24px rgba(0, 0, 0, 0.30)) !important;
+}
+
+#timerProgressRing .top-sand {
+  height: calc(100% - var(--sand-progress)) !important;
+}
+
+#timerProgressRing .bottom-sand {
+  height: var(--sand-progress) !important;
+}
+
+#timerProgressRing.timer-running .falling-line {
+  opacity: 1 !important;
+  animation: sandLinePulse 0.72s ease-in-out infinite !important;
+}
+
+#timerProgressRing.timer-running .falling-particle {
+  animation: particleFall 1.25s linear infinite !important;
+}
+
+#timerProgressRing.timer-running .hourglass {
+  animation: hourglassBreath 2.8s ease-in-out infinite !important;
+}
+
+#timerProgressRing .timer-display {
+  font-size: 2.04rem !important;
+  font-weight: 330 !important;
+  letter-spacing: 0.075em !important;
+  color: rgba(255, 248, 240, 0.96) !important;
+  text-shadow:
+    0 0 10px rgba(255, 122, 0, 0.26),
+    0 0 20px rgba(255, 122, 0, 0.12) !important;
+}
+
+
+/* =========================================================
+   OPTIONS + THEMES V12
+   Tuerca, panel de opciones, paletas por color/intensidad
+   y mejoras del reloj de arena.
+========================================================= */
+
+:root {
+  --accent: var(--orange);
+  --accent-dark: var(--copper);
+  --accent-soft: var(--orange-soft);
+  --accent-rgb: 255, 122, 0;
+  --accent-soft-rgb: 255, 159, 28;
+}
+
+.top-navbar {
+  justify-content: flex-start !important;
+  padding-left: 34px !important;
+  padding-right: 54px !important;
+}
+
+.top-nav {
+  margin-left: auto !important;
+  margin-right: 30px !important;
+  max-width: calc(100vw - 420px) !important;
+  overflow-x: auto !important;
+  justify-content: flex-start !important;
+  scrollbar-width: thin;
+}
+
+.settings-toggle {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 auto;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: #111111;
+  background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+  border: 1px solid rgba(var(--accent-rgb), 0.30);
+  box-shadow:
+    0 12px 26px rgba(var(--accent-rgb), 0.16),
+    inset 0 0 0 1px rgba(255,255,255,0.18);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.settings-toggle:hover {
+  transform: translateY(-2px) rotate(18deg);
+  box-shadow:
+    0 16px 34px rgba(var(--accent-rgb), 0.24),
+    0 0 20px rgba(var(--accent-rgb), 0.12);
+}
+
+.settings-toggle span {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.settings-panel {
+  position: fixed;
+  top: 92px;
+  right: 28px;
+  z-index: 1800;
+  width: min(390px, calc(100vw - 32px));
+  max-height: calc(100vh - 120px);
+  overflow: auto;
+  padding: 22px;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 80% 10%, rgba(var(--accent-rgb), 0.14), transparent 34%),
+    linear-gradient(145deg, rgba(34,34,34,0.985), rgba(15,15,15,0.985));
+  border: 1px solid rgba(255,255,255,0.105);
+  box-shadow:
+    0 28px 70px rgba(0,0,0,0.52),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px) scale(0.985);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.settings-panel.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.settings-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+
+.settings-head span {
+  display: block;
+  color: var(--accent-soft);
+  font-size: 0.72rem;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.settings-head h3 {
+  font-size: 1.35rem;
+  letter-spacing: -0.035em;
+}
+
+.settings-close {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  cursor: pointer;
+  color: var(--muted);
+  background: rgba(255,255,255,0.055);
+  border: 1px solid var(--line);
+  font-size: 1.2rem;
+}
+
+.settings-block {
+  padding: 16px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,0.045);
+  margin-top: 14px;
+}
+
+.settings-block h4 {
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.settings-block p {
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.55;
+  margin-bottom: 14px;
+}
+
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 7px;
+  margin-bottom: 14px;
+}
+
+.theme-swatch {
+  aspect-ratio: 1;
+  border-radius: 12px;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.14);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.theme-swatch:hover,
+.theme-swatch.active {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 0 2px rgba(255,255,255,0.14),
+    0 0 20px rgba(var(--accent-rgb), 0.18);
+}
+
+.theme-swatch[data-theme="orange"] { background: linear-gradient(135deg, #7c2d12, #ff7a00, #fed7aa); }
+.theme-swatch[data-theme="blue"] { background: linear-gradient(135deg, #0f172a, #2563eb, #38bdf8); }
+.theme-swatch[data-theme="gray"] { background: linear-gradient(135deg, #0f0f0f, #71717a, #f4f4f5); }
+.theme-swatch[data-theme="gold"] { background: linear-gradient(135deg, #422006, #d97706, #facc15); }
+.theme-swatch[data-theme="red"] { background: linear-gradient(135deg, #450a0a, #ef4444, #fee2e2); }
+.theme-swatch[data-theme="green"] { background: linear-gradient(135deg, #052e16, #22c55e, #dcfce7); }
+.theme-swatch[data-theme="purple"] { background: linear-gradient(135deg, #2e1065, #8b5cf6, #f3e8ff); }
+.theme-swatch[data-theme="white"] { background: linear-gradient(135deg, #78716c, #f5f5f4, #ffffff); }
+.theme-swatch[data-theme="black"] { background: linear-gradient(135deg, #030303, #171717, #404040); }
+
+.intensity-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  color: var(--muted);
+  font-weight: 900;
+  font-size: 0.82rem;
+  margin-bottom: 10px;
+}
+
+.intensity-label span {
+  color: var(--accent-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-size: 0.72rem;
+}
+
+.intensity-range {
+  width: 100%;
+  accent-color: var(--accent);
+  margin-bottom: 14px;
+}
+
+.palette-preview {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+
+.palette-cell {
+  min-height: 40px;
+  cursor: pointer;
+  border: none;
+  position: relative;
+}
+
+.palette-cell.active::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border-radius: 999px;
+  border: 2px solid rgba(255,255,255,0.82);
+  box-shadow: 0 0 14px rgba(255,255,255,0.24);
+}
+
+body[data-theme="white"] {
+  --bg: #e7e5e4;
+  --bg-soft: #f5f5f4;
+  --panel: rgba(255, 255, 255, 0.92);
+  --panel-strong: #ffffff;
+  --text: #1c1917;
+  --muted: #57534e;
+  --line: rgba(28, 25, 23, 0.13);
+  background:
+    radial-gradient(circle at 12% 20%, rgba(var(--accent-rgb), 0.13), transparent 30%),
+    linear-gradient(135deg, #f5f5f4 0%, #e7e5e4 52%, #d6d3d1 100%) !important;
+}
+
+body[data-theme="black"] {
+  --bg: #030303;
+  --bg-soft: #0a0a0a;
+  --panel: rgba(10, 10, 10, 0.96);
+  --panel-strong: #0f0f0f;
+  --text: #f5f5f5;
+  --muted: #a3a3a3;
+  --line: rgba(255, 255, 255, 0.085);
+  background:
+    radial-gradient(circle at 10% 20%, rgba(var(--accent-rgb), 0.07), transparent 30%),
+    linear-gradient(135deg, #000 0%, #050505 52%, #0a0a0a 100%) !important;
+}
+
+body:not([data-theme="white"]) {
+  background:
+    radial-gradient(circle at 12% 20%, rgba(var(--accent-rgb), 0.13), transparent 30%),
+    radial-gradient(circle at 85% 5%, rgba(var(--accent-soft-rgb), 0.10), transparent 28%),
+    radial-gradient(circle at 70% 90%, rgba(120, 113, 108, 0.16), transparent 34%),
+    linear-gradient(135deg, #0f0f0f 0%, #141414 48%, #1c1917 100%) !important;
+}
+
+.primary-btn,
+.brand-icon,
+.settings-toggle {
+  background: linear-gradient(135deg, var(--accent), var(--accent-soft)) !important;
+}
+
+.eyebrow,
+.level-tag,
+.level-pill,
+.resource-nav-btn,
+.nav-link.active,
+.nav-link:hover {
+  border-color: rgba(var(--accent-rgb), 0.22) !important;
+}
+
+.nav-link.active,
+.nav-link:hover,
+.resource-nav-btn.active,
+.resource-nav-btn:hover {
+  background: rgba(var(--accent-rgb), 0.13) !important;
+}
+
+.eyebrow,
+.level-tag,
+.level-pill,
+.resource-nav-btn,
+.resource-nav-btn.active,
+.resource-nav-btn:hover {
+  color: var(--accent-soft) !important;
+}
+
+.orange-fill,
+.bar-fill,
+.progress-card .bar-fill {
+  background: linear-gradient(90deg, var(--accent), var(--accent-soft)) !important;
+}
+
+/* Hourglass improvements */
+#timerProgressRing.hourglass-timer-card {
+  background:
+    radial-gradient(circle at 50% 20%, rgba(var(--accent-rgb), 0.13), transparent 38%),
+    linear-gradient(145deg, rgba(255,255,255,0.065), rgba(255,255,255,0.025)) !important;
+}
+
+#timerProgressRing .hourglass-stage {
+  height: 178px !important;
+}
+
+#timerProgressRing .hourglass {
+  height: 164px !important;
+  grid-template-rows: 1fr 24px 1fr !important;
+}
+
+#timerProgressRing .hourglass::before,
+#timerProgressRing .hourglass::after {
+  height: 9px !important;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,0.11), rgba(var(--accent-rgb),0.52), rgba(255,255,255,0.10)) !important;
+}
+
+#timerProgressRing .hourglass-neck {
+  width: 34px !important;
+  height: 24px !important;
+  margin: 0 auto !important;
+  border-radius: 999px !important;
+  background:
+    radial-gradient(circle, rgba(var(--accent-rgb), 0.18), transparent 52%),
+    linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent) !important;
+  box-shadow:
+    inset 0 0 10px rgba(var(--accent-rgb), 0.13),
+    0 0 16px rgba(var(--accent-rgb), 0.10) !important;
+}
+
+#timerProgressRing .falling-line {
+  height: 104px !important;
+  transform-origin: top center !important;
+  background: linear-gradient(180deg, rgba(255, 232, 174, 0.98), var(--accent), var(--accent-dark)) !important;
+  box-shadow:
+    0 0 10px rgba(var(--accent-rgb), 0.82),
+    0 0 22px rgba(var(--accent-rgb), 0.36) !important;
+}
+
+#timerProgressRing .falling-particle {
+  background: var(--accent-soft) !important;
+  box-shadow:
+    0 0 9px rgba(var(--accent-rgb), 0.95),
+    0 0 18px rgba(var(--accent-rgb), 0.42) !important;
+}
+
+#timerProgressRing.timer-running .falling-particle {
+  animation: particleFallToBottom 2.05s linear infinite !important;
+}
+
+#timerProgressRing .particle-four {
+  margin-left: -4px;
+  animation-delay: 0.94s !important;
+}
+
+#timerProgressRing .particle-five {
+  margin-left: 11px;
+  animation-delay: 1.22s !important;
+}
+
+#timerProgressRing .particle-six {
+  margin-left: -12px;
+  animation-delay: 1.52s !important;
+}
+
+@keyframes particleFallToBottom {
+  0% {
+    transform: translateY(0) scale(0.52);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  72% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(104px) scale(0.95);
+    opacity: 0;
+  }
+}
+
+#timerProgressRing .sand {
+  background:
+    radial-gradient(circle at 40% 20%, rgba(255, 244, 210, 0.78), transparent 12%),
+    linear-gradient(180deg, var(--accent-soft), var(--accent) 48%, var(--accent-dark)) !important;
+  box-shadow:
+    inset 0 5px 14px rgba(255, 236, 197, 0.18),
+    0 0 16px rgba(var(--accent-rgb), 0.45),
+    0 0 32px rgba(var(--accent-rgb), 0.18) !important;
+}
+
+#timerProgressRing .hourglass-glow {
+  background: radial-gradient(circle, rgba(var(--accent-rgb), 0.20), transparent 62%) !important;
+}
+
+@media (max-width: 1050px) {
+  .top-navbar {
+    padding-right: 20px !important;
+  }
+
+  .top-nav {
+    max-width: calc(100vw - 210px) !important;
+    margin-right: 12px !important;
+  }
+
+  .settings-panel {
+    right: 16px;
+    top: 110px;
+  }
+}

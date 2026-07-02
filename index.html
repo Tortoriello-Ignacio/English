@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>English Trainer IELTS | Inglés desde Español</title>
   <meta name="description" content="Entrenador de inglés desde español con tiempos verbales, writing IELTS, recursos, timer, flashcards, vocabulario y progreso." />
-  <link rel="stylesheet" href="style.css?v=hourglass-timer-v10" />
+  <link rel="stylesheet" href="style.css?v=theme-options-v12" />
 </head>
 
 <body>
@@ -92,7 +92,53 @@
       <button class="resource-nav-btn" type="button" data-resource="phrasals">Phrasal verbs</button>
       <button class="resource-nav-btn" type="button" data-resource="modals">Modales</button>
     </nav>
+    <button id="settingsToggleBtn" class="settings-toggle" type="button" aria-label="Abrir opciones">
+      <span aria-hidden="true">⚙</span>
+    </button>
   </header>
+
+
+  <!-- PANEL DE OPCIONES -->
+  <aside id="settingsPanel" class="settings-panel" aria-label="Opciones varias">
+    <div class="settings-head">
+      <div>
+        <span>Opciones</span>
+        <h3>Personalización</h3>
+      </div>
+      <button id="settingsCloseBtn" class="settings-close" type="button" aria-label="Cerrar opciones">×</button>
+    </div>
+
+    <div class="settings-block">
+      <h4>Theme de color</h4>
+      <p>Elegí una paleta y una intensidad. Toda la página adapta sus acentos, brillos, botones y detalles visuales.</p>
+
+      <div class="theme-grid" id="themeGrid">
+        <button type="button" class="theme-swatch" data-theme="orange" title="Naranja"></button>
+        <button type="button" class="theme-swatch" data-theme="blue" title="Azul"></button>
+        <button type="button" class="theme-swatch" data-theme="gray" title="Gris"></button>
+        <button type="button" class="theme-swatch" data-theme="gold" title="Dorado"></button>
+        <button type="button" class="theme-swatch" data-theme="red" title="Rojo"></button>
+        <button type="button" class="theme-swatch" data-theme="green" title="Verde"></button>
+        <button type="button" class="theme-swatch" data-theme="purple" title="Morado"></button>
+        <button type="button" class="theme-swatch" data-theme="white" title="Más blanco"></button>
+        <button type="button" class="theme-swatch" data-theme="black" title="Más negro"></button>
+      </div>
+
+      <label class="intensity-label" for="themeIntensity">
+        Intensidad
+        <span id="themeIntensityLabel">medio</span>
+      </label>
+      <input id="themeIntensity" class="intensity-range" type="range" min="0" max="4" step="1" value="2" />
+
+      <div class="palette-preview" id="palettePreview" aria-hidden="true"></div>
+    </div>
+
+    <div class="settings-block">
+      <h4>Progreso</h4>
+      <p>Reinicia tiempo acumulado, racha, exámenes, estadísticas y última actividad. No borra tus apuntes ni vocabulario.</p>
+      <button id="resetProgressBtn" class="danger-btn full-btn" type="button">Reiniciar contador de progreso</button>
+    </div>
+  </aside>
 
   <!-- DASHBOARD PRINCIPAL -->
   <div id="dashboardView">
@@ -561,6 +607,6 @@
     </main>
   </div>
 
-  <script src="app.js?v=hourglass-timer-v10"></script>
+  <script src="app.js?v=theme-options-v12"></script>
 </body>
 </html>
