@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>English Trainer IELTS | Inglés desde Español</title>
   <meta name="description" content="Entrenador de inglés desde español con tiempos verbales, writing IELTS, recursos, timer, flashcards, vocabulario y progreso." />
-  <link rel="stylesheet" href="style.css?v=theme-shadow-v26" />
+  <link rel="stylesheet" href="style.css?v=v31-listening-audio-fix" />
 </head>
 
 <body>
@@ -83,6 +83,7 @@
       <a href="#tiempos" class="nav-link" data-dashboard-link>Tiempos</a>
       <a href="#writing" class="nav-link" data-dashboard-link>Writing</a>
       <a href="#practica-rapida" class="nav-link" data-dashboard-link>Práctica</a>
+      <a href="#listening" class="nav-link" data-dashboard-link>Listening</a>
       <a href="#examen" class="nav-link" data-dashboard-link>Examen</a>
 
       <span class="nav-divider"></span>
@@ -165,13 +166,13 @@
             <small>Meta sugerida: 10 horas</small>
           </article>
 
-          <article class="progress-card">
+          <article class="progress-card current-session-card">
             <div>
-              <strong id="grammarCountText">17</strong>
-              <span>Tiempos y condicionales</span>
+              <strong id="currentSessionText">0m</strong>
+              <span>Sesión actual</span>
             </div>
-            <div class="bar-track"><div class="bar-fill gray-fill" style="width:100%"></div></div>
-            <small>Mapa gramatical completo</small>
+            <div class="bar-track"><div id="currentSessionBar" class="bar-fill session-fill"></div></div>
+            <small>Tiempo activo usando la página. Se pausa si no hay interacción.</small>
           </article>
 
           <article class="progress-card">
@@ -378,21 +379,127 @@
         </div>
       </section>
 
+      <section id="listening" class="section reveal listening-section">
+        <div class="section-header listening-header">
+          <div>
+            <span class="eyebrow">IELTS Listening</span>
+            <h3>Listening practice · 80 lessons por dificultad</h3>
+            <p>
+              Practicá con consignas estilo IELTS: sentence completion, form completion, table completion,
+              matching, multiple choice, short answers, note completion, plan/map labelling y classification.
+            </p>
+          </div>
+          <div class="listening-top-actions">
+            <button id="newListeningBtn" class="secondary-btn" type="button">Nueva práctica</button>
+          </div>
+        </div>
+
+        <div class="listening-shell">
+          <aside class="listening-controls-card">
+            <div class="listening-control-title">
+              <span>Audio trainer</span>
+              <strong id="listeningMiniStatus">Ready</strong>
+            </div>
+
+            <div class="control-group">
+              <label for="listeningLevel">Dificultad IELTS</label>
+              <select id="listeningLevel" class="dark-select">
+                <option value="4-5">Band 4-5 · Foundation</option>
+                <option value="6" selected>Band 6 · Intermediate</option>
+                <option value="7">Band 7 · Upper intermediate</option>
+                <option value="8-9">Band 8-9 · Advanced</option>
+              </select>
+            </div>
+
+            <div class="control-group">
+              <label for="listeningLessonSelect">Lesson de Listening</label>
+              <select id="listeningLessonSelect" class="dark-select"></select>
+            </div>
+
+            <div class="control-group">
+              <label for="voiceSelect">Voz</label>
+              <select id="voiceSelect" class="dark-select">
+                <option value="female">Voz femenina</option>
+                <option value="male">Voz masculina</option>
+              </select>
+            </div>
+
+            <div class="control-grid">
+              <label class="range-control">
+                <span>Volumen</span>
+                <input id="listeningVolume" type="range" min="0" max="1" step="0.05" value="0.85" />
+              </label>
+              <label class="range-control">
+                <span>Velocidad / WPM</span>
+                <input id="listeningWpm" type="range" min="90" max="190" step="5" value="135" />
+                <em id="wpmValue" class="range-value">135 WPM</em>
+              </label>
+            </div>
+
+            <div class="audio-actions">
+              <button id="playListeningBtn" class="primary-btn" type="button">Play</button>
+              <button id="pauseListeningBtn" class="secondary-btn" type="button">Pausa</button>
+            </div>
+
+            <div class="listening-progress">
+              <div class="bar-track"><div id="listeningProgressBar" class="bar-fill"></div></div>
+              <span id="listeningStatus">Listo para escuchar</span>
+            </div>
+          </aside>
+
+          <article class="listening-task-card">
+            <div class="listening-task-head">
+              <span id="listeningType" class="level-pill">Sentence completion</span>
+              <strong id="listeningTitle">Listening lesson</strong>
+            </div>
+            <p id="listeningInstruction" class="listening-instruction">Complete the task using the instructions below.</p>
+            <div id="listeningQuestions" class="listening-questions"></div>
+            <div class="listening-check-actions">
+              <button id="checkListeningBtn" class="primary-btn" type="button">Corregir listening</button>
+              <button id="clearListeningBtn" class="ghost-btn" type="button">Limpiar respuestas</button>
+              <span id="listeningScore" class="listening-score"></span>
+            </div>
+          </article>
+        </div>
+
+        <div class="listening-accordions">
+          <details id="transcriptPanel" class="listening-details">
+            <summary>Transcript</summary>
+            <p id="listeningTranscript"></p>
+          </details>
+          <details id="answersPanel" class="listening-details">
+            <summary>Answers</summary>
+            <ol id="listeningAnswers"></ol>
+          </details>
+        </div>
+      </section>
+
       <section id="examen" class="section reveal">
         <div class="section-header">
           <div>
             <span class="eyebrow">Evaluación</span>
             <h3>Multiple choice · 10 preguntas</h3>
-            <p>Cada examen trae 10 preguntas. Podés cambiar entre 100 exámenes distintos.</p>
+            <p>Cada examen trae 10 preguntas. Elegí dificultad IELTS y cambiá entre 100 exámenes por nivel: 400 variantes en total.</p>
           </div>
           <button id="resetQuizBtn" class="secondary-btn" type="button">Reiniciar examen</button>
         </div>
 
         <div class="quiz-toolbar">
           <label>
+            Dificultad:
+            <select id="examDifficulty">
+              <option value="4-5">Band 4-5</option>
+              <option value="6" selected>Band 6</option>
+              <option value="7">Band 7</option>
+              <option value="8-9">Band 8-9</option>
+            </select>
+          </label>
+
+          <label>
             Examen:
             <select id="examSelector"></select>
           </label>
+
           <span id="quizProgress">0/10 respondidas</span>
         </div>
 
@@ -648,7 +755,6 @@
     })();
   </script>
 
-  <script src="app.js?v=theme-shadow-v26"></script>
+  <script src="app.js?v=v31-listening-audio-fix"></script>
 </body>
 </html>
-
