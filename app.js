@@ -35,7 +35,7 @@
         i = (i + 1) % frases.length;
         titulo.classList.remove("title-changing");
       }, 280);
-    }, 10000);
+    }, 5000);
   }
 
   if (document.readyState === "loading") {
