@@ -35,7 +35,7 @@
         i = (i + 1) % frases.length;
         titulo.classList.remove("title-changing");
       }, 280);
-    }, 5000);
+    }, 10000);
   }
 
   if (document.readyState === "loading") {
@@ -6636,4 +6636,33 @@ window.addEventListener("load", () => {
   window.addEventListener("load", () => {
     window.setTimeout(bootTimerMini, 80);
   });
+})();
+
+
+/* =========================================================
+   THEME BUTTON SHADOW V26
+   Fuerza repintado cuando cambia el theme para que sombras y botones
+   queden sincronizados con el color activo.
+========================================================= */
+(function themeButtonShadowV26() {
+  function repaintThemeShadows() {
+    document.documentElement.classList.add("theme-shadow-repaint");
+    window.setTimeout(() => {
+      document.documentElement.classList.remove("theme-shadow-repaint");
+    }, 60);
+  }
+
+  const originalApplyTheme = typeof applyTheme === "function" ? applyTheme : null;
+
+  if (originalApplyTheme && !window.__themeShadowV26Wrapped) {
+    window.__themeShadowV26Wrapped = true;
+
+    applyTheme = function applyThemeWithButtonShadowsV26(...args) {
+      const result = originalApplyTheme.apply(this, args);
+      repaintThemeShadows();
+      return result;
+    };
+  }
+
+  window.addEventListener("load", repaintThemeShadows);
 })();
