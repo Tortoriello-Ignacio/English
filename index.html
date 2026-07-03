@@ -5,11 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>English Trainer IELTS | Inglés desde Español</title>
   <meta name="description" content="Entrenador de inglés desde español con tiempos verbales, writing IELTS, recursos, timer, flashcards, vocabulario y progreso." />
-  <link rel="stylesheet" href="style.css?v=dynamic-title-v24" />
+  <link rel="stylesheet" href="style.css?v=timer-title-v25" />
 </head>
 
 <body>
   <!-- TIMER LATERAL -->
+  <div id="miniTimerBubble" class="mini-timer-bubble" aria-hidden="true">
+    <div class="mini-timer-orb">
+      <svg viewBox="0 0 100 100" class="mini-timer-svg" role="img" aria-label="Progreso del timer">
+        <circle class="mini-timer-base" cx="50" cy="50" r="47"></circle>
+        <path id="miniTimerEatenPath" class="mini-timer-eaten"></path>
+        <circle class="mini-timer-gloss" cx="50" cy="50" r="39"></circle>
+      </svg>
+    </div>
+    <span id="miniTimerDisplay">00:00</span>
+  </div>
+
   <button id="timerToggleBtn" class="timer-toggle" type="button" aria-label="Abrir o cerrar timer">Timer</button>
 
   <aside id="timerPanel" class="timer-panel" aria-label="Focus timer">
@@ -27,9 +38,12 @@
       </div>
 
       <div class="circle-timer-orb" aria-hidden="true">
-        <div class="circle-timer-face">
-          <span class="circle-inner-glow"></span>
-        </div>
+        <svg viewBox="0 0 100 100" class="circle-timer-svg" role="img" aria-label="Progreso circular del timer">
+          <circle class="circle-timer-base" cx="50" cy="50" r="48"></circle>
+          <path id="timerEatenPath" class="circle-timer-eaten"></path>
+          <circle class="circle-timer-gloss" cx="50" cy="50" r="40"></circle>
+        </svg>
+        <span class="circle-inner-glow"></span>
       </div>
 
       <p class="circle-timer-caption">El relleno se consume desde arriba.</p>
@@ -585,6 +599,55 @@
     </main>
   </div>
 
-  <script src="app.js?v=dynamic-title-v24"></script>
+  
+  <script>
+    (function () {
+      const frases = [
+        "Entrená inglés con claridad, fluidez y precisión",
+        "Domina inglés con foco en escritura y estructura",
+        "Tu inglés más sólido: precisión, escritura y foco",
+        "Aprendé inglés paso a paso, con método y claridad",
+        "Entrenamiento de inglés: estructura, escritura y progreso",
+        "Inglés claro y preciso, pensado para tu examen IELTS",
+        "Convertí tu práctica en inglés seguro y estructurado",
+        "Entrená inglés con foco en resultados y escritura",
+        "Tu inglés listo para IELTS: claridad y precisión.",
+        "Escribí mejor en inglés: estructura y confianza",
+        "Entrená inglés con precisión y escritura efectiva",
+        "Domina inglés con foco en claridad y resultados"
+      ];
+
+      let i = 1;
+      let intervalo = null;
+
+      function iniciarTituloDinamico() {
+        const titulo = document.getElementById("titulo-dinamico");
+        if (!titulo || titulo.dataset.dynamicTitleReady === "true") return;
+
+        titulo.dataset.dynamicTitleReady = "true";
+        titulo.innerText = frases[0];
+
+        intervalo = window.setInterval(function () {
+          titulo.classList.add("title-changing");
+
+          window.setTimeout(function () {
+            titulo.innerText = frases[i];
+            i = (i + 1) % frases.length;
+            titulo.classList.remove("title-changing");
+          }, 280);
+        }, 10000);
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", iniciarTituloDinamico);
+      } else {
+        iniciarTituloDinamico();
+      }
+
+      window.addEventListener("load", iniciarTituloDinamico);
+    })();
+  </script>
+
+  <script src="app.js?v=timer-title-v25"></script>
 </body>
 </html>

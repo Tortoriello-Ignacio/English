@@ -1,3 +1,52 @@
+
+/* =========================================================
+   DYNAMIC TITLE BOOT V25 - runs before app code
+========================================================= */
+(function dynamicTitleBootV25() {
+  const frases = [
+    "Entrená inglés con claridad, fluidez y precisión",
+    "Domina inglés con foco en escritura y estructura",
+    "Tu inglés más sólido: precisión, escritura y foco",
+    "Aprendé inglés paso a paso, con método y claridad",
+    "Entrenamiento de inglés: estructura, escritura y progreso",
+    "Inglés claro y preciso, pensado para tu examen IELTS",
+    "Convertí tu práctica en inglés seguro y estructurado",
+    "Entrená inglés con foco en resultados y escritura",
+    "Tu inglés listo para IELTS: claridad y precisión.",
+    "Escribí mejor en inglés: estructura y confianza",
+    "Entrená inglés con precisión y escritura efectiva",
+    "Domina inglés con foco en claridad y resultados"
+  ];
+
+  let i = 1;
+
+  function init() {
+    const titulo = document.getElementById("titulo-dinamico");
+    if (!titulo || titulo.dataset.dynamicTitleReady === "true") return;
+
+    titulo.dataset.dynamicTitleReady = "true";
+    titulo.innerText = frases[0];
+
+    window.setInterval(() => {
+      titulo.classList.add("title-changing");
+
+      window.setTimeout(() => {
+        titulo.innerText = frases[i];
+        i = (i + 1) % frases.length;
+        titulo.classList.remove("title-changing");
+      }, 280);
+    }, 10000);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+
+  window.addEventListener("load", init);
+})();
+
 /* =========================================================
    ENGLISH TRAINER IELTS - APP.JS
    v8 full features: progreso, niveles, vocabulario, flashcards,
@@ -6397,55 +6446,194 @@ window.addEventListener("load", () => {
 
 
 /* =========================================================
-   DYNAMIC HERO TITLE V24
-   Cambia el título principal cada 10 segundos.
+   TIMER MINI + SVG SECTOR V25
+   Main timer and mini timer share exact progress sector.
+   The consumed sector begins at 12 o'clock.
 ========================================================= */
-
-(function dynamicHeroTitleV24() {
-  const frases = [
-    "Entrená inglés con claridad, fluidez y precisión",
-    "Domina inglés con foco en escritura y estructura",
-    "Tu inglés más sólido: precisión, escritura y foco",
-    "Aprendé inglés paso a paso, con método y claridad",
-    "Entrenamiento de inglés: estructura, escritura y progreso",
-    "Inglés claro y preciso, pensado para tu examen IELTS",
-    "Convertí tu práctica en inglés seguro y estructurado",
-    "Entrená inglés con foco en resultados y escritura",
-    "Tu inglés listo para IELTS: claridad y precisión.",
-    "Escribí mejor en inglés: estructura y confianza",
-    "Entrená inglés con precisión y escritura efectiva",
-    "Domina inglés con foco en claridad y resultados"
-  ];
-
-  let i = 1;
-  const INTERVALO_TITULO_MS = 10000;
-
-  function cambiarTitulo() {
-    const titulo = document.getElementById("titulo-dinamico");
-    if (!titulo) return;
-
-    titulo.classList.add("title-changing");
-
-    window.setTimeout(() => {
-      titulo.innerText = frases[i];
-      i = (i + 1) % frases.length;
-      titulo.classList.remove("title-changing");
-    }, 280);
+(function timerMiniAndSectorV25() {
+  function getRoot() {
+    return document.getElementById("timerProgressRing") || document.getElementById("timerVisual");
   }
 
-  function iniciarTituloDinamico() {
-    const titulo = document.getElementById("titulo-dinamico");
-    if (!titulo || titulo.dataset.dynamicTitleReady === "true") return;
+  function polarToCartesian(cx, cy, r, angleDeg) {
+    const angleRad = (angleDeg - 90) * Math.PI / 180;
+    return {
+      x: cx + (r * Math.cos(angleRad)),
+      y: cy + (r * Math.sin(angleRad))
+    };
+  }
 
-    titulo.dataset.dynamicTitleReady = "true";
-    titulo.innerText = frases[0];
+  function describeSector(cx, cy, r, angleDeg) {
+    const angle = Math.max(0, Math.min(359.999, Number(angleDeg) || 0));
 
-    window.setInterval(cambiarTitulo, INTERVALO_TITULO_MS);
+    if (angle <= 0.001) return "";
+
+    if (angle >= 359.5) {
+      return [
+        `M ${cx} ${cy - r}`,
+        `A ${r} ${r} 0 1 1 ${cx - 0.01} ${cy - r}`,
+        `A ${r} ${r} 0 1 1 ${cx} ${cy - r}`,
+        "Z"
+      ].join(" ");
+    }
+
+    const start = polarToCartesian(cx, cy, r, 0);
+    const end = polarToCartesian(cx, cy, r, angle);
+    const largeArcFlag = angle > 180 ? 1 : 0;
+
+    return [
+      `M ${cx} ${cy}`,
+      `L ${start.x} ${start.y}`,
+      `A ${r} ${r} 0 ${largeArcFlag} 1 ${end.x} ${end.y}`,
+      "Z"
+    ].join(" ");
+  }
+
+  function ensureSvgTimerMarkup() {
+    const root = getRoot();
+    if (!root) return;
+
+    root.id = "timerProgressRing";
+    root.classList.remove("water-hourglass", "digital-timer-card", "hourglass-timer-card");
+    root.classList.add("circle-timer-card");
+
+    if (root.querySelector("#timerEatenPath")) return;
+
+    root.innerHTML = `
+      <div class="circle-timer-time">
+        <span id="timerDisplay" class="timer-display">00:00</span>
+        <small>sesión de foco</small>
+      </div>
+
+      <div class="circle-timer-orb" aria-hidden="true">
+        <svg viewBox="0 0 100 100" class="circle-timer-svg" role="img" aria-label="Progreso circular del timer">
+          <circle class="circle-timer-base" cx="50" cy="50" r="48"></circle>
+          <path id="timerEatenPath" class="circle-timer-eaten"></path>
+          <circle class="circle-timer-gloss" cx="50" cy="50" r="40"></circle>
+        </svg>
+        <span class="circle-inner-glow"></span>
+      </div>
+
+      <p class="circle-timer-caption">El relleno se consume desde arriba.</p>
+    `;
+  }
+
+  function ensureMiniTimerMarkup() {
+    if (document.getElementById("miniTimerBubble")) return;
+
+    const button = document.getElementById("timerToggleBtn");
+    if (!button) return;
+
+    const mini = document.createElement("div");
+    mini.id = "miniTimerBubble";
+    mini.className = "mini-timer-bubble";
+    mini.setAttribute("aria-hidden", "true");
+    mini.innerHTML = `
+      <div class="mini-timer-orb">
+        <svg viewBox="0 0 100 100" class="mini-timer-svg" role="img" aria-label="Progreso del timer">
+          <circle class="mini-timer-base" cx="50" cy="50" r="47"></circle>
+          <path id="miniTimerEatenPath" class="mini-timer-eaten"></path>
+          <circle class="mini-timer-gloss" cx="50" cy="50" r="39"></circle>
+        </svg>
+      </div>
+      <span id="miniTimerDisplay">00:00</span>
+    `;
+
+    button.insertAdjacentElement("beforebegin", mini);
+  }
+
+  function isTimerPanelOpen() {
+    const panel = document.getElementById("timerPanel");
+    return !!panel && panel.classList.contains("open");
+  }
+
+  function updateMiniVisibility() {
+    const mini = document.getElementById("miniTimerBubble");
+    if (!mini) return;
+
+    const shouldShow = !!timerInitialSeconds && !isTimerPanelOpen();
+
+    mini.classList.toggle("visible", shouldShow);
+    mini.setAttribute("aria-hidden", shouldShow ? "false" : "true");
+    document.body.classList.toggle("timer-panel-open", isTimerPanelOpen());
+  }
+
+  function updateTimerUIV25() {
+    ensureSvgTimerMarkup();
+    ensureMiniTimerMarkup();
+
+    const remaining = Math.max(Number(timerSecondsLeft) || 0, 0);
+    const minutes = Math.floor(remaining / 60);
+    const seconds = remaining % 60;
+    const timeText = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+
+    const display = document.getElementById("timerDisplay");
+    const miniDisplay = document.getElementById("miniTimerDisplay");
+
+    if (display) display.textContent = timeText;
+    if (miniDisplay) miniDisplay.textContent = timeText;
+
+    const progress = timerInitialSeconds
+      ? (timerInitialSeconds - remaining) / timerInitialSeconds
+      : 0;
+
+    const elapsedDegrees = Math.max(0, Math.min(360, progress * 360));
+    const sectorPath = describeSector(50, 50, 50, elapsedDegrees);
+
+    const mainPath = document.getElementById("timerEatenPath");
+    const miniPath = document.getElementById("miniTimerEatenPath");
+
+    if (mainPath) mainPath.setAttribute("d", sectorPath);
+    if (miniPath) miniPath.setAttribute("d", sectorPath);
+
+    const root = getRoot();
+    if (root) {
+      root.style.setProperty("--timer-elapsed", `${elapsedDegrees}deg`);
+      root.style.setProperty("--timer-progress-ratio", String(progress));
+    }
+
+    updateMiniVisibility();
+  }
+
+  updateTimerUI = updateTimerUIV25;
+
+  function afterTimerToggle() {
+    window.setTimeout(() => {
+      updateTimerUIV25();
+      updateMiniVisibility();
+    }, 0);
+  }
+
+  function bootTimerMini() {
+    ensureSvgTimerMarkup();
+    ensureMiniTimerMarkup();
+    updateTimerUIV25();
+
+    const toggleBtn = document.getElementById("timerToggleBtn");
+    if (toggleBtn && toggleBtn.dataset.timerMiniV25 !== "true") {
+      toggleBtn.dataset.timerMiniV25 = "true";
+      toggleBtn.addEventListener("click", afterTimerToggle, true);
+      toggleBtn.addEventListener("click", afterTimerToggle, false);
+    }
+
+    const panel = document.getElementById("timerPanel");
+    if (panel && panel.dataset.timerMiniObserverV25 !== "true") {
+      panel.dataset.timerMiniObserverV25 = "true";
+      const observer = new MutationObserver(() => {
+        updateTimerUIV25();
+        updateMiniVisibility();
+      });
+      observer.observe(panel, { attributes: true, attributeFilter: ["class"] });
+    }
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", iniciarTituloDinamico);
+    document.addEventListener("DOMContentLoaded", bootTimerMini);
   } else {
-    iniciarTituloDinamico();
+    bootTimerMini();
   }
+
+  window.addEventListener("load", () => {
+    window.setTimeout(bootTimerMini, 80);
+  });
 })();
