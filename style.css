@@ -5734,3 +5734,4265 @@ a.ghost-btn {
 #listeningProgressBar {
   transition: width 0.18s linear !important;
 }
+
+
+/* =========================================================
+   V32 RESOURCE MENU + FLASHVOICE + STABLE SESSION
+========================================================= */
+
+.resource-menu {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  overflow: visible;
+}
+
+.resource-menu-toggle {
+  min-height: 42px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(var(--accent-rgb), .22);
+  background: linear-gradient(145deg, rgba(var(--accent-rgb), .14), rgba(255,255,255,.035));
+  color: var(--accent-soft);
+  font-weight: 950;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(var(--accent-rgb), .13), inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+.resource-menu.open .resource-menu-toggle,
+.resource-menu-toggle:hover {
+  border-color: rgba(var(--accent-rgb), .38);
+  box-shadow: 0 16px 40px rgba(var(--accent-rgb), .20), inset 0 1px 0 rgba(255,255,255,.12);
+}
+
+.resource-menu-caret {
+  font-size: .9rem;
+  transition: transform .18s ease;
+}
+
+.resource-menu.open .resource-menu-caret {
+  transform: rotate(180deg);
+}
+
+.resource-menu-panel {
+  position: absolute;
+  top: calc(100% + 14px);
+  right: 0;
+  width: min(520px, calc(100vw - 30px));
+  padding: 20px;
+  border-radius: 26px;
+  background: linear-gradient(145deg, rgba(30, 36, 48, .98), rgba(17, 22, 33, .98));
+  border: 1px solid rgba(var(--accent-rgb), .18);
+  box-shadow: 0 28px 80px rgba(0,0,0,.48), 0 0 38px rgba(var(--accent-rgb), .08), inset 0 1px 0 rgba(255,255,255,.065);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  opacity: 0;
+  transform: translateY(-8px) scale(.98);
+  pointer-events: none;
+  visibility: hidden;
+  z-index: 2500;
+}
+
+.resource-menu.open .resource-menu-panel {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.resource-menu-item {
+  width: 100%;
+  min-height: 72px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  align-items: center;
+  text-align: left;
+  gap: 14px;
+  color: var(--text);
+  background: rgba(255,255,255,.035);
+  border: 1px solid rgba(255,255,255,.065);
+  cursor: pointer;
+}
+
+.resource-menu-item:hover,
+.resource-menu-item.active {
+  background: rgba(var(--accent-rgb), .12) !important;
+  border-color: rgba(var(--accent-rgb), .24) !important;
+  box-shadow: 0 14px 32px rgba(var(--accent-rgb), .12), inset 0 1px 0 rgba(255,255,255,.08) !important;
+}
+
+.resource-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: rgba(var(--accent-rgb), .14);
+  border: 1px solid rgba(var(--accent-rgb), .16);
+  font-size: 1.15rem;
+}
+
+.resource-menu-item strong {
+  display: block;
+  color: var(--text);
+  font-size: .98rem;
+  line-height: 1.15;
+}
+
+.resource-menu-item small {
+  display: block;
+  color: var(--muted);
+  margin-top: 4px;
+  font-size: .82rem;
+  line-height: 1.35;
+}
+
+.flashcard-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+#knownCardBtn,
+#hardCardBtn,
+#repeatCardBtn {
+  display: none !important;
+}
+
+.flashvoice-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.flashvoice-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, .65fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.flashvoice-card,
+.flashvoice-transcript-box {
+  border-radius: 26px;
+  padding: clamp(20px, 2.4vw, 30px);
+  border: 1px solid rgba(var(--accent-rgb), .14);
+  background: linear-gradient(145deg, rgba(255,255,255,.06), rgba(255,255,255,.028));
+  box-shadow: 0 20px 46px rgba(0,0,0,.26), 0 0 30px rgba(var(--accent-rgb), .045), inset 0 1px 0 rgba(255,255,255,.055);
+}
+
+.flashvoice-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.flashvoice-head strong {
+  font-size: clamp(1.35rem, 2vw, 2rem);
+  letter-spacing: -.035em;
+}
+
+.flashvoice-help {
+  color: var(--muted);
+  line-height: 1.65;
+  margin-bottom: 18px;
+}
+
+.flashvoice-controls,
+.flashvoice-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 14px 0;
+}
+
+.flashvoice-ranges {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 18px 0;
+}
+
+.flashvoice-ranges label {
+  color: var(--muted);
+  font-weight: 900;
+  display: grid;
+  gap: 8px;
+}
+
+.flashvoice-ranges input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+#flashvoiceWpmValue {
+  color: var(--accent-soft);
+  font-style: normal;
+  font-weight: 950;
+}
+
+#flashvoiceAnswer {
+  width: 100%;
+  min-height: 210px;
+  resize: vertical;
+}
+
+.flashvoice-transcript-box span {
+  display: inline-flex;
+  color: var(--accent-soft);
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-size: .76rem;
+  margin-bottom: 12px;
+}
+
+.flashvoice-transcript-box p {
+  color: var(--text);
+  line-height: 1.7;
+}
+
+.flashvoice-transcript-box em {
+  display: block;
+  color: var(--muted);
+  line-height: 1.65;
+  margin-top: 14px;
+}
+
+#currentSessionText {
+  font-variant-numeric: tabular-nums;
+  min-width: 4ch;
+  display: inline-block;
+  backface-visibility: hidden;
+}
+
+#currentSessionBar {
+  transition: width .35s linear !important;
+}
+
+#timerPanel.open {
+  z-index: 1800;
+}
+
+@media (max-width: 1120px) {
+  .resource-menu-panel {
+    right: auto;
+    left: 0;
+  }
+
+  .flashvoice-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .resource-menu-panel {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    top: 92px;
+    width: auto;
+    max-height: calc(100vh - 120px);
+    overflow: auto;
+  }
+
+  .resource-menu-item {
+    grid-template-columns: 46px 1fr;
+  }
+
+  .flashvoice-ranges {
+    grid-template-columns: 1fr;
+  }
+
+  .flashvoice-controls,
+  .flashvoice-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* =========================================================
+   V33 MINIMAL CONTRAST + ESTUDIO MENU + FLASHVOICE POLISH
+========================================================= */
+
+:root {
+  --soft-shadow: 0 14px 34px rgba(0, 0, 0, .22);
+  --soft-shadow-hover: 0 18px 42px rgba(0, 0, 0, .26);
+}
+
+/* Suavizado general */
+body {
+  letter-spacing: -.012em;
+}
+
+.section,
+.card,
+.progress-card,
+.tense-card,
+.writing-card,
+.quick-practice-card,
+.listening-controls-card,
+.listening-task-card,
+.listening-details,
+.flashvoice-card,
+.flashvoice-transcript-box,
+.resource-menu-panel,
+.settings-panel,
+.timer-panel {
+  box-shadow: var(--soft-shadow) !important;
+  border-color: rgba(255,255,255,.075) !important;
+}
+
+.section {
+  border-radius: 24px !important;
+}
+
+button,
+.nav-link,
+.resource-menu-toggle,
+.resource-menu-item,
+.primary-btn,
+.secondary-btn,
+.ghost-btn,
+.danger-btn {
+  box-shadow: 0 8px 20px rgba(0,0,0,.14) !important;
+  font-size: .86rem !important;
+  letter-spacing: -.015em;
+}
+
+button:hover,
+.nav-link:hover,
+.resource-menu-toggle:hover,
+.resource-menu-item:hover,
+.primary-btn:hover,
+.secondary-btn:hover,
+.ghost-btn:hover {
+  box-shadow: 0 12px 26px rgba(0,0,0,.20) !important;
+}
+
+p,
+li,
+label,
+small,
+textarea,
+input,
+select {
+  font-size: .92rem;
+}
+
+h2,
+.hero-copy h2,
+.hero-copy .dynamic-hero-title {
+  font-size: clamp(2.35rem, 4.8vw, 5.35rem) !important;
+}
+
+h3 {
+  font-size: clamp(1.45rem, 2.6vw, 2.35rem) !important;
+}
+
+/* Navbar más limpio y cómodo */
+.top-navbar {
+  padding: 10px clamp(12px, 2vw, 28px) 14px !important;
+  gap: clamp(10px, 1.6vw, 22px) !important;
+}
+
+.top-nav {
+  gap: 8px !important;
+  padding: 8px 4px 10px !important;
+  flex-wrap: nowrap !important;
+  min-width: 0;
+}
+
+.nav-link {
+  min-height: 38px !important;
+  padding: 0 15px !important;
+  white-space: nowrap;
+  font-size: .84rem !important;
+}
+
+.resource-menu-toggle {
+  min-height: 38px !important;
+  padding: 0 16px !important;
+  border-radius: 999px;
+  background: rgba(var(--accent-rgb), .10) !important;
+}
+
+.resource-menu-panel {
+  width: min(540px, calc(100vw - 30px));
+  padding: 14px;
+  border-radius: 22px;
+  gap: 8px;
+  background:
+    linear-gradient(145deg, rgba(28, 31, 38, .985), rgba(15, 18, 25, .985)) !important;
+}
+
+.resource-menu-item,
+.study-menu-item {
+  min-height: 62px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  grid-template-columns: 44px 1fr;
+  background: rgba(255,255,255,.028) !important;
+}
+
+.resource-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  font-size: 1rem;
+}
+
+.resource-menu-item strong {
+  font-size: .93rem;
+}
+
+.resource-menu-item small {
+  font-size: .76rem;
+}
+
+/* Flashvoice: simetría y orden */
+#tab-flashvoice {
+  max-width: 1180px;
+  margin-inline: auto;
+}
+
+#tab-flashvoice .section-header {
+  align-items: end;
+  gap: 20px;
+}
+
+.flashvoice-toolbar {
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.flashvoice-toolbar .compact-select,
+#flashvoiceSource,
+#flashvoiceVoice {
+  min-width: 170px;
+  min-height: 42px;
+  border-radius: 14px;
+}
+
+.flashvoice-layout {
+  grid-template-columns: 1fr !important;
+  max-width: 980px;
+  margin: 0 auto;
+  gap: 16px;
+}
+
+.flashvoice-card {
+  display: grid;
+  gap: 16px;
+  padding: clamp(22px, 3vw, 34px) !important;
+  border-radius: 24px !important;
+}
+
+.flashvoice-head {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 12px 18px;
+  margin: 0 !important;
+}
+
+.flashvoice-head strong {
+  justify-self: end;
+  font-size: clamp(1.25rem, 2.2vw, 1.75rem) !important;
+  line-height: 1.1;
+}
+
+.flashvoice-help {
+  margin: 0 !important;
+  color: var(--muted);
+}
+
+.flashvoice-controls {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0 !important;
+}
+
+.flashvoice-ranges {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 0 !important;
+}
+
+.flashvoice-ranges label {
+  gap: 7px;
+}
+
+.flashvoice-ranges input[type="range"] {
+  min-height: 28px;
+}
+
+#flashvoiceAnswer {
+  min-height: 190px;
+  border-radius: 18px;
+  line-height: 1.65;
+}
+
+.flashvoice-actions {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 0 !important;
+}
+
+.flashvoice-transcript-box {
+  max-width: 980px;
+  margin: 0 auto;
+  width: 100%;
+  border-radius: 22px !important;
+}
+
+.flashvoice-transcript-box p,
+.flashvoice-transcript-box em,
+#flashvoiceFeedback p {
+  white-space: pre-line;
+}
+
+.quick-feedback {
+  border-radius: 18px;
+}
+
+/* Menos sombra en tarjetas activas */
+.tense-card:hover,
+.tense-card.active,
+.flashcard,
+.quick-practice-card:focus-within,
+.writing-card:focus-within,
+.notes-editor:focus-within,
+.vocab-editor:focus-within {
+  box-shadow: 0 14px 32px rgba(0,0,0,.20) !important;
+}
+
+/* Responsive navbar */
+@media (max-width: 1260px) {
+  .top-navbar {
+    align-items: center !important;
+  }
+
+  .top-nav {
+    flex: 1 1 auto;
+    overflow-x: auto !important;
+    justify-content: flex-end !important;
+  }
+}
+
+@media (max-width: 920px) {
+  .top-navbar {
+    align-items: flex-start !important;
+  }
+
+  .top-nav {
+    order: 3;
+    flex-basis: 100%;
+    justify-content: flex-start !important;
+    padding-bottom: 12px !important;
+  }
+
+  .resource-menu-panel {
+    right: auto;
+    left: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .flashvoice-controls,
+  .flashvoice-ranges,
+  .flashvoice-actions {
+    grid-template-columns: 1fr !important;
+  }
+
+  .flashvoice-head {
+    grid-template-columns: 1fr;
+  }
+
+  .flashvoice-head strong {
+    justify-self: start;
+  }
+
+  .resource-menu-panel {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    top: 88px;
+    width: auto;
+    max-height: calc(100vh - 110px);
+    overflow: auto;
+  }
+}
+
+
+/* =========================================================
+   V34 CALENDAR + MISC MENU + NAV WIDTH
+========================================================= */
+
+/* Navbar: más ancho, simétrico y preparado para Estudio + ... */
+.top-navbar {
+  padding-inline: clamp(16px, 2.4vw, 42px) !important;
+}
+
+.top-nav {
+  gap: 9px !important;
+  justify-content: flex-end !important;
+  max-width: none !important;
+}
+
+.nav-link,
+.resource-menu-toggle,
+.misc-menu-toggle {
+  min-width: max-content;
+}
+
+.misc-menu {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  overflow: visible;
+}
+
+.misc-menu-toggle {
+  min-height: 38px;
+  padding: 0 15px;
+  border-radius: 999px;
+  border: 1px solid rgba(var(--accent-rgb), .18);
+  background: rgba(255,255,255,.035);
+  color: var(--text);
+  font-weight: 950;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.misc-menu-toggle:hover,
+.misc-menu.open .misc-menu-toggle {
+  background: rgba(var(--accent-rgb), .10);
+  border-color: rgba(var(--accent-rgb), .26);
+  color: var(--accent-soft);
+}
+
+.misc-menu-caret {
+  font-size: .82rem;
+  transition: transform .18s ease;
+}
+
+.misc-menu.open .misc-menu-caret {
+  transform: rotate(180deg);
+}
+
+.misc-menu-panel {
+  position: absolute;
+  top: calc(100% + 14px);
+  right: 0;
+  width: min(540px, calc(100vw - 30px));
+  padding: 14px;
+  border-radius: 22px;
+  background: linear-gradient(145deg, rgba(28, 31, 38, .985), rgba(15, 18, 25, .985));
+  border: 1px solid rgba(var(--accent-rgb), .15);
+  box-shadow: 0 18px 48px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.055);
+  display: grid;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(-8px) scale(.98);
+  pointer-events: none;
+  visibility: hidden;
+  z-index: 2600;
+}
+
+.misc-menu.open .misc-menu-panel {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.misc-menu-item {
+  width: 100%;
+  min-height: 60px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.065);
+  background: rgba(255,255,255,.028);
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  align-items: center;
+  gap: 12px;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.misc-menu-item:hover {
+  background: rgba(var(--accent-rgb), .10);
+  border-color: rgba(var(--accent-rgb), .20);
+}
+
+.misc-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: rgba(var(--accent-rgb), .12);
+  border: 1px solid rgba(var(--accent-rgb), .13);
+  font-weight: 950;
+}
+
+.misc-menu-item strong {
+  display: block;
+  font-size: .9rem;
+}
+
+.misc-menu-item small {
+  display: block;
+  color: var(--muted);
+  font-size: .75rem;
+  margin-top: 3px;
+}
+
+/* Calendar */
+.calendar-section {
+  max-width: 1180px;
+  margin-inline: auto;
+}
+
+.calendar-header {
+  align-items: end;
+}
+
+.calendar-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.calendar-summary > div,
+.selected-day-card,
+.exam-form,
+.profile-card,
+.badge-card,
+.community-grid article,
+.policy-card,
+.plans-grid article,
+.support-card {
+  border: 1px solid rgba(255,255,255,.075);
+  background: linear-gradient(145deg, rgba(255,255,255,.052), rgba(255,255,255,.024));
+  border-radius: 22px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.18);
+}
+
+.calendar-summary > div {
+  padding: 16px;
+}
+
+.calendar-summary strong {
+  display: block;
+  font-size: 1.45rem;
+  color: var(--text);
+}
+
+.calendar-summary span {
+  color: var(--muted);
+  font-size: .8rem;
+  font-weight: 850;
+}
+
+.calendar-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(300px, .75fr);
+  gap: 18px;
+}
+
+.calendar-card {
+  border: 1px solid rgba(255,255,255,.075);
+  background: rgba(255,255,255,.025);
+  border-radius: 24px;
+  padding: clamp(18px, 2vw, 28px);
+  box-shadow: 0 12px 30px rgba(0,0,0,.18);
+}
+
+.calendar-toolbar {
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.calendar-toolbar > div {
+  text-align: center;
+}
+
+.calendar-toolbar strong {
+  display: block;
+  font-size: 1.2rem;
+  color: var(--text);
+}
+
+.calendar-toolbar span {
+  display: block;
+  color: var(--muted);
+  font-size: .78rem;
+}
+
+.calendar-weekdays,
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.calendar-weekdays {
+  margin-bottom: 8px;
+}
+
+.calendar-weekdays span {
+  text-align: center;
+  color: var(--muted);
+  font-size: .74rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.calendar-day {
+  min-height: 88px;
+  padding: 10px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.065);
+  background: rgba(255,255,255,.028);
+  color: var(--text);
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.calendar-day:hover {
+  border-color: rgba(var(--accent-rgb), .22);
+  background: rgba(var(--accent-rgb), .07);
+}
+
+.calendar-day strong {
+  font-size: .96rem;
+}
+
+.calendar-day small {
+  color: var(--accent-soft);
+  font-size: .72rem;
+  font-weight: 900;
+}
+
+.calendar-day em {
+  justify-self: end;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: rgba(var(--accent-rgb), .22);
+  color: var(--text);
+  font-size: .68rem;
+  font-style: normal;
+  font-weight: 950;
+}
+
+.calendar-day.today {
+  outline: 1px solid rgba(var(--accent-rgb), .34);
+}
+
+.calendar-day.selected {
+  background: rgba(var(--accent-rgb), .13);
+  border-color: rgba(var(--accent-rgb), .32);
+}
+
+.calendar-day.studied {
+  box-shadow: inset 0 -3px 0 rgba(var(--accent-rgb), .32) !important;
+}
+
+.calendar-empty {
+  opacity: .22;
+  pointer-events: none;
+}
+
+.calendar-side {
+  display: grid;
+  gap: 16px;
+}
+
+.selected-day-card,
+.exam-form {
+  padding: 20px;
+}
+
+.selected-day-card h4 {
+  margin: 10px 0 8px;
+  font-size: 1.1rem;
+}
+
+.selected-day-card p,
+.exam-form label,
+.exam-event span {
+  color: var(--muted);
+}
+
+.selected-day-events {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.exam-event {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.035);
+  border: 1px solid rgba(255,255,255,.065);
+}
+
+.exam-event strong,
+.exam-event span {
+  display: block;
+}
+
+.exam-form {
+  display: grid;
+  gap: 12px;
+}
+
+.exam-form label,
+.profile-card label,
+.support-card label {
+  display: grid;
+  gap: 7px;
+  font-weight: 850;
+}
+
+.exam-form input,
+.exam-form select,
+.profile-card input,
+.profile-card select,
+.support-card select,
+.support-card textarea {
+  width: 100%;
+  min-height: 44px;
+  border-radius: 14px;
+}
+
+/* Misc sections */
+.misc-section {
+  max-width: 1180px;
+  margin-inline: auto;
+}
+
+.profile-grid,
+.community-grid,
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.profile-card,
+.policy-card,
+.support-card {
+  padding: 22px;
+}
+
+.profile-card {
+  display: grid;
+  gap: 14px;
+}
+
+.profile-status h4 {
+  margin: 10px 0;
+}
+
+.mini-metrics,
+.badges-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.mini-metrics div {
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.035);
+  border: 1px solid rgba(255,255,255,.06);
+}
+
+.mini-metrics strong {
+  display: block;
+  font-size: 1.25rem;
+}
+
+.mini-metrics span {
+  color: var(--muted);
+  font-size: .76rem;
+}
+
+.badge-card {
+  padding: 18px;
+  opacity: .72;
+}
+
+.badge-card.unlocked {
+  opacity: 1;
+  border-color: rgba(var(--accent-rgb), .22);
+  background: rgba(var(--accent-rgb), .065);
+}
+
+.badge-card span {
+  font-size: 1.4rem;
+}
+
+.badge-card strong {
+  display: block;
+  margin: 10px 0 6px;
+}
+
+.badge-card p {
+  color: var(--muted);
+}
+
+.badge-card small {
+  color: var(--accent-soft);
+  font-weight: 900;
+}
+
+.community-grid article,
+.plans-grid article {
+  padding: 20px;
+}
+
+.plans-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.plans-grid article span {
+  color: var(--accent-soft);
+  font-weight: 950;
+  text-transform: uppercase;
+  font-size: .72rem;
+  letter-spacing: .08em;
+}
+
+.plans-grid article strong,
+.community-grid article strong {
+  display: block;
+  margin: 8px 0;
+  font-size: 1.1rem;
+}
+
+.faq-list {
+  display: grid;
+  gap: 10px;
+}
+
+.faq-list details {
+  padding: 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.075);
+  background: rgba(255,255,255,.028);
+}
+
+.faq-list summary {
+  cursor: pointer;
+  font-weight: 950;
+}
+
+.faq-list p,
+.policy-card p,
+.community-grid p,
+.plans-grid p {
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.support-card {
+  display: grid;
+  gap: 14px;
+}
+
+.support-card textarea {
+  min-height: 180px;
+}
+
+#supportStatus {
+  color: var(--accent-soft);
+  font-weight: 850;
+}
+
+/* Hide sections patched by JS */
+.dashboard-section-hidden {
+  display: none !important;
+}
+
+@media (max-width: 1180px) {
+  .top-nav {
+    overflow-x: auto !important;
+    justify-content: flex-start !important;
+  }
+
+  .misc-menu-panel {
+    right: auto;
+    left: 0;
+  }
+
+  .calendar-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .calendar-weekdays,
+  .calendar-grid {
+    gap: 5px;
+  }
+
+  .calendar-day {
+    min-height: 72px;
+    border-radius: 13px;
+    padding: 8px;
+  }
+
+  .calendar-summary,
+  .profile-grid,
+  .community-grid,
+  .plans-grid,
+  .mini-metrics,
+  .badges-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .misc-menu-panel {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    top: 88px;
+    width: auto;
+    max-height: calc(100vh - 110px);
+    overflow: auto;
+  }
+}
+
+
+/* =========================================================
+   V35 HEATMAP CALENDAR
+========================================================= */
+
+.heatmap-calendar-section {
+  max-width: 1180px;
+  margin-inline: auto;
+  padding: clamp(22px, 3vw, 36px) !important;
+}
+
+.heatmap-calendar-section .calendar-header {
+  align-items: end;
+  margin-bottom: 22px;
+}
+
+.heatmap-summary {
+  grid-template-columns: repeat(2, minmax(130px, 1fr)) !important;
+}
+
+.heatmap-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(310px, .65fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.heatmap-month-card,
+.heatmap-side-panel > *,
+.heatmap-modal-card {
+  border: 1px solid rgba(255,255,255,.075);
+  background: linear-gradient(145deg, rgba(255,255,255,.048), rgba(255,255,255,.022));
+  box-shadow: 0 14px 34px rgba(0,0,0,.18);
+}
+
+.heatmap-month-card {
+  border-radius: 24px;
+  padding: clamp(18px, 2.2vw, 28px);
+}
+
+.heatmap-toolbar {
+  display: grid;
+  grid-template-columns: 42px 1fr 42px;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.heatmap-toolbar > div {
+  text-align: center;
+}
+
+.heatmap-toolbar strong {
+  display: block;
+  font-size: clamp(1rem, 1.6vw, 1.28rem);
+  color: var(--text);
+}
+
+.heatmap-toolbar span {
+  display: block;
+  color: var(--muted);
+  font-size: .78rem;
+  margin-top: 3px;
+}
+
+.heatmap-weekdays,
+.heatmap-month-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.heatmap-weekdays {
+  margin-bottom: 8px;
+}
+
+.heatmap-weekdays span {
+  color: var(--muted);
+  font-size: .72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  text-align: center;
+}
+
+.heatmap-day {
+  min-height: 84px;
+  border: 0;
+  border-radius: 16px;
+  padding: 10px;
+  color: var(--text);
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  text-align: left;
+  cursor: pointer;
+  position: relative;
+  transition: transform .16s ease, filter .16s ease, outline-color .16s ease;
+}
+
+.heatmap-day:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+}
+
+.heatmap-day strong {
+  font-size: .95rem;
+  line-height: 1;
+}
+
+.heatmap-day span {
+  font-size: .72rem;
+  color: rgba(255,255,255,.74);
+  font-weight: 800;
+}
+
+.heatmap-day i {
+  position: absolute;
+  right: 9px;
+  bottom: 9px;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.88);
+}
+
+.heatmap-day.today {
+  outline: 1px solid rgba(var(--accent-rgb), .42);
+  outline-offset: 2px;
+}
+
+.heatmap-day.selected {
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,.32), 0 10px 20px rgba(0,0,0,.16) !important;
+}
+
+.heatmap-empty {
+  opacity: .15;
+  pointer-events: none;
+  background: rgba(255,255,255,.025) !important;
+}
+
+.heat-0,
+.heat-level-0 {
+  background: rgba(120, 125, 135, .16);
+}
+
+.heat-1,
+.heat-level-1 {
+  background: rgba(var(--accent-rgb), .18);
+}
+
+.heat-2,
+.heat-level-2 {
+  background: rgba(var(--accent-rgb), .36);
+}
+
+.heat-3,
+.heat-level-3 {
+  background: linear-gradient(145deg, rgba(var(--accent-rgb), .82), rgba(var(--accent-rgb), .50));
+}
+
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 7px;
+  margin-top: 16px;
+  color: var(--muted);
+  font-size: .76rem;
+  font-weight: 850;
+}
+
+.heatmap-legend i {
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+.heatmap-side-panel {
+  display: grid;
+  gap: 12px;
+}
+
+.heatmap-metric-card,
+.heatmap-selected-card,
+.annual-heatmap-card {
+  border-radius: 20px;
+  padding: 18px;
+}
+
+.heatmap-metric-card span {
+  display: block;
+  color: var(--muted);
+  font-size: .75rem;
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.heatmap-metric-card strong {
+  display: block;
+  margin: 7px 0 5px;
+  font-size: 1.45rem;
+  color: var(--text);
+  letter-spacing: -.035em;
+}
+
+.heatmap-metric-card p,
+.heatmap-selected-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.heatmap-selected-card h4 {
+  margin: 10px 0 7px;
+  font-size: 1.05rem;
+}
+
+.heatmap-note-preview {
+  margin-top: 10px !important;
+  color: var(--accent-soft) !important;
+  font-weight: 850;
+}
+
+.annual-heatmap-card > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.annual-heatmap-card strong {
+  font-size: .95rem;
+}
+
+.annual-heatmap-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.annual-month {
+  display: grid;
+  gap: 6px;
+}
+
+.annual-month strong {
+  color: var(--muted);
+  text-transform: uppercase;
+  font-size: .68rem;
+  letter-spacing: .06em;
+}
+
+.annual-month div {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+}
+
+.annual-month i {
+  aspect-ratio: 1;
+  border-radius: 3px;
+  display: block;
+}
+
+.annual-empty {
+  background: transparent !important;
+}
+
+/* Modal */
+.heatmap-modal[hidden] {
+  display: none !important;
+}
+
+.heatmap-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+}
+
+.heatmap-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(8px);
+}
+
+.heatmap-modal-card {
+  position: relative;
+  z-index: 1;
+  width: min(460px, 100%);
+  border-radius: 24px;
+  padding: 24px;
+  background: linear-gradient(145deg, rgba(31,34,42,.98), rgba(15,17,22,.98));
+}
+
+.heatmap-modal-close {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.05);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.heatmap-modal-card h4 {
+  margin: 8px 0;
+  font-size: 1.22rem;
+}
+
+.heatmap-modal-card p {
+  color: var(--muted);
+}
+
+.heatmap-modal-card label {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+  font-weight: 850;
+  margin-top: 14px;
+}
+
+#heatmapNoteInput {
+  min-height: 120px;
+  border-radius: 16px;
+  resize: vertical;
+}
+
+.heatmap-modal-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+/* Keep Estudio and ... independent and non-overlapping */
+.resource-menu,
+.misc-menu {
+  z-index: 2600;
+}
+
+.resource-menu.open {
+  z-index: 2700;
+}
+
+.misc-menu.open {
+  z-index: 2800;
+}
+
+/* Slightly wider top nav */
+.top-navbar {
+  padding-inline: clamp(18px, 2.8vw, 52px) !important;
+}
+
+.top-nav {
+  gap: 10px !important;
+}
+
+@media (max-width: 1120px) {
+  .heatmap-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .annual-heatmap-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .heatmap-calendar-section {
+    padding: 18px !important;
+  }
+
+  .heatmap-summary,
+  .heatmap-modal-actions {
+    grid-template-columns: 1fr !important;
+  }
+
+  .heatmap-weekdays,
+  .heatmap-month-grid {
+    gap: 5px;
+  }
+
+  .heatmap-day {
+    min-height: 66px;
+    padding: 8px;
+    border-radius: 12px;
+  }
+
+  .heatmap-day span {
+    display: none;
+  }
+
+  .annual-heatmap-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 460px) {
+  .annual-heatmap-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* =========================================================
+   V37 PREMIUM GRID MENUS - THEME ICONS
+   Íconos outline con currentColor: toman el color del theme activo.
+========================================================= */
+
+.resource-menu-panel.premium-grid-menu-panel,
+.misc-menu-panel.premium-grid-menu-panel {
+  width: min(920px, calc(100vw - 36px)) !important;
+  padding: 16px !important;
+  border-radius: 24px !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+  background:
+    linear-gradient(145deg, rgba(17, 22, 32, .985), rgba(11, 15, 23, .985)) !important;
+  border: 1px solid rgba(255, 255, 255, .075) !important;
+  box-shadow:
+    0 22px 54px rgba(0, 0, 0, .30),
+    inset 0 1px 0 rgba(255, 255, 255, .045) !important;
+}
+
+.premium-grid-menu-item,
+.resource-menu-item.premium-grid-menu-item,
+.misc-menu-item.premium-grid-menu-item,
+.study-menu-item.premium-grid-menu-item {
+  min-height: 112px !important;
+  height: 112px !important;
+  width: 100% !important;
+  padding: 18px 18px !important;
+  border-radius: 20px !important;
+  display: grid !important;
+  grid-template-columns: 48px minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 18px !important;
+  text-align: left !important;
+  color: var(--accent) !important;
+  background: rgba(255, 255, 255, .032) !important;
+  border: 1px solid rgba(255, 255, 255, .075) !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+}
+
+.premium-grid-menu-item:hover,
+.resource-menu-item.premium-grid-menu-item:hover,
+.misc-menu-item.premium-grid-menu-item:hover,
+.study-menu-item.premium-grid-menu-item:hover,
+.premium-grid-menu-item.active {
+  transform: translateY(-1px);
+  background: rgba(var(--accent-rgb), .075) !important;
+  border-color: rgba(var(--accent-rgb), .22) !important;
+  box-shadow:
+    0 14px 30px rgba(0, 0, 0, .18),
+    inset 0 1px 0 rgba(255, 255, 255, .055) !important;
+}
+
+.premium-line-icon,
+.resource-icon.premium-line-icon,
+.misc-icon.premium-line-icon {
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  display: grid !important;
+  place-items: center !important;
+  color: var(--accent) !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.premium-line-icon svg {
+  width: 38px !important;
+  height: 38px !important;
+  display: block;
+  stroke: currentColor !important;
+  fill: none !important;
+  stroke-width: 1.65 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  filter: drop-shadow(0 0 8px rgba(var(--accent-rgb), .18));
+}
+
+.premium-line-icon svg * {
+  stroke: currentColor !important;
+  fill: none !important;
+  vector-effect: non-scaling-stroke;
+}
+
+.premium-grid-menu-item .resource-copy {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.premium-grid-menu-item strong {
+  color: rgba(250, 252, 255, .98) !important;
+  font-size: .98rem !important;
+  font-weight: 780 !important;
+  line-height: 1.12 !important;
+  letter-spacing: -.02em !important;
+}
+
+.premium-grid-menu-item small {
+  color: #9ca3af !important;
+  font-size: .80rem !important;
+  line-height: 1.42 !important;
+  font-weight: 500 !important;
+  margin: 0 !important;
+  max-width: 34ch;
+}
+
+/* Hace que Estudio y ... compartan una estética idéntica */
+.resource-menu-toggle,
+.misc-menu-toggle {
+  min-height: 40px !important;
+  padding-inline: 16px !important;
+}
+
+@media (min-width: 1180px) {
+  .resource-menu-panel.premium-grid-menu-panel {
+    right: 0 !important;
+  }
+
+  .misc-menu-panel.premium-grid-menu-panel {
+    right: 0 !important;
+  }
+}
+
+@media (max-width: 920px) {
+  .resource-menu-panel.premium-grid-menu-panel,
+  .misc-menu-panel.premium-grid-menu-panel {
+    position: fixed !important;
+    left: 12px !important;
+    right: 12px !important;
+    top: 86px !important;
+    width: auto !important;
+    max-height: calc(100vh - 108px) !important;
+    overflow: auto !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  .premium-grid-menu-item,
+  .resource-menu-item.premium-grid-menu-item,
+  .misc-menu-item.premium-grid-menu-item,
+  .study-menu-item.premium-grid-menu-item {
+    min-height: 96px !important;
+    height: 96px !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .premium-grid-menu-item,
+  .resource-menu-item.premium-grid-menu-item,
+  .misc-menu-item.premium-grid-menu-item,
+  .study-menu-item.premium-grid-menu-item {
+    grid-template-columns: 40px minmax(0, 1fr) !important;
+    gap: 14px !important;
+    padding: 15px !important;
+  }
+
+  .premium-line-icon,
+  .resource-icon.premium-line-icon,
+  .misc-icon.premium-line-icon {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+  }
+
+  .premium-line-icon svg {
+    width: 34px !important;
+    height: 34px !important;
+  }
+
+  .premium-grid-menu-item strong {
+    font-size: .92rem !important;
+  }
+
+  .premium-grid-menu-item small {
+    font-size: .74rem !important;
+  }
+}
+
+
+
+/* =========================================================
+   V38 CALENDAR ALIGNMENT WITH HERO DASHBOARD
+   Calendario de progreso alineado al Dashboard de inicio.
+========================================================= */
+
+:root {
+  --dashboard-side-width: 460px;
+  --dashboard-main-ratio: 1.1fr;
+  --dashboard-gap: 28px;
+}
+
+/* Ambos bloques principales usan el mismo ancho de layout del main */
+.hero-section,
+.heatmap-calendar-section {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Mismo sistema visual: padding, radio, margen vertical y borde */
+.heatmap-calendar-section {
+  padding: clamp(20px, 2.8vw, 42px) !important;
+  border-radius: 24px !important;
+  margin-bottom: 28px !important;
+  background:
+    radial-gradient(circle at 80% 10%, rgba(var(--accent-rgb), 0.12), transparent 32%),
+    linear-gradient(145deg, rgba(36, 36, 36, 0.96), rgba(25, 25, 25, 0.90)) !important;
+  border: 1px solid rgba(255, 255, 255, .075) !important;
+  box-shadow: var(--soft-shadow, 0 14px 34px rgba(0,0,0,.22)) !important;
+}
+
+/* La cabecera del calendario copia la misma proporción que el hero:
+   izquierda amplia + bloque estadístico derecho del mismo ancho que progress-panel */
+.heatmap-calendar-section .calendar-header {
+  display: grid !important;
+  grid-template-columns: minmax(0, var(--dashboard-main-ratio)) var(--dashboard-side-width) !important;
+  gap: var(--dashboard-gap) !important;
+  align-items: end !important;
+  margin-bottom: var(--dashboard-gap) !important;
+}
+
+.heatmap-calendar-section .calendar-header > div:first-child {
+  min-width: 0;
+}
+
+.heatmap-calendar-section .calendar-header h3,
+.heatmap-calendar-section .calendar-header p {
+  max-width: 760px;
+}
+
+/* El resumen superior ocupa exactamente el ancho de la columna derecha */
+.heatmap-summary,
+.calendar-summary.heatmap-summary {
+  width: 100% !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: clamp(12px, 1.6vw, 18px) !important;
+  align-self: stretch !important;
+}
+
+.heatmap-summary > div {
+  min-height: 118px;
+  border-radius: 22px !important;
+  padding: 22px !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* La grilla del calendario usa la misma arquitectura que el hero */
+.heatmap-layout {
+  display: grid !important;
+  grid-template-columns: minmax(0, var(--dashboard-main-ratio)) var(--dashboard-side-width) !important;
+  gap: var(--dashboard-gap) !important;
+  align-items: stretch !important;
+}
+
+/* El calendario mensual ocupa el mismo ancho visual que el bloque textual izquierdo del hero */
+.heatmap-month-card {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 100% !important;
+  border-radius: 22px !important;
+  padding: 22px !important;
+}
+
+/* El panel derecho ocupa el mismo ancho visual que las métricas del Dashboard */
+.heatmap-side-panel {
+  width: 100% !important;
+  min-width: 0 !important;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: clamp(12px, 1.6vw, 18px) !important;
+  align-content: start !important;
+}
+
+.heatmap-metric-card,
+.heatmap-selected-card,
+.annual-heatmap-card {
+  border-radius: 22px !important;
+  padding: 22px !important;
+  min-height: 150px;
+}
+
+.heatmap-selected-card,
+.annual-heatmap-card {
+  grid-column: 1 / -1;
+}
+
+/* Progreso anual dentro de la misma columna derecha, sin exceder ni achicarse */
+.annual-heatmap-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+}
+
+.annual-month div {
+  gap: 2px !important;
+}
+
+/* La cuadrícula mensual se estira de forma proporcional en la columna izquierda */
+.heatmap-month-grid {
+  grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+}
+
+.heatmap-day {
+  min-height: clamp(70px, 5.6vw, 92px) !important;
+}
+
+/* Breakpoint unificado con el hero: cuando el Dashboard pasa a una columna, el calendario también */
+@media (max-width: 1280px) {
+  :root {
+    --dashboard-side-width: 1fr;
+  }
+
+  .heatmap-calendar-section .calendar-header,
+  .heatmap-layout {
+    grid-template-columns: 1fr !important;
+    gap: 22px !important;
+  }
+
+  .heatmap-summary,
+  .calendar-summary.heatmap-summary,
+  .heatmap-side-panel {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .annual-heatmap-card {
+    grid-column: 1 / -1;
+  }
+
+  .annual-heatmap-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .heatmap-calendar-section {
+    padding: 18px !important;
+    border-radius: 22px !important;
+  }
+
+  .heatmap-calendar-section .calendar-header,
+  .heatmap-layout {
+    gap: 18px !important;
+  }
+
+  .heatmap-summary,
+  .calendar-summary.heatmap-summary,
+  .heatmap-side-panel {
+    grid-template-columns: 1fr !important;
+  }
+
+  .heatmap-month-card,
+  .heatmap-metric-card,
+  .heatmap-selected-card,
+  .annual-heatmap-card {
+    padding: 18px !important;
+    border-radius: 20px !important;
+  }
+
+  .heatmap-day {
+    min-height: 66px !important;
+  }
+
+  .annual-heatmap-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 460px) {
+  .annual-heatmap-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+
+/* =========================================================
+   V39 COMPACT HEATMAP STRUCTURE
+   Progreso anual horizontal debajo del calendario mensual.
+========================================================= */
+
+.heatmap-layout.heatmap-layout-compact {
+  grid-template-columns: minmax(0, var(--dashboard-main-ratio)) var(--dashboard-side-width) !important;
+  align-items: start !important;
+}
+
+.heatmap-left-column {
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: 16px;
+  min-width: 0;
+}
+
+.heatmap-left-column .heatmap-month-card {
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+/* Progreso anual ahora pertenece a la columna izquierda y se muestra horizontal */
+.heatmap-left-column .annual-heatmap-card {
+  grid-column: auto !important;
+  width: 100%;
+  min-height: 0 !important;
+  padding: 18px 20px !important;
+  border-radius: 22px !important;
+}
+
+.heatmap-left-column .annual-heatmap-card > div:first-child {
+  margin-bottom: 12px !important;
+  align-items: center;
+}
+
+.heatmap-left-column .annual-heatmap-grid {
+  display: grid !important;
+  grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+  width: 100%;
+}
+
+.heatmap-left-column .annual-month {
+  min-width: 0;
+  gap: 5px !important;
+}
+
+.heatmap-left-column .annual-month strong {
+  font-size: .62rem !important;
+  text-align: center;
+  color: var(--muted);
+}
+
+.heatmap-left-column .annual-month div {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px !important;
+}
+
+.heatmap-left-column .annual-month i {
+  border-radius: 2px !important;
+  min-width: 0;
+}
+
+/* Columna derecha compacta, sin el bloque anual ni huecos verticales */
+.heatmap-side-panel {
+  align-content: start !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 14px !important;
+}
+
+.heatmap-side-panel .annual-heatmap-card {
+  display: none !important;
+}
+
+.heatmap-metric-card,
+.heatmap-selected-card {
+  min-height: 128px !important;
+  padding: 18px !important;
+}
+
+.heatmap-metric-card strong {
+  font-size: 1.28rem !important;
+  margin: 5px 0 4px !important;
+}
+
+.heatmap-metric-card p,
+.heatmap-selected-card p {
+  font-size: .82rem !important;
+  line-height: 1.48 !important;
+}
+
+.heatmap-selected-card {
+  grid-column: 1 / -1;
+  min-height: 136px !important;
+}
+
+/* Reducir altura general del calendario mensual */
+.heatmap-month-card {
+  padding: 20px !important;
+}
+
+.heatmap-toolbar {
+  margin-bottom: 14px !important;
+}
+
+.heatmap-weekdays,
+.heatmap-month-grid {
+  gap: 6px !important;
+}
+
+.heatmap-day {
+  min-height: clamp(58px, 4.6vw, 78px) !important;
+  border-radius: 13px !important;
+  padding: 8px !important;
+}
+
+.heatmap-day strong {
+  font-size: .86rem !important;
+}
+
+.heatmap-day span {
+  font-size: .68rem !important;
+}
+
+.heatmap-legend {
+  margin-top: 12px !important;
+}
+
+/* Responsive: dos filas de 6 meses si el ancho se ajusta */
+@media (max-width: 1280px) {
+  .heatmap-layout.heatmap-layout-compact {
+    grid-template-columns: 1fr !important;
+  }
+
+  .heatmap-side-panel {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+
+  .heatmap-selected-card {
+    grid-column: span 1 !important;
+  }
+
+  .heatmap-left-column .annual-heatmap-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 980px) {
+  .heatmap-side-panel {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .heatmap-selected-card {
+    grid-column: 1 / -1 !important;
+  }
+
+  .heatmap-left-column .annual-heatmap-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .heatmap-left-column {
+    gap: 14px;
+  }
+
+  .heatmap-side-panel {
+    grid-template-columns: 1fr !important;
+  }
+
+  .heatmap-selected-card {
+    grid-column: auto !important;
+  }
+
+  .heatmap-left-column .annual-heatmap-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .heatmap-day {
+    min-height: 54px !important;
+  }
+}
+
+@media (max-width: 460px) {
+  .heatmap-left-column .annual-heatmap-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+
+
+/* =========================================================
+   V40 NAVBAR MINIMAL REFACTOR
+   Limpieza visual, botón Más igual a Estudio y espaciado premium.
+========================================================= */
+
+/* Contenedor general de navbar: sin líneas duras, más aire lateral */
+.top-navbar {
+  width: 100% !important;
+  max-width: none !important;
+  min-height: 78px !important;
+  padding: 12px clamp(24px, 4vw, 72px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: clamp(24px, 3vw, 48px) !important;
+  background:
+    linear-gradient(180deg, rgba(11, 15, 23, .96), rgba(11, 15, 23, .90)) !important;
+  border: 0 !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Marca a la izquierda: compacta, limpia y sin bordes pesados */
+.brand {
+  flex: 0 0 auto !important;
+  min-width: max-content !important;
+}
+
+.brand-mark {
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Grupo de navegación: mismo max width visual que dashboard, centrado y con separación */
+.top-nav {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  max-width: 1180px !important;
+  margin-left: auto !important;
+  margin-right: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: clamp(10px, 1.1vw, 18px) !important;
+  overflow: visible !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+/* Píldoras limpias: sin rebordes duros */
+.nav-link,
+.nav-pill-minimal,
+.resource-menu-toggle,
+.misc-menu-toggle,
+.nav-pill-theme {
+  min-height: 40px !important;
+  height: 40px !important;
+  padding: 0 17px !important;
+  border-radius: 999px !important;
+  border: 0 !important;
+  outline: 0 !important;
+  background: transparent !important;
+  color: var(--muted) !important;
+  font-size: .86rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -.012em !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  white-space: nowrap !important;
+  box-shadow: none !important;
+  transition:
+    color .18s ease,
+    background-color .18s ease,
+    transform .18s ease,
+    box-shadow .18s ease !important;
+}
+
+/* Estudio y Más exactamente iguales en diseño y reacción */
+.resource-menu-toggle,
+.misc-menu-toggle,
+.nav-pill-theme {
+  color: var(--accent-soft) !important;
+  background: rgba(var(--accent-rgb), .075) !important;
+}
+
+.resource-menu-toggle:hover,
+.misc-menu-toggle:hover,
+.resource-menu.open .resource-menu-toggle,
+.misc-menu.open .misc-menu-toggle,
+.nav-pill-theme:hover {
+  color: var(--text) !important;
+  background: rgba(var(--accent-rgb), .145) !important;
+  box-shadow:
+    0 10px 26px rgba(var(--accent-rgb), .11),
+    inset 0 1px 0 rgba(255, 255, 255, .045) !important;
+  transform: translateY(-1px);
+}
+
+/* Links comunes: activos/hover con diferencias leves de tono */
+.nav-link:hover,
+.nav-pill-minimal:hover {
+  color: var(--text) !important;
+  background: rgba(255, 255, 255, .045) !important;
+  transform: translateY(-1px);
+}
+
+.nav-link.active,
+.nav-pill-minimal.active {
+  color: var(--text) !important;
+  background: rgba(var(--accent-rgb), .115) !important;
+  box-shadow: none !important;
+}
+
+/* Se elimina sensación de separadores duros */
+.nav-divider {
+  display: none !important;
+}
+
+/* Caret de Estudio / Más homogéneo */
+.resource-menu-caret,
+.misc-menu-caret {
+  color: currentColor !important;
+  opacity: .8;
+  font-size: .82rem !important;
+  transition: transform .18s ease, opacity .18s ease !important;
+}
+
+.resource-menu.open .resource-menu-caret,
+.misc-menu.open .misc-menu-caret {
+  transform: rotate(180deg);
+  opacity: 1;
+}
+
+/* Paneles dropdown siguen sin solaparse y nacen desde botones */
+.resource-menu,
+.misc-menu {
+  flex: 0 0 auto !important;
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+/* Botón de configuración con la misma limpieza visual */
+#settingsToggleBtn,
+.settings-toggle {
+  flex: 0 0 auto !important;
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 999px !important;
+  border: 0 !important;
+  background: rgba(var(--accent-rgb), .12) !important;
+  color: var(--accent-soft) !important;
+  box-shadow: none !important;
+  transition:
+    background-color .18s ease,
+    color .18s ease,
+    transform .18s ease,
+    box-shadow .18s ease !important;
+}
+
+#settingsToggleBtn:hover,
+.settings-toggle:hover {
+  background: rgba(var(--accent-rgb), .18) !important;
+  color: var(--text) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 26px rgba(var(--accent-rgb), .10) !important;
+}
+
+/* Ajuste de paneles para que se sientan parte del sistema minimalista */
+.resource-menu-panel.premium-grid-menu-panel,
+.misc-menu-panel.premium-grid-menu-panel {
+  top: calc(100% + 12px) !important;
+  border: 0 !important;
+  background:
+    linear-gradient(145deg, rgba(16, 20, 29, .985), rgba(10, 14, 21, .985)) !important;
+  box-shadow:
+    0 26px 60px rgba(0, 0, 0, .34),
+    inset 0 1px 0 rgba(255, 255, 255, .045) !important;
+}
+
+/* Responsive: mantiene aire y evita amontonamiento horizontal */
+@media (max-width: 1280px) {
+  .top-navbar {
+    padding-inline: clamp(18px, 3vw, 38px) !important;
+    gap: 18px !important;
+  }
+
+  .top-nav {
+    max-width: none !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    justify-content: flex-end !important;
+    gap: 10px !important;
+    scrollbar-width: none;
+  }
+
+  .top-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-link,
+  .nav-pill-minimal,
+  .resource-menu-toggle,
+  .misc-menu-toggle,
+  .nav-pill-theme {
+    padding-inline: 15px !important;
+  }
+}
+
+@media (max-width: 920px) {
+  .top-navbar {
+    flex-wrap: wrap !important;
+    align-items: flex-start !important;
+  }
+
+  .top-nav {
+    order: 3 !important;
+    flex-basis: 100% !important;
+    justify-content: flex-start !important;
+    padding-top: 6px !important;
+  }
+
+  #settingsToggleBtn,
+  .settings-toggle {
+    margin-left: auto !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .top-navbar {
+    padding: 12px 14px !important;
+  }
+
+  .brand-copy strong {
+    font-size: .9rem !important;
+  }
+
+  .brand-copy span {
+    font-size: .72rem !important;
+  }
+
+  .nav-link,
+  .nav-pill-minimal,
+  .resource-menu-toggle,
+  .misc-menu-toggle,
+  .nav-pill-theme {
+    min-height: 38px !important;
+    height: 38px !important;
+    padding-inline: 13px !important;
+    font-size: .8rem !important;
+  }
+}
+
+
+
+/* =========================================================
+   V41 FLEXIBLE GRID CARDS
+   Evita recortes de textos largos en Estudio y Más.
+========================================================= */
+
+/* El panel permite que las tarjetas crezcan y no recorta contenido */
+.resource-menu-panel.premium-grid-menu-panel,
+.misc-menu-panel.premium-grid-menu-panel {
+  overflow: visible !important;
+  align-items: stretch !important;
+  grid-auto-rows: auto !important;
+}
+
+/* En pantallas pequeñas, el panel puede scrollear, pero las tarjetas no recortan texto */
+@media (max-width: 920px) {
+  .resource-menu-panel.premium-grid-menu-panel,
+  .misc-menu-panel.premium-grid-menu-panel {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+}
+
+/* Quita alturas fijas y permite crecimiento natural por contenido */
+.premium-grid-menu-item,
+.resource-menu-item.premium-grid-menu-item,
+.misc-menu-item.premium-grid-menu-item,
+.study-menu-item.premium-grid-menu-item {
+  height: auto !important;
+  min-height: 112px !important;
+  max-height: none !important;
+  overflow: visible !important;
+
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+
+  padding: 18px !important;
+  gap: 16px !important;
+  white-space: normal !important;
+}
+
+/* Ícono libre a la izquierda, alineado arriba */
+.premium-line-icon,
+.resource-icon.premium-line-icon,
+.misc-icon.premium-line-icon {
+  flex: 0 0 42px !important;
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  margin-top: 2px !important;
+  align-self: flex-start !important;
+}
+
+/* Bloque de texto flexible en columna */
+.premium-grid-menu-item .resource-copy,
+.resource-menu-item.premium-grid-menu-item .resource-copy,
+.misc-menu-item.premium-grid-menu-item .resource-copy,
+.study-menu-item.premium-grid-menu-item .resource-copy {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  width: auto !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  gap: 5px !important;
+
+  overflow: visible !important;
+  white-space: normal !important;
+}
+
+/* Títulos y subtítulos sin cortes ni ellipsis */
+.premium-grid-menu-item strong,
+.premium-grid-menu-item small,
+.resource-menu-item.premium-grid-menu-item strong,
+.resource-menu-item.premium-grid-menu-item small,
+.misc-menu-item.premium-grid-menu-item strong,
+.misc-menu-item.premium-grid-menu-item small,
+.study-menu-item.premium-grid-menu-item strong,
+.study-menu-item.premium-grid-menu-item small {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+
+  overflow: visible !important;
+  text-overflow: unset !important;
+  white-space: normal !important;
+  word-break: normal !important;
+  overflow-wrap: anywhere !important;
+}
+
+/* Mantiene jerarquía tipográfica premium aunque el texto ocupe 2 o 3 líneas */
+.premium-grid-menu-item strong {
+  line-height: 1.18 !important;
+}
+
+.premium-grid-menu-item small {
+  line-height: 1.48 !important;
+}
+
+/* En móviles se reduce el mínimo, pero sigue creciendo si el texto lo requiere */
+@media (max-width: 920px) {
+  .premium-grid-menu-item,
+  .resource-menu-item.premium-grid-menu-item,
+  .misc-menu-item.premium-grid-menu-item,
+  .study-menu-item.premium-grid-menu-item {
+    min-height: 96px !important;
+    height: auto !important;
+    padding: 16px !important;
+    gap: 14px !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .premium-grid-menu-item,
+  .resource-menu-item.premium-grid-menu-item,
+  .misc-menu-item.premium-grid-menu-item,
+  .study-menu-item.premium-grid-menu-item {
+    min-height: 92px !important;
+    height: auto !important;
+    padding: 15px !important;
+  }
+
+  .premium-line-icon,
+  .resource-icon.premium-line-icon,
+  .misc-icon.premium-line-icon {
+    flex-basis: 36px !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+  }
+}
+
+
+
+/* =========================================================
+   V42 MENU TEXT FIT FIX
+   Corrección fuerte: evita que subtítulos largos se corten o invadan otra tarjeta.
+========================================================= */
+
+/* Panel más respirado y con columnas reales; evita que los textos queden comprimidos */
+.resource-menu-panel.premium-grid-menu-panel,
+.misc-menu-panel.premium-grid-menu-panel {
+  width: min(1080px, calc(100vw - 96px)) !important;
+  max-width: min(1080px, calc(100vw - 96px)) !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  grid-auto-rows: auto !important;
+  align-items: stretch !important;
+  gap: 12px !important;
+  padding: 18px !important;
+  overflow: visible !important;
+  box-sizing: border-box !important;
+}
+
+/* Cada tarjeta se comporta como una mini grilla icono + texto.
+   Sin altura fija: crece si el texto necesita otra línea. */
+.resource-menu-item.premium-grid-menu-item,
+.misc-menu-item.premium-grid-menu-item,
+.study-menu-item.premium-grid-menu-item,
+.premium-grid-menu-item {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+
+  height: auto !important;
+  min-height: 118px !important;
+  max-height: none !important;
+
+  box-sizing: border-box !important;
+  overflow: visible !important;
+
+  display: grid !important;
+  grid-template-columns: 42px minmax(0, 1fr) !important;
+  align-items: start !important;
+  justify-items: stretch !important;
+  column-gap: 18px !important;
+  row-gap: 0 !important;
+
+  padding: 20px 22px !important;
+  white-space: normal !important;
+}
+
+/* Ícono arriba, no centrado verticalmente */
+.resource-menu-item.premium-grid-menu-item .premium-line-icon,
+.misc-menu-item.premium-grid-menu-item .premium-line-icon,
+.study-menu-item.premium-grid-menu-item .premium-line-icon,
+.premium-grid-menu-item .premium-line-icon,
+.resource-icon.premium-line-icon,
+.misc-icon.premium-line-icon {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  flex: 0 0 38px !important;
+
+  align-self: start !important;
+  justify-self: start !important;
+  margin-top: 1px !important;
+}
+
+/* Bloque textual: min-width 0 es clave para que el texto pueda quebrar dentro de CSS Grid */
+.resource-menu-item.premium-grid-menu-item .resource-copy,
+.misc-menu-item.premium-grid-menu-item .resource-copy,
+.study-menu-item.premium-grid-menu-item .resource-copy,
+.premium-grid-menu-item .resource-copy {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+
+  min-width: 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  gap: 7px !important;
+
+  overflow: visible !important;
+  white-space: normal !important;
+}
+
+/* Título: nunca debe empujar el ancho de la tarjeta */
+.resource-menu-item.premium-grid-menu-item strong,
+.misc-menu-item.premium-grid-menu-item strong,
+.study-menu-item.premium-grid-menu-item strong,
+.premium-grid-menu-item strong {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+
+  overflow: visible !important;
+  white-space: normal !important;
+  text-overflow: clip !important;
+  overflow-wrap: break-word !important;
+  word-break: normal !important;
+
+  line-height: 1.18 !important;
+}
+
+/* Subtítulo: forzamos wrap dentro del recuadro.
+   max-inline-size en ch mantiene lectura premium y evita invasión horizontal. */
+.resource-menu-item.premium-grid-menu-item small,
+.misc-menu-item.premium-grid-menu-item small,
+.study-menu-item.premium-grid-menu-item small,
+.premium-grid-menu-item small {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 34ch !important;
+  inline-size: min(100%, 34ch) !important;
+
+  overflow: visible !important;
+  white-space: normal !important;
+  text-overflow: clip !important;
+  overflow-wrap: break-word !important;
+  word-break: normal !important;
+  hyphens: auto !important;
+
+  line-height: 1.48 !important;
+}
+
+/* Si alguna regla anterior agrega nowrap a botones internos, queda anulada acá */
+.resource-menu-panel.premium-grid-menu-panel *,
+.misc-menu-panel.premium-grid-menu-panel * {
+  white-space: normal;
+}
+
+/* Los SVG conservan el color dinámico del theme */
+.resource-menu-panel.premium-grid-menu-panel svg,
+.misc-menu-panel.premium-grid-menu-panel svg {
+  color: var(--accent) !important;
+  stroke: currentColor !important;
+}
+
+/* Responsive: cuando no hay ancho real para dos columnas, pasa a una columna */
+@media (max-width: 1040px) {
+  .resource-menu-panel.premium-grid-menu-panel,
+  .misc-menu-panel.premium-grid-menu-panel {
+    position: fixed !important;
+    left: 18px !important;
+    right: 18px !important;
+    top: 82px !important;
+    width: auto !important;
+    max-width: none !important;
+    max-height: calc(100vh - 104px) !important;
+
+    grid-template-columns: 1fr !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+
+  .resource-menu-item.premium-grid-menu-item,
+  .misc-menu-item.premium-grid-menu-item,
+  .study-menu-item.premium-grid-menu-item,
+  .premium-grid-menu-item {
+    min-height: auto !important;
+    padding: 18px 20px !important;
+  }
+
+  .resource-menu-item.premium-grid-menu-item small,
+  .misc-menu-item.premium-grid-menu-item small,
+  .study-menu-item.premium-grid-menu-item small,
+  .premium-grid-menu-item small {
+    max-width: none !important;
+    inline-size: 100% !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .resource-menu-panel.premium-grid-menu-panel,
+  .misc-menu-panel.premium-grid-menu-panel {
+    left: 12px !important;
+    right: 12px !important;
+    padding: 12px !important;
+    gap: 8px !important;
+  }
+
+  .resource-menu-item.premium-grid-menu-item,
+  .misc-menu-item.premium-grid-menu-item,
+  .study-menu-item.premium-grid-menu-item,
+  .premium-grid-menu-item {
+    grid-template-columns: 34px minmax(0, 1fr) !important;
+    column-gap: 14px !important;
+    padding: 15px !important;
+  }
+
+  .resource-menu-item.premium-grid-menu-item .premium-line-icon,
+  .misc-menu-item.premium-grid-menu-item .premium-line-icon,
+  .study-menu-item.premium-grid-menu-item .premium-line-icon,
+  .premium-grid-menu-item .premium-line-icon,
+  .resource-icon.premium-line-icon,
+  .misc-icon.premium-line-icon {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    flex-basis: 32px !important;
+  }
+}
+
+
+
+/* =========================================================
+   V43 PREMIUM HERO VISUAL
+   Recuadro de bienvenida más amplio, orgánico e interactivo.
+========================================================= */
+
+/* Más amplitud horizontal de la landing */
+.main-content {
+  width: min(1640px, 100%) !important;
+}
+
+/* Hero premium: sin borde duro, fondo integrado al dark theme */
+.hero-section.hero-premium-section {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  padding: clamp(42px, 5.2vw, 86px) clamp(34px, 5.4vw, 92px) !important;
+  margin-bottom: 28px !important;
+  border: 0 !important;
+  border-radius: clamp(28px, 3vw, 44px) !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+  position: relative !important;
+  background:
+    radial-gradient(circle at 78% 32%, rgba(var(--accent-rgb), .18), transparent 26%),
+    radial-gradient(circle at 18% 8%, rgba(255,255,255,.045), transparent 30%),
+    linear-gradient(135deg, rgba(19, 17, 28, .98), rgba(11, 15, 23, .92) 58%, rgba(19, 17, 28, .98)) !important;
+}
+
+.hero-section.hero-premium-section::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  pointer-events: none;
+  background:
+    linear-gradient(115deg, transparent 0 38%, rgba(var(--accent-rgb), .075) 48%, transparent 58% 100%);
+  opacity: .85;
+}
+
+.hero-section.hero-premium-section::after {
+  content: "";
+  position: absolute;
+  inset: auto 8% 0 8%;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb), .24), transparent);
+  opacity: .42;
+}
+
+/* Dos columnas: texto amplio izquierda + elemento visual derecha */
+.hero-stage {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.28fr) minmax(300px, .72fr);
+  gap: clamp(32px, 5vw, 82px);
+  align-items: center;
+}
+
+.hero-premium-section .hero-copy {
+  padding: 0 !important;
+  min-width: 0;
+}
+
+.hero-premium-section .eyebrow {
+  border: 0 !important;
+  color: var(--accent-soft) !important;
+  background: rgba(var(--accent-rgb), .105) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.045);
+}
+
+.hero-premium-section .hero-copy h2 {
+  max-width: 1050px !important;
+  font-size: clamp(3.15rem, 5.9vw, 7.25rem) !important;
+  line-height: .91 !important;
+  letter-spacing: -.085em !important;
+  margin-bottom: 24px !important;
+  text-wrap: balance;
+}
+
+.hero-premium-section .hero-copy p {
+  max-width: 820px !important;
+  font-size: clamp(1rem, 1.06vw, 1.18rem) !important;
+  line-height: 1.82 !important;
+  color: rgba(214, 220, 232, .78) !important;
+  margin-bottom: 30px !important;
+}
+
+.hero-premium-section .hero-actions {
+  gap: 12px !important;
+}
+
+/* Elemento visual: SVG transparente, color dinámico del theme */
+.hero-visual-wrap {
+  justify-self: center;
+  width: min(420px, 100%);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  color: var(--accent);
+  cursor: default;
+  isolation: isolate;
+}
+
+.hero-english-badge {
+  width: 100%;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  transform-origin: 50% 50%;
+  will-change: transform;
+  filter:
+    drop-shadow(0 30px 50px rgba(0,0,0,.24))
+    drop-shadow(0 0 26px rgba(var(--accent-rgb), .12));
+}
+
+.hero-visual-wrap:hover .hero-english-badge,
+.hero-premium-section:hover .hero-english-badge {
+  animation: vibrar .42s linear both;
+}
+
+@keyframes vibrar {
+  0% { transform: translate3d(0,0,0) rotate(0deg); }
+  12% { transform: translate3d(1.5px,-1px,0) rotate(.8deg); }
+  24% { transform: translate3d(-1.4px,1px,0) rotate(-.8deg); }
+  36% { transform: translate3d(1.2px,.8px,0) rotate(.55deg); }
+  48% { transform: translate3d(-1px,-.8px,0) rotate(-.55deg); }
+  60% { transform: translate3d(.8px,.7px,0) rotate(.35deg); }
+  72% { transform: translate3d(-.7px,-.6px,0) rotate(-.35deg); }
+  84% { transform: translate3d(.4px,-.3px,0) rotate(.18deg); }
+  100% { transform: translate3d(0,0,0) rotate(0deg); }
+}
+
+.hero-english-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.hero-english-svg * {
+  vector-effect: non-scaling-stroke;
+}
+
+.hero-orbit,
+.hero-wave,
+.hero-mini-card rect,
+.hero-mini-card path,
+.hero-spark path {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hero-orbit-one {
+  stroke-width: 1.35;
+  opacity: .32;
+}
+
+.hero-orbit-two {
+  stroke-width: 1;
+  opacity: .18;
+  stroke-dasharray: 6 12;
+}
+
+.hero-wave {
+  stroke-width: 1.6;
+  opacity: .28;
+}
+
+.hero-wave-two {
+  stroke-width: 1.25;
+  opacity: .18;
+}
+
+.hero-en-text {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 104px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: -.09em;
+  fill: url(#heroEnGlow);
+}
+
+.hero-en-sub {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: .22em;
+  fill: currentColor;
+  opacity: .58;
+}
+
+.hero-mini-card rect {
+  stroke-width: 1.25;
+  opacity: .38;
+}
+
+.hero-mini-card path {
+  stroke-width: 1.2;
+  opacity: .46;
+}
+
+.hero-card-one {
+  transform-origin: 114px 123px;
+  transform: rotate(-7deg);
+}
+
+.hero-card-two {
+  transform-origin: 320px 303px;
+  transform: rotate(7deg);
+}
+
+.hero-spark path {
+  stroke-width: 1.5;
+  opacity: .52;
+}
+
+/* Métricas debajo: no compiten con el visual, conservan IDs y funcionalidad */
+.hero-premium-section .hero-progress-grid {
+  position: relative;
+  z-index: 1;
+  margin-top: clamp(34px, 4vw, 58px) !important;
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+}
+
+.hero-premium-section .progress-card {
+  min-height: 128px !important;
+  padding: 18px !important;
+  border: 0 !important;
+  border-radius: 20px !important;
+  background: rgba(255,255,255,.038) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.045) !important;
+  justify-content: center !important;
+}
+
+.hero-premium-section .progress-card.wide-card {
+  grid-column: auto !important;
+}
+
+.hero-premium-section .progress-card strong {
+  font-size: clamp(1.55rem, 1.8vw, 2rem) !important;
+}
+
+.hero-premium-section .progress-card span {
+  font-size: .72rem !important;
+  margin-bottom: 10px !important;
+}
+
+.hero-premium-section .progress-card small {
+  font-size: .75rem !important;
+  line-height: 1.35 !important;
+}
+
+@media (max-width: 1280px) {
+  .hero-stage {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
+    gap: 34px;
+  }
+
+  .hero-premium-section .hero-progress-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 920px) {
+  .hero-section.hero-premium-section {
+    padding: 34px 24px !important;
+  }
+
+  .hero-stage {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-visual-wrap {
+    width: min(320px, 72vw);
+    justify-self: start;
+  }
+
+  .hero-premium-section .hero-progress-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .hero-section.hero-premium-section {
+    padding: 28px 18px !important;
+    border-radius: 26px !important;
+  }
+
+  .hero-premium-section .hero-copy h2 {
+    font-size: clamp(2.6rem, 15vw, 4.2rem) !important;
+  }
+
+  .hero-premium-section .hero-progress-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .hero-visual-wrap {
+    width: min(260px, 82vw);
+  }
+}
+
+
+
+/* =========================================================
+   V44 NAV TYPOGRAPHY FIX + EN RIPPLE/MOUSE TRACKING
+========================================================= */
+
+/* Corrección crítica: descenders de letras como g/p no se recortan */
+.top-nav .nav-link,
+.top-nav .nav-pill-minimal,
+.top-nav .resource-menu-toggle,
+.top-nav .misc-menu-toggle,
+.top-nav .nav-pill-theme,
+.resource-menu-toggle,
+.misc-menu-toggle {
+  height: auto !important;
+  min-height: 42px !important;
+  line-height: 1.35 !important;
+  padding-top: 8px !important;
+  padding-bottom: 9px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  overflow: visible !important;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* El texto interno también tiene caja de línea respirada */
+.top-nav .nav-link *,
+.top-nav .resource-menu-toggle *,
+.top-nav .misc-menu-toggle * {
+  line-height: 1.35 !important;
+  overflow: visible !important;
+}
+
+/* Evita cualquier regla previa de leading-none / altura rígida en nav */
+.nav-link,
+.resource-menu-toggle,
+.misc-menu-toggle {
+  max-height: none !important;
+}
+
+/* Ajuste del hero para mantener fondo orgánico sin bordes duros */
+.hero-section.hero-premium-section {
+  border: 0 !important;
+  background:
+    radial-gradient(circle at 78% 38%, rgba(var(--accent-rgb), .16), transparent 28%),
+    radial-gradient(circle at 22% 4%, rgba(255,255,255,.04), transparent 30%),
+    linear-gradient(135deg, rgba(19, 17, 28, .98), rgba(11, 15, 23, .93) 58%, rgba(19, 17, 28, .98)) !important;
+}
+
+/* Nuevo componente EN circular */
+.hero-en-interactive-wrap {
+  justify-self: center;
+  width: min(430px, 100%);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  color: var(--accent);
+  perspective: 900px;
+  cursor: pointer;
+}
+
+.hero-en-circle {
+  --hero-mx: 0px;
+  --hero-my: 0px;
+  --hero-rx: 0deg;
+  --hero-ry: 0deg;
+
+  position: relative;
+  width: min(340px, 82%);
+  aspect-ratio: 1;
+  border-radius: 999px;
+
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 10px;
+
+  color: var(--accent);
+  border: 1.2px solid rgba(var(--accent-rgb), .72);
+  background:
+    radial-gradient(circle at 48% 42%, rgba(var(--accent-rgb), .135), transparent 45%),
+    radial-gradient(circle at 50% 100%, rgba(255,255,255,.04), transparent 44%),
+    rgba(255, 255, 255, .012);
+
+  box-shadow:
+    0 34px 78px rgba(0,0,0,.25),
+    0 0 46px rgba(var(--accent-rgb), .12),
+    inset 0 1px 0 rgba(255,255,255,.055);
+
+  transform:
+    translate3d(var(--hero-mx), var(--hero-my), 0)
+    rotateX(var(--hero-rx))
+    rotateY(var(--hero-ry));
+
+  transition:
+    transform .16s cubic-bezier(.2,.8,.2,1),
+    border-color .18s ease,
+    box-shadow .18s ease,
+    background-color .18s ease;
+  will-change: transform;
+}
+
+/* Ondas concéntricas transparentes */
+.hero-en-circle::before,
+.hero-en-circle::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  border: 1px solid rgba(var(--accent-rgb), .38);
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(.98);
+}
+
+.hero-en-circle::after {
+  inset: -12px;
+  border-color: rgba(var(--accent-rgb), .22);
+}
+
+.hero-en-interactive-wrap:hover .hero-en-circle,
+.hero-en-circle.is-tracking {
+  border-color: rgba(var(--accent-rgb), .95);
+  box-shadow:
+    0 38px 86px rgba(0,0,0,.29),
+    0 0 60px rgba(var(--accent-rgb), .18),
+    inset 0 1px 0 rgba(255,255,255,.07);
+}
+
+.hero-en-interactive-wrap:hover .hero-en-circle {
+  animation: vibrar .34s linear both;
+}
+
+.hero-en-interactive-wrap:hover .hero-en-circle::before {
+  animation: enRipple 1.18s ease-out infinite;
+}
+
+.hero-en-interactive-wrap:hover .hero-en-circle::after {
+  animation: enRipple 1.18s .28s ease-out infinite;
+}
+
+@keyframes enRipple {
+  0% {
+    opacity: .52;
+    transform: scale(.98);
+  }
+  62% {
+    opacity: .16;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.18);
+  }
+}
+
+@keyframes vibrar {
+  0% { transform: translate3d(var(--hero-mx), var(--hero-my), 0) rotateX(var(--hero-rx)) rotateY(var(--hero-ry)) rotate(0deg); }
+  12% { transform: translate3d(calc(var(--hero-mx) + 1.2px), calc(var(--hero-my) - .8px), 0) rotateX(var(--hero-rx)) rotateY(var(--hero-ry)) rotate(.7deg); }
+  24% { transform: translate3d(calc(var(--hero-mx) - 1.1px), calc(var(--hero-my) + .8px), 0) rotateX(var(--hero-rx)) rotateY(var(--hero-ry)) rotate(-.7deg); }
+  36% { transform: translate3d(calc(var(--hero-mx) + .9px), calc(var(--hero-my) + .6px), 0) rotateX(var(--hero-rx)) rotateY(var(--hero-ry)) rotate(.45deg); }
+  48% { transform: translate3d(calc(var(--hero-mx) - .8px), calc(var(--hero-my) - .6px), 0) rotateX(var(--hero-rx)) rotateY(var(--hero-ry)) rotate(-.45deg); }
+  60% { transform: translate3d(calc(var(--hero-mx) + .55px), calc(var(--hero-my) + .45px), 0) rotateX(var(--hero-rx)) rotateY(var(--hero-ry)) rotate(.25deg); }
+  72% { transform: translate3d(calc(var(--hero-mx) - .45px), calc(var(--hero-my) - .35px), 0) rotateX(var(--hero-rx)) rotateY(var(--hero-ry)) rotate(-.25deg); }
+  100% { transform: translate3d(var(--hero-mx), var(--hero-my), 0) rotateX(var(--hero-rx)) rotateY(var(--hero-ry)) rotate(0deg); }
+}
+
+/* Tipografía del componente EN */
+.hero-en-main {
+  font-size: clamp(4.8rem, 8vw, 7.6rem);
+  line-height: .82;
+  letter-spacing: -.09em;
+  font-weight: 950;
+  color: currentColor;
+  text-shadow:
+    0 0 30px rgba(var(--accent-rgb), .18),
+    0 16px 44px rgba(0,0,0,.20);
+}
+
+.hero-en-caption {
+  color: currentColor;
+  opacity: .66;
+  font-size: .72rem;
+  line-height: 1.2;
+  font-weight: 900;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+}
+
+/* Detalles lineales internos, también con color theme */
+.hero-en-ring {
+  position: absolute;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  opacity: .16;
+  pointer-events: none;
+}
+
+.hero-en-ring-one {
+  inset: 14%;
+}
+
+.hero-en-ring-two {
+  inset: 27%;
+  border-style: dashed;
+  opacity: .12;
+}
+
+.hero-en-spark {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  color: currentColor;
+  opacity: .48;
+}
+
+.hero-en-spark::before,
+.hero-en-spark::after {
+  content: "";
+  position: absolute;
+  background: currentColor;
+  border-radius: 999px;
+}
+
+.hero-en-spark::before {
+  width: 100%;
+  height: 1px;
+  left: 0;
+  top: 50%;
+}
+
+.hero-en-spark::after {
+  height: 100%;
+  width: 1px;
+  left: 50%;
+  top: 0;
+}
+
+.hero-en-spark-a {
+  right: 12%;
+  top: 20%;
+  transform: rotate(18deg);
+}
+
+.hero-en-spark-b {
+  left: 13%;
+  bottom: 20%;
+  transform: rotate(-12deg) scale(.78);
+  opacity: .34;
+}
+
+/* Se desactiva cualquier visual SVG anterior si hubiera quedado por cascada */
+.hero-english-badge,
+.hero-english-svg {
+  pointer-events: none;
+}
+
+/* Responsive del visual */
+@media (max-width: 920px) {
+  .hero-en-interactive-wrap {
+    justify-self: start;
+    width: min(330px, 72vw);
+  }
+
+  .hero-en-circle {
+    width: min(290px, 86%);
+  }
+}
+
+@media (max-width: 560px) {
+  .top-nav .nav-link,
+  .top-nav .resource-menu-toggle,
+  .top-nav .misc-menu-toggle {
+    min-height: 40px !important;
+    padding-top: 7px !important;
+    padding-bottom: 8px !important;
+    line-height: 1.34 !important;
+  }
+
+  .hero-en-interactive-wrap {
+    width: min(270px, 84vw);
+  }
+
+  .hero-en-main {
+    font-size: clamp(4rem, 19vw, 5.6rem);
+  }
+}
+
+
+
+/* =========================================================
+   V45 EN SELECT-NONE + COMPACT BALANCED CALENDAR
+========================================================= */
+
+/* 1) EN: imposible de seleccionar o resaltar durante hover/drag */
+.hero-en-circle,
+.hero-en-circle *,
+.hero-en-main,
+.hero-en-caption {
+  -webkit-user-select: none !important;
+  user-select: none !important;
+  -webkit-touch-callout: none !important;
+}
+
+.hero-en-main,
+.hero-en-caption,
+.hero-en-ring,
+.hero-en-spark {
+  pointer-events: none !important;
+}
+
+/* 2) Calendario compacto y balanceado */
+.heatmap-calendar-section {
+  padding: clamp(18px, 2.4vw, 32px) !important;
+}
+
+/* Cabecera más compacta */
+.heatmap-calendar-section .calendar-header {
+  margin-bottom: 18px !important;
+  gap: 20px !important;
+}
+
+.heatmap-summary > div {
+  min-height: 92px !important;
+  padding: 16px 18px !important;
+}
+
+/* Layout principal: izquierda y derecha con altura alineada */
+.heatmap-layout.heatmap-layout-compact,
+.heatmap-layout {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.32fr) minmax(300px, .68fr) !important;
+  gap: 18px !important;
+  align-items: stretch !important;
+}
+
+/* Columna izquierda: calendario mensual y anual con mismo ancho exacto */
+.heatmap-left-column {
+  display: grid !important;
+  grid-template-rows: auto auto !important;
+  gap: 14px !important;
+  min-width: 0 !important;
+  align-self: stretch !important;
+}
+
+.heatmap-left-column > .heatmap-month-card,
+.heatmap-left-column > .annual-heatmap-card {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+}
+
+/* Calendario mensual más acotado */
+.heatmap-month-card {
+  padding: 16px !important;
+  border-radius: 20px !important;
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+.heatmap-toolbar {
+  grid-template-columns: 38px 1fr 38px !important;
+  gap: 10px !important;
+  margin-bottom: 12px !important;
+}
+
+.heatmap-toolbar .ghost-btn {
+  width: 38px !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  padding: 0 !important;
+}
+
+.heatmap-toolbar strong {
+  font-size: 1.02rem !important;
+}
+
+.heatmap-toolbar span {
+  font-size: .72rem !important;
+}
+
+.heatmap-weekdays,
+.heatmap-month-grid {
+  gap: 5px !important;
+}
+
+.heatmap-weekdays span {
+  font-size: .66rem !important;
+}
+
+.heatmap-day {
+  min-height: clamp(42px, 3.45vw, 58px) !important;
+  border-radius: 10px !important;
+  padding: 6px !important;
+  gap: 2px !important;
+}
+
+.heatmap-day strong {
+  font-size: .78rem !important;
+}
+
+.heatmap-day span {
+  font-size: .61rem !important;
+  line-height: 1.1 !important;
+}
+
+.heatmap-day i {
+  width: 5px !important;
+  height: 5px !important;
+  right: 6px !important;
+  bottom: 6px !important;
+}
+
+.heatmap-legend {
+  margin-top: 10px !important;
+  gap: 5px !important;
+  font-size: .68rem !important;
+}
+
+.heatmap-legend i {
+  width: 14px !important;
+  height: 14px !important;
+  border-radius: 4px !important;
+}
+
+/* Progreso anual horizontal: mismo ancho que el calendario mensual */
+.heatmap-left-column .annual-heatmap-card {
+  padding: 14px 16px !important;
+  border-radius: 20px !important;
+  min-height: 0 !important;
+  align-self: stretch !important;
+}
+
+.heatmap-left-column .annual-heatmap-card > div:first-child {
+  margin-bottom: 10px !important;
+}
+
+.heatmap-left-column .annual-heatmap-grid {
+  display: grid !important;
+  grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+  gap: 7px !important;
+  width: 100% !important;
+}
+
+.heatmap-left-column .annual-month {
+  min-width: 0 !important;
+  gap: 4px !important;
+}
+
+.heatmap-left-column .annual-month strong {
+  font-size: .56rem !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  letter-spacing: .04em !important;
+}
+
+.heatmap-left-column .annual-month div {
+  display: grid !important;
+  grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+  gap: 1.5px !important;
+}
+
+.heatmap-left-column .annual-month i {
+  min-width: 0 !important;
+  aspect-ratio: 1 !important;
+  border-radius: 2px !important;
+}
+
+/* Columna derecha: 4 tarjetas compactas, agrupadas, sin hueco muerto */
+.heatmap-side-panel {
+  height: 100% !important;
+  min-height: 0 !important;
+  align-self: stretch !important;
+
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+  align-content: stretch !important;
+  align-items: stretch !important;
+}
+
+.heatmap-side-panel .annual-heatmap-card {
+  display: none !important;
+}
+
+/* Las 4 tarjetas se acomodan en 2x2 y ocupan la altura combinada de la columna izquierda */
+.heatmap-metric-card,
+.heatmap-selected-card {
+  min-height: 0 !important;
+  height: 100% !important;
+  padding: 16px !important;
+  border-radius: 20px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+}
+
+.heatmap-selected-card {
+  grid-column: auto !important;
+}
+
+.heatmap-metric-card span {
+  font-size: .66rem !important;
+  line-height: 1.1 !important;
+}
+
+.heatmap-metric-card strong {
+  font-size: clamp(1.15rem, 1.45vw, 1.55rem) !important;
+  margin: 6px 0 5px !important;
+}
+
+.heatmap-metric-card p,
+.heatmap-selected-card p {
+  font-size: .76rem !important;
+  line-height: 1.42 !important;
+}
+
+.heatmap-selected-card h4 {
+  font-size: .92rem !important;
+  line-height: 1.25 !important;
+  margin: 8px 0 6px !important;
+}
+
+.heatmap-note-preview {
+  margin-top: 8px !important;
+}
+
+/* Responsive: mantiene simetría y evita columnas comprimidas */
+@media (max-width: 1280px) {
+  .heatmap-layout.heatmap-layout-compact,
+  .heatmap-layout {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .heatmap-side-panel {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    grid-template-rows: auto !important;
+    height: auto !important;
+  }
+
+  .heatmap-metric-card,
+  .heatmap-selected-card {
+    height: auto !important;
+    min-height: 118px !important;
+  }
+
+  .heatmap-left-column .annual-heatmap-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 980px) {
+  .heatmap-side-panel {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .heatmap-left-column .annual-heatmap-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+    gap: 9px !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .heatmap-calendar-section {
+    padding: 16px !important;
+  }
+
+  .heatmap-side-panel {
+    grid-template-columns: 1fr !important;
+  }
+
+  .heatmap-metric-card,
+  .heatmap-selected-card {
+    min-height: auto !important;
+  }
+
+  .heatmap-left-column .annual-heatmap-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .heatmap-day {
+    min-height: 44px !important;
+  }
+
+  .heatmap-day span {
+    display: none !important;
+  }
+}
+
+@media (max-width: 460px) {
+  .heatmap-left-column .annual-heatmap-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+
+
+/* =========================================================
+   V47 STRICT VERTICAL HOME FLOW
+   Bloque 1: Hero + tira horizontal.
+   Bloque 2: Calendario tradicional completo.
+========================================================= */
+
+:root {
+  --home-shell-width: 1480px;
+  --home-shell-x: clamp(18px, 3vw, 42px);
+  --home-shell-gap: 32px;
+}
+
+/* El contenedor general vuelve a un flujo vertical estable */
+.main-content {
+  width: min(var(--home-shell-width), calc(100vw - (var(--home-shell-x) * 2))) !important;
+  max-width: var(--home-shell-width) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* BLOQUE 1: Hero independiente, ancho exacto del layout */
+.hero-section.hero-premium-section {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 0 var(--home-shell-gap) 0 !important;
+  padding: clamp(36px, 4.2vw, 74px) clamp(28px, 4.2vw, 76px) !important;
+  border: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Hero en dos columnas: izquierda texto/progreso; derecha EN */
+.hero-stage {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.28fr) minmax(280px, .72fr) !important;
+  gap: clamp(34px, 5vw, 76px) !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+
+.hero-copy {
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+/* EN: no se selecciona nunca */
+.hero-en-circle,
+.hero-en-circle *,
+.hero-en-main,
+.hero-en-caption {
+  -webkit-user-select: none !important;
+  user-select: none !important;
+  -webkit-touch-callout: none !important;
+}
+
+.hero-en-main,
+.hero-en-caption {
+  pointer-events: none !important;
+}
+
+/* Tira de progreso dentro de la columna izquierda, abajo del texto */
+.hero-compact-progress {
+  width: 100%;
+  margin-top: clamp(22px, 2.4vw, 34px);
+  padding: 14px 14px 12px;
+  border: 0 !important;
+  border-radius: 22px;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.038), rgba(255,255,255,.017)),
+    radial-gradient(circle at 18% 0%, rgba(var(--accent-rgb), .07), transparent 36%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.04),
+    0 14px 30px rgba(0,0,0,.10);
+  box-sizing: border-box;
+}
+
+.hero-compact-progress-head {
+  display: grid;
+  grid-template-columns: minmax(190px, .72fr) minmax(260px, 1fr);
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.hero-compact-month {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.hero-compact-month > div {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.hero-compact-month span {
+  color: var(--accent-soft);
+  font-size: .64rem;
+  font-weight: 900;
+  letter-spacing: .10em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.hero-compact-month strong {
+  color: var(--text);
+  font-size: .98rem;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.hero-compact-nav {
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  color: var(--accent-soft);
+  background: rgba(var(--accent-rgb), .10);
+  cursor: pointer;
+  font-size: 1.18rem;
+  line-height: 1;
+}
+
+.hero-compact-nav:hover {
+  color: var(--text);
+  background: rgba(var(--accent-rgb), .16);
+}
+
+.hero-compact-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.hero-compact-stats article {
+  padding: 8px 9px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.030);
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.hero-compact-stats span {
+  color: var(--muted);
+  font-size: .61rem;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: .045em;
+  line-height: 1;
+}
+
+.hero-compact-stats strong {
+  color: var(--text);
+  font-size: .98rem;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+/* Una fila continua: compacta y estable */
+.hero-compact-strip-wrap {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 3px 0 2px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(var(--accent-rgb), .26) transparent;
+}
+
+.hero-compact-strip-wrap::-webkit-scrollbar {
+  height: 6px;
+}
+
+.hero-compact-strip-wrap::-webkit-scrollbar-thumb {
+  background: rgba(var(--accent-rgb), .23);
+  border-radius: 999px;
+}
+
+.hero-compact-strip {
+  --hero-days-count: 31;
+  width: 100%;
+  min-width: 560px;
+  display: grid;
+  grid-template-columns: repeat(var(--hero-days-count), minmax(14px, 1fr));
+  gap: 4px;
+  align-items: center;
+}
+
+.hero-compact-day {
+  aspect-ratio: 1;
+  min-height: 16px;
+  min-width: 0;
+  border: 0;
+  border-radius: 5px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: rgba(255,255,255,.78);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.035);
+  transition: transform .16s ease, filter .16s ease, box-shadow .16s ease;
+}
+
+.hero-compact-day span {
+  font-size: clamp(.44rem, .50vw, .56rem);
+  line-height: 1;
+  font-weight: 900;
+  opacity: .68;
+  pointer-events: none;
+  user-select: none;
+}
+
+.hero-compact-day:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.12);
+  box-shadow: 0 6px 12px rgba(0,0,0,.16), inset 0 1px 0 rgba(255,255,255,.06);
+}
+
+.hero-compact-day.is-today {
+  outline: 1px solid rgba(var(--accent-rgb), .62);
+  outline-offset: 2px;
+}
+
+.hero-compact-progress .heat-0 {
+  background: rgba(122,128,142,.16) !important;
+}
+
+.hero-compact-progress .heat-1 {
+  background: rgba(var(--accent-rgb), .20) !important;
+}
+
+.hero-compact-progress .heat-2 {
+  background: rgba(var(--accent-rgb), .44) !important;
+}
+
+.hero-compact-progress .heat-3 {
+  background: linear-gradient(145deg, rgba(var(--accent-rgb), .95), rgba(var(--accent-rgb), .58)) !important;
+}
+
+/* Métricas existentes del hero: quedan debajo del stage, sin romper simetría */
+.hero-premium-section .hero-progress-grid {
+  width: 100% !important;
+  margin-top: clamp(28px, 3.4vw, 46px) !important;
+}
+
+/* BLOQUE 2: Calendario tradicional completo, separado y con mismo ancho exacto */
+.heatmap-calendar-section {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 0 var(--home-shell-gap) 0 !important;
+  padding: clamp(24px, 3vw, 40px) !important;
+  border-radius: 28px !important;
+  box-sizing: border-box !important;
+  border: 0 !important;
+  background:
+    radial-gradient(circle at 80% 10%, rgba(var(--accent-rgb), .10), transparent 32%),
+    linear-gradient(145deg, rgba(255,255,255,.036), rgba(255,255,255,.018)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.04),
+    0 18px 40px rgba(0,0,0,.10) !important;
+}
+
+/* Restauración de calendario tradicional espacioso en semanas Lun-Dom */
+.heatmap-calendar-section .calendar-header {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.15fr) minmax(280px, .45fr) !important;
+  gap: 24px !important;
+  align-items: end !important;
+  margin-bottom: 24px !important;
+}
+
+.heatmap-layout.heatmap-layout-compact,
+.heatmap-layout {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.22fr) minmax(320px, .78fr) !important;
+  gap: 24px !important;
+  align-items: start !important;
+}
+
+.heatmap-left-column {
+  display: grid !important;
+  grid-template-rows: auto auto !important;
+  gap: 18px !important;
+  min-width: 0 !important;
+}
+
+.heatmap-month-card {
+  padding: clamp(18px, 2vw, 28px) !important;
+  border-radius: 24px !important;
+  min-height: auto !important;
+  height: auto !important;
+}
+
+.heatmap-toolbar {
+  grid-template-columns: 44px 1fr 44px !important;
+  gap: 12px !important;
+  margin-bottom: 18px !important;
+}
+
+.heatmap-weekdays,
+.heatmap-month-grid {
+  display: grid !important;
+  grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+}
+
+.heatmap-day {
+  min-height: clamp(72px, 5.2vw, 92px) !important;
+  border-radius: 16px !important;
+  padding: 10px !important;
+}
+
+.heatmap-day strong {
+  font-size: .94rem !important;
+}
+
+.heatmap-day span {
+  display: block !important;
+  font-size: .72rem !important;
+}
+
+.heatmap-side-panel {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  grid-auto-rows: auto !important;
+  gap: 16px !important;
+  align-content: start !important;
+}
+
+.heatmap-metric-card,
+.heatmap-selected-card {
+  min-height: 140px !important;
+  height: auto !important;
+  padding: 20px !important;
+  border-radius: 22px !important;
+}
+
+.heatmap-selected-card {
+  grid-column: 1 / -1 !important;
+}
+
+.heatmap-left-column .annual-heatmap-card {
+  width: 100% !important;
+  padding: 18px 20px !important;
+  border-radius: 22px !important;
+}
+
+.heatmap-left-column .annual-heatmap-grid {
+  display: grid !important;
+  grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+}
+
+/* Responsive QA: ambos bloques colapsan con el mismo ancho y orden vertical */
+@media (max-width: 1180px) {
+  .hero-stage,
+  .heatmap-calendar-section .calendar-header,
+  .heatmap-layout.heatmap-layout-compact,
+  .heatmap-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  .hero-en-interactive-wrap {
+    justify-self: start !important;
+  }
+
+  .heatmap-side-panel {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+
+  .heatmap-selected-card {
+    grid-column: auto !important;
+  }
+}
+
+@media (max-width: 920px) {
+  .main-content {
+    width: calc(100vw - 28px) !important;
+  }
+
+  .hero-compact-progress-head {
+    grid-template-columns: 1fr !important;
+  }
+
+  .heatmap-side-panel {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .heatmap-selected-card {
+    grid-column: 1 / -1 !important;
+  }
+
+  .heatmap-left-column .annual-heatmap-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-section.hero-premium-section,
+  .heatmap-calendar-section {
+    padding: 18px !important;
+    border-radius: 24px !important;
+  }
+
+  .hero-compact-stats,
+  .heatmap-side-panel {
+    grid-template-columns: 1fr !important;
+  }
+
+  .hero-compact-strip {
+    grid-template-columns: repeat(var(--hero-days-count), 22px);
+    min-width: max-content;
+  }
+
+  .heatmap-weekdays,
+  .heatmap-month-grid {
+    gap: 5px !important;
+  }
+
+  .heatmap-day {
+    min-height: 54px !important;
+    border-radius: 12px !important;
+    padding: 8px !important;
+  }
+
+  .heatmap-day span {
+    display: none !important;
+  }
+
+  .heatmap-left-column .annual-heatmap-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+/* =========================================================
+   V48 — FINAL HOME LAYOUT LOCK (QA)
+   Objetivo: flujo estrictamente vertical y simétrico.
+   Bloque 1 (#inicio) y Bloque 2 (#calendario) comparten
+   EXACTAMENTE el mismo contenedor de ancho máximo.
+   Esta capa va al final para ganar en cascada y neutralizar
+   reglas previas contradictorias (.hero-section 2-col, etc).
+========================================================= */
+
+:root {
+  --home-max-w: 1480px;
+  --home-x: clamp(18px, 3vw, 42px);
+  --home-gap: 32px;
+}
+
+/* Contenedor único: ambos bloques nacen del mismo ancho */
+.main-content {
+  width: min(var(--home-max-w), calc(100vw - (var(--home-x) * 2))) !important;
+  max-width: var(--home-max-w) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* BLOQUE 1 — El hero deja de ser grid de 2 columnas.
+   Ahora es un bloque vertical: stage -> (strip vive dentro) -> progress-grid */
+#inicio.hero-section.hero-premium-section {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 0 var(--home-gap) 0 !important;
+  padding: clamp(34px, 4vw, 68px) clamp(26px, 3.6vw, 60px) !important;
+  border: 0 !important;
+  box-sizing: border-box !important;
+  grid-template-columns: none !important;   /* mata la grilla vieja 1.1fr/460px */
+}
+
+/* Única grilla interna del hero: texto+tira (izq) / EN (der) */
+#inicio .hero-stage {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.3fr) minmax(260px, 0.7fr) !important;
+  gap: clamp(32px, 5vw, 76px) !important;
+  align-items: center !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+#inicio .hero-copy {
+  min-width: 0 !important;
+  width: 100% !important;
+  padding: 0 !important;
+}
+
+/* La tira de progreso: dentro del hero-copy, ancho completo de su columna */
+#inicio .hero-compact-progress {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Métricas del hero: fila inferior, ancho total del bloque, misma altura */
+#inicio .hero-progress-grid {
+  width: 100% !important;
+  margin: clamp(26px, 3vw, 44px) 0 0 0 !important;
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  align-items: stretch !important;
+}
+#inicio .hero-progress-grid .progress-card.wide-card {
+  grid-column: auto !important;
+}
+
+/* EN: bloque interactivo, nunca seleccionable */
+#inicio .hero-en-interactive-wrap {
+  justify-self: center !important;
+}
+#inicio .hero-en-circle,
+#inicio .hero-en-circle *,
+#inicio .hero-en-main,
+#inicio .hero-en-caption {
+  -webkit-user-select: none !important;
+  user-select: none !important;
+  -webkit-touch-callout: none !important;
+}
+#inicio .hero-en-main,
+#inicio .hero-en-caption {
+  pointer-events: none !important;
+}
+
+/* BLOQUE 2 — Calendario tradicional, mismo ancho exacto que el hero */
+#calendario.heatmap-calendar-section {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: var(--home-gap) 0 var(--home-gap) 0 !important;
+  padding: clamp(26px, 3vw, 44px) !important;
+  box-sizing: border-box !important;
+  border: 0 !important;
+}
+
+#calendario .calendar-header {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.45fr) !important;
+  gap: 24px !important;
+  align-items: end !important;
+  margin-bottom: 24px !important;
+}
+
+#calendario .heatmap-layout {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.22fr) minmax(320px, 0.78fr) !important;
+  gap: 24px !important;
+  align-items: start !important;
+}
+
+/* Calendario mensual: grilla tradicional Lun–Dom, espaciosa y simétrica */
+#calendario .heatmap-weekdays,
+#calendario .heatmap-month-grid {
+  display: grid !important;
+  grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+}
+#calendario .heatmap-day {
+  min-height: clamp(70px, 5vw, 92px) !important;
+  height: auto !important;      /* sin alturas rígidas: nada se aplasta */
+  border-radius: 16px !important;
+  padding: 10px !important;
+}
+
+/* ---- Responsive QA: ambos bloques colapsan al mismo ancho y orden ---- */
+@media (max-width: 1180px) {
+  #inicio .hero-stage,
+  #calendario .calendar-header,
+  #calendario .heatmap-layout {
+    grid-template-columns: 1fr !important;
+  }
+  #inicio .hero-en-interactive-wrap { justify-self: start !important; }
+  #inicio .hero-progress-grid { grid-template-columns: repeat(3, minmax(0,1fr)) !important; }
+}
+
+@media (max-width: 920px) {
+  .main-content { width: calc(100vw - 28px) !important; }
+  #inicio .hero-progress-grid { grid-template-columns: repeat(2, minmax(0,1fr)) !important; }
+  #inicio .hero-compact-progress-head { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 560px) {
+  #inicio.hero-section.hero-premium-section,
+  #calendario.heatmap-calendar-section { padding: 18px !important; border-radius: 24px !important; }
+  #inicio .hero-progress-grid,
+  #inicio .hero-compact-stats { grid-template-columns: 1fr !important; }
+  #calendario .heatmap-day { min-height: 54px !important; }
+  #calendario .heatmap-day span { display: none !important; }
+}

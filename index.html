@@ -5,8 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>English Trainer IELTS | Inglés desde Español</title>
   <meta name="description" content="Entrenador de inglés desde español con tiempos verbales, writing IELTS, recursos, timer, flashcards, vocabulario y progreso." />
-  <link rel="icon" type="image/png" href="assets/EN.png" />
-  <link rel="stylesheet" href="style.css?v=v31-listening-audio-fix" />
+  <link rel="stylesheet" href="style.css?v=v47-hero-strip-full-calendar" />
 </head>
 
 <body>
@@ -79,21 +78,141 @@
     </div>
 
     <nav class="top-nav">
-      <a href="#inicio" class="nav-link active" data-dashboard-link>Inicio</a>
-      <a href="#progreso" class="nav-link" data-dashboard-link>Progreso</a>
-      <a href="#tiempos" class="nav-link" data-dashboard-link>Tiempos</a>
-      <a href="#writing" class="nav-link" data-dashboard-link>Writing</a>
-      <a href="#practica-rapida" class="nav-link" data-dashboard-link>Práctica</a>
-      <a href="#listening" class="nav-link" data-dashboard-link>Listening</a>
-      <a href="#examen" class="nav-link" data-dashboard-link>Examen</a>
+      <a href="#inicio" class="nav-link nav-pill-minimal active" data-dashboard-link>Inicio</a>
+      <a href="#progreso" class="nav-link nav-pill-minimal" data-dashboard-link>Progreso</a>
+      <a href="#tiempos" class="nav-link nav-pill-minimal" data-dashboard-link>Tiempos</a>
+      <a href="#practica-rapida" class="nav-link nav-pill-minimal" data-dashboard-link>Práctica</a>
+      <a href="#examen" class="nav-link nav-pill-minimal" data-dashboard-link>Examen</a>
+      <div class="resource-menu" id="resourceMenu">
+        <button id="resourceMenuToggle" class="resource-menu-toggle nav-pill-theme" type="button" aria-expanded="false" aria-controls="resourceMenuPanel">
+          <span class="resource-menu-mark">Estudio</span>
+          <span class="resource-menu-caret" aria-hidden="true">⌄</span>
+        </button>
 
-      <span class="nav-divider"></span>
+        <div id="resourceMenuPanel" class="resource-menu-panel premium-grid-menu-panel" aria-label="Secciones de estudio">
+          <button class="resource-menu-item premium-grid-menu-item study-menu-item" type="button" data-study-target="writing">
+            <span class="resource-icon premium-line-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M5 19l4.2-1.1L18 9.1 14.9 6 6.1 14.8 5 19Z"/><path d="M13.8 7.1l3.1 3.1"/><path d="M8.4 16.5l-.8 2.5 2.6-.7"/><path d="M11.6 11.4 9 14"/></svg>
+            </span>
+            <span class="resource-copy"><strong>Writing</strong><small>Producción de textos estructurados y corrección con IA Coach.</small></span>
+          </button>
 
-      <button class="resource-nav-btn" type="button" data-resource="apuntes">Apuntes</button>
-      <button class="resource-nav-btn" type="button" data-resource="vocabulario">Vocabulario</button>
-      <button class="resource-nav-btn" type="button" data-resource="flashcards">Flashcards</button>
-      <button class="resource-nav-btn" type="button" data-resource="phrasals">Phrasal verbs</button>
-      <button class="resource-nav-btn" type="button" data-resource="modals">Modales</button>
+          <button class="resource-menu-item premium-grid-menu-item study-menu-item" type="button" data-study-target="listening">
+            <span class="resource-icon premium-line-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4.5 13v-1.2a7.5 7.5 0 0 1 15 0V13"/><rect x="3.5" y="12" width="4" height="7" rx="2"/><rect x="16.5" y="12" width="4" height="7" rx="2"/><path d="M7.5 19a3 3 0 0 0 3 3h3"/></svg>
+            </span>
+            <span class="resource-copy"><strong>Listening</strong><small>Práctica auditiva avanzada, transcripciones y análisis de respuestas.</small></span>
+          </button>
+
+          <button class="resource-nav-btn resource-menu-item premium-grid-menu-item" type="button" data-resource="apuntes">
+            <span class="resource-icon premium-line-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4H11v16H6.5A2.5 2.5 0 0 0 4 22V6.5Z"/><path d="M20 6.5A2.5 2.5 0 0 0 17.5 4H13v16h4.5A2.5 2.5 0 0 1 20 22V6.5Z"/><path d="M7 8h2"/><path d="M15 8h2"/><path d="M7 12h2"/><path d="M15 12h2"/></svg>
+            </span>
+            <span class="resource-copy"><strong>Apuntes</strong><small>Registro personal de lecciones, gramática y textos guardados.</small></span>
+          </button>
+
+          <button class="resource-nav-btn resource-menu-item premium-grid-menu-item" type="button" data-resource="vocabulario">
+            <span class="resource-icon premium-line-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M5 5.5c0-1.1.9-2 2-2h5v17H7a2 2 0 0 0-2 2v-17Z"/><path d="M19 5.5c0-1.1-.9-2-2-2h-5v17h5a2 2 0 0 1 2 2v-17Z"/><path d="M8 8h2"/><path d="M14 8h2"/><path d="M8.3 15l1.7-4.8L11.7 15"/><path d="M8.9 13.2h2.2"/></svg>
+            </span>
+            <span class="resource-copy"><strong>Vocabulario</strong><small>Banco personalizado de términos para la expansión léxica.</small></span>
+          </button>
+
+          <button class="resource-nav-btn resource-menu-item premium-grid-menu-item" type="button" data-resource="flashcards">
+            <span class="resource-icon premium-line-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="4" y="7" width="10" height="12" rx="2"/><rect x="10" y="5" width="10" height="12" rx="2"/><path d="M7.2 15l1.7-4.3 1.7 4.3"/><path d="M7.8 13.5h2.2"/><path d="M13.5 9h3.8"/><path d="M13.5 14l3.8-5"/></svg>
+            </span>
+            <span class="resource-copy"><strong>Flashcards</strong><small>Sistema de repetición espaciada para memorización activa.</small></span>
+          </button>
+
+          <button class="resource-nav-btn resource-menu-item premium-grid-menu-item" type="button" data-resource="flashvoice">
+            <span class="resource-icon premium-line-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="9" y="4" width="6" height="10" rx="3"/><path d="M6.5 11.5a5.5 5.5 0 0 0 11 0"/><path d="M12 17v3"/><path d="M9 20h6"/><path d="M18.5 8.2c1 .5 1.7 1.3 2.1 2.3"/><path d="M18.5 12.8c1-.5 1.7-1.3 2.1-2.3"/></svg>
+            </span>
+            <span class="resource-copy"><strong>Flashvoice</strong><small>Entrenamiento de comprensión auditiva y transcripción en tiempo real.</small></span>
+          </button>
+
+          <button class="resource-nav-btn resource-menu-item premium-grid-menu-item" type="button" data-resource="phrasals">
+            <span class="resource-icon premium-line-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M10.2 13.8 8 16a3 3 0 1 1-4.2-4.2L6 9.6"/><path d="M13.8 10.2 16 8a3 3 0 1 1 4.2 4.2L18 14.4"/><path d="m9 15 6-6"/></svg>
+            </span>
+            <span class="resource-copy"><strong>Phrasal verbs</strong><small>Dominio de expresiones idiomáticas y combinaciones de uso cotidiano.</small></span>
+          </button>
+
+          <button class="resource-nav-btn resource-menu-item premium-grid-menu-item" type="button" data-resource="modals">
+            <span class="resource-icon premium-line-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="m12 3 6 6-6 6-6-6 6-6Z"/><path d="m12 9 6 6-6 6-6-6 6-6Z"/><path d="M6 9h12"/></svg>
+            </span>
+            <span class="resource-copy"><strong>Modales</strong><small>Guía de verbos auxiliares, matices de probabilidad y funciones expresivas.</small></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="misc-menu" id="miscMenu">
+        <button id="miscMenuToggle" class="misc-menu-toggle resource-menu-toggle nav-pill-theme" type="button" aria-expanded="false" aria-controls="miscMenuPanel" aria-label="Abrir menú misceláneo">
+          <span class="misc-menu-mark">Más</span>
+          <span class="misc-menu-caret" aria-hidden="true">⌄</span>
+        </button>
+
+        <div id="miscMenuPanel" class="misc-menu-panel premium-grid-menu-panel" aria-label="Opciones adicionales">
+          <button class="misc-menu-item premium-grid-menu-item" type="button" data-misc-target="perfil">
+            <span class="misc-icon premium-line-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="7.5" r="3.5"/><path d="M5 21a7 7 0 0 1 14 0"/></svg>
+            </span>
+            <span class="resource-copy"><strong>Perfil</strong><small>Objetivos, nivel y preferencias.</small></span>
+          </button>
+
+          <button class="misc-menu-item premium-grid-menu-item" type="button" data-misc-target="calendario">
+            <span class="misc-icon premium-line-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4"/><path d="M16 3v4"/><path d="M4 10h16"/><path d="M8 14h1"/><path d="M12 14h1"/><path d="M16 14h1"/><path d="M8 18h1"/><path d="M12 18h1"/></svg>
+            </span>
+            <span class="resource-copy"><strong>Calendario</strong><small>Exámenes y días estudiados.</small></span>
+          </button>
+
+          <button class="misc-menu-item premium-grid-menu-item" type="button" data-misc-target="logros">
+            <span class="misc-icon premium-line-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M8 4h8l-1.5 5h-5L8 4Z"/><circle cx="12" cy="14" r="4"/><path d="m10.8 14 1 1 1.7-2"/><path d="M9.5 18.5 8.5 22l3.5-1.7L15.5 22l-1-3.5"/></svg>
+            </span>
+            <span class="resource-copy"><strong>Logros / Medallas</strong><small>Hitos de continuidad y gamificación.</small></span>
+          </button>
+
+          <button class="misc-menu-item premium-grid-menu-item" type="button" data-misc-target="comunidad">
+            <span class="misc-icon premium-line-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 6.5A4.5 4.5 0 0 1 8.5 2h4A4.5 4.5 0 0 1 17 6.5v1A4.5 4.5 0 0 1 12.5 12H9l-4 3v-4.2A4.5 4.5 0 0 1 4 7.5v-1Z"/><path d="M13 13h2.5A4.5 4.5 0 0 0 20 8.5v7.7l-3-2.2h-2"/></svg>
+            </span>
+            <span class="resource-copy"><strong>Comunidad</strong><small>Grupos, retos y práctica social.</small></span>
+          </button>
+
+          <button class="misc-menu-item premium-grid-menu-item" type="button" data-misc-target="faqs">
+            <span class="misc-icon premium-line-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M9 9a3 3 0 1 1 4.2 2.7c-.8.4-1.2 1-1.2 2.1v.4"/><path d="M12 19h.01"/></svg>
+            </span>
+            <span class="resource-copy"><strong>FAQs</strong><small>Preguntas frecuentes y centro de ayuda.</small></span>
+          </button>
+
+          <button class="misc-menu-item premium-grid-menu-item" type="button" data-misc-target="privacidad">
+            <span class="misc-icon premium-line-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 2.8 8 7 10 4.2-2 7-5.5 7-10V6l-7-3Z"/><path d="M9 12h6"/><path d="M10 12V9.8a2 2 0 0 1 3.4-1.4"/></svg>
+            </span>
+            <span class="resource-copy"><strong>Términos y privacidad</strong><small>Uso local de tus datos y marco legal.</small></span>
+          </button>
+
+          <button class="misc-menu-item premium-grid-menu-item" type="button" data-misc-target="suscripciones">
+            <span class="misc-icon premium-line-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M7 10h7"/><path d="M7 14h5"/><path d="m16.5 10 1.5 2-1.5 2-1.5-2 1.5-2Z"/></svg>
+            </span>
+            <span class="resource-copy"><strong>Suscripciones</strong><small>Planes de estudio futuros y gestión de cuenta.</small></span>
+          </button>
+
+          <button class="misc-menu-item premium-grid-menu-item" type="button" data-misc-target="soporte">
+            <span class="misc-icon premium-line-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0 3.7 5.4l-7.7 7.7a2.2 2.2 0 0 1-3.1-3.1l7.7-7.7a4 4 0 0 0-.6-2.3Z"/><path d="M6.8 17.2l2 2"/></svg>
+            </span>
+            <span class="resource-copy"><strong>Soporte</strong><small>Feedback y reporte de errores.</small></span>
+          </button>
+        </div>
+      </div>
+
     </nav>
     <button id="settingsToggleBtn" class="settings-toggle" type="button" aria-label="Abrir opciones">
       <span aria-hidden="true">⚙</span>
@@ -142,22 +261,58 @@
   <div id="dashboardView">
     <main class="main-content">
 
-      <section id="inicio" class="section hero-section reveal">
-        <div class="hero-copy">
-          <span class="eyebrow">IELTS Training Dashboard</span>
-          <h2 id="titulo-dinamico" class="dynamic-hero-title">Entrená inglés con foco en estructura, escritura y precisión</h2>
-          <p>
-            Estudiá tiempos verbales, condicionales, phrasal verbs, modales y writing IELTS.
-            Además, llevá registro de tu tiempo de estudio, racha, exámenes, vocabulario y prácticas guardadas.
-          </p>
+      <section id="inicio" class="section hero-section reveal hero-premium-section">
+        <div class="hero-stage">
+          <div class="hero-copy">
+            <span class="eyebrow">IELTS Training Dashboard</span>
+            <h2 id="titulo-dinamico" class="dynamic-hero-title">Entrená inglés con foco en estructura, escritura y precisión</h2>
+            <p>
+              Estudiá tiempos verbales, condicionales, phrasal verbs y modales. Además, llevá registro de tu tiempo de estudio, racha, exámenes, vocabulario y prácticas guardadas.
+            </p>
 
-          <div class="hero-actions">
-            <a href="#tiempos" class="primary-btn" data-dashboard-link>Estudiar tiempos</a>
-            <a href="#writing" class="secondary-btn" data-dashboard-link>Practicar writing</a>
+            <div class="hero-actions">
+              <a href="#tiempos" class="primary-btn" data-dashboard-link>Estudiar tiempos</a>
+              <a href="#calendario" class="secondary-btn" data-dashboard-link>Ver calendario</a>
+            </div>
+
+            <div class="hero-compact-progress" aria-label="Progreso mensual compacto">
+              <div class="hero-compact-progress-head">
+                <div class="hero-compact-month">
+                  <button id="heroCompactPrevBtn" class="hero-compact-nav" type="button" aria-label="Mes anterior">‹</button>
+                  <div>
+                    <span>Progreso del mes</span>
+                    <strong id="heroCompactTitle">Mes actual</strong>
+                  </div>
+                  <button id="heroCompactNextBtn" class="hero-compact-nav" type="button" aria-label="Mes siguiente">›</button>
+                </div>
+
+                <div class="hero-compact-stats">
+                  <article><span>Racha</span><strong id="heroCompactCurrentStreak">0d</strong></article>
+                  <article><span>Mejor</span><strong id="heroCompactLongestStreak">0d</strong></article>
+                  <article><span>Total</span><strong id="heroCompactMonthTotal">0m</strong></article>
+                </div>
+              </div>
+
+              <div class="hero-compact-strip-wrap">
+                <div id="heroCompactMonthStrip" class="hero-compact-strip" aria-label="Heatmap horizontal del mes"></div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="hero-visual-wrap hero-en-interactive-wrap" aria-label="Elemento visual interactivo de aprendizaje de inglés">
+            <div class="hero-en-circle" id="heroEnCircle" aria-hidden="true">
+              <span class="hero-en-main select-none pointer-events-none">EN</span>
+              <span class="hero-en-caption select-none pointer-events-none">IELTS MODE</span>
+              <i class="hero-en-ring hero-en-ring-one"></i>
+              <i class="hero-en-ring hero-en-ring-two"></i>
+              <i class="hero-en-spark hero-en-spark-a"></i>
+              <i class="hero-en-spark hero-en-spark-b"></i>
+            </div>
           </div>
         </div>
 
-        <div class="progress-panel">
+        <div class="progress-panel hero-progress-grid">
           <article class="progress-card">
             <div>
               <strong id="studyTimeText">0m</strong>
@@ -203,6 +358,260 @@
             <small>Resultado acumulado de tus exámenes</small>
           </article>
         </div>
+      </section>
+
+      <section id="calendario" class="section reveal calendar-section heatmap-calendar-section">
+        <div class="section-header calendar-header">
+          <div>
+            <span class="eyebrow">Mapa de calor</span>
+            <h3>Calendario de progreso</h3>
+            <p>
+              Visualizá tus minutos de estudio por día con un heatmap mensual. Los colores se basan en el tiempo registrado:
+              gris sin actividad, claro 1-30m, medio 31-60m y oscuro más de 60m.
+            </p>
+          </div>
+
+          <div class="calendar-summary heatmap-summary">
+            <div>
+              <strong id="heatmapMonthTotal">0h</strong>
+              <span>Total del mes</span>
+            </div>
+            <div>
+              <strong id="heatmapCurrentStreak">0</strong>
+              <span>Racha actual</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="heatmap-layout heatmap-layout-compact">
+          <div class="heatmap-left-column">
+            <article class="heatmap-month-card">
+            <div class="heatmap-toolbar">
+              <button id="heatmapPrevBtn" class="ghost-btn" type="button" aria-label="Mes anterior">‹</button>
+              <div>
+                <strong id="heatmapTitle">Julio 2026</strong>
+                <span id="heatmapSubtitle">Click en un día para agregar una nota o recordatorio</span>
+              </div>
+              <button id="heatmapNextBtn" class="ghost-btn" type="button" aria-label="Mes siguiente">›</button>
+            </div>
+
+            <div class="heatmap-weekdays">
+              <span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span>
+            </div>
+
+            <div id="heatmapMonthGrid" class="heatmap-month-grid" aria-label="Calendario mensual tipo mapa de calor"></div>
+
+            <div class="heatmap-legend" aria-label="Leyenda del mapa de calor">
+              <span>Menos</span>
+              <i class="heat-level-0"></i>
+              <i class="heat-level-1"></i>
+              <i class="heat-level-2"></i>
+              <i class="heat-level-3"></i>
+              <span>Más</span>
+            </div>
+          </article>
+
+            
+
+            <div class="annual-heatmap-card">
+              <div>
+                <span class="eyebrow">Progreso anual</span>
+                <strong>Últimos 12 meses</strong>
+              </div>
+              <div id="annualHeatmapGrid" class="annual-heatmap-grid"></div>
+            </div>
+          </div>
+
+          <aside class="heatmap-side-panel">
+            <div class="heatmap-metric-card">
+              <span>Racha actual</span>
+              <strong id="heatmapStreakNow">0 días</strong>
+              <p>Días seguidos con actividad registrada.</p>
+            </div>
+
+            <div class="heatmap-metric-card">
+              <span>Racha más larga</span>
+              <strong id="heatmapLongestStreak">0 días</strong>
+              <p>Tu mejor continuidad histórica.</p>
+            </div>
+
+            <div class="heatmap-metric-card">
+              <span>Total de horas del mes</span>
+              <strong id="heatmapMonthHours">0h</strong>
+              <p>Suma de minutos registrados en este mes.</p>
+            </div>
+
+            <div class="heatmap-selected-card">
+              <span class="eyebrow">Día seleccionado</span>
+              <h4 id="heatmapSelectedTitle">Hoy</h4>
+              <p id="heatmapSelectedStats">Sin actividad registrada.</p>
+              <p id="heatmapSelectedNote" class="heatmap-note-preview">Sin recordatorio.</p>
+            </div>
+          </aside>
+        </div>
+
+        <div id="heatmapModal" class="heatmap-modal" hidden>
+          <div class="heatmap-modal-backdrop" data-close-heatmap-modal></div>
+          <article class="heatmap-modal-card" role="dialog" aria-modal="true" aria-labelledby="heatmapModalTitle">
+            <button class="heatmap-modal-close" type="button" data-close-heatmap-modal aria-label="Cerrar">×</button>
+            <span class="eyebrow">Recordatorio</span>
+            <h4 id="heatmapModalTitle">Día seleccionado</h4>
+            <p id="heatmapModalStudyInfo">Tiempo registrado: 0m.</p>
+            <label>
+              Nota del día
+              <textarea id="heatmapNoteInput" placeholder="Ej: Simulacro IELTS, repasar phrasal verbs, hacer listening 20 min..."></textarea>
+            </label>
+            <div class="heatmap-modal-actions">
+              <button id="heatmapSaveNoteBtn" class="primary-btn" type="button">Guardar</button>
+              <button class="secondary-btn" type="button" data-close-heatmap-modal>Cancelar</button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+
+      <section id="perfil" class="section reveal misc-section">
+        <div class="section-header">
+          <div>
+            <span class="eyebrow">Perfil</span>
+            <h3>Tu ruta de inglés</h3>
+            <p>Guardá tu objetivo IELTS, nivel estimado y preferencias de estudio para orientar la práctica diaria.</p>
+          </div>
+        </div>
+
+        <div class="profile-grid">
+          <form id="profileForm" class="profile-card">
+            <label>Nombre o alias
+              <input id="profileName" type="text" placeholder="Ej: Valentín" />
+            </label>
+            <label>Objetivo IELTS
+              <select id="profileTargetBand">
+                <option value="6">Band 6</option>
+                <option value="7">Band 7</option>
+                <option value="8">Band 8</option>
+                <option value="9">Band 9</option>
+              </select>
+            </label>
+            <label>Área prioritaria
+              <select id="profileFocus">
+                <option>Writing</option>
+                <option>Listening</option>
+                <option>Speaking</option>
+                <option>Reading</option>
+                <option>Gramática</option>
+                <option>Vocabulario</option>
+              </select>
+            </label>
+            <button class="primary-btn" type="submit">Guardar perfil</button>
+          </form>
+
+          <article class="profile-card profile-status">
+            <span class="eyebrow">Resumen</span>
+            <h4 id="profileGreeting">Perfil sin configurar</h4>
+            <p id="profileSummary">Completá tus datos para tener una ruta visible.</p>
+            <div class="mini-metrics">
+              <div><strong id="profileStudyTotal">0m</strong><span>Estudio total</span></div>
+              <div><strong id="profileAverage">0%</strong><span>Promedio</span></div>
+              <div><strong id="profileStreak">0</strong><span>Racha</span></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="logros" class="section reveal misc-section">
+        <div class="section-header">
+          <div>
+            <span class="eyebrow">Logros</span>
+            <h3>Medallas y continuidad</h3>
+            <p>Visualizá hitos de estudio, práctica y rendimiento. Se desbloquean con tu progreso real.</p>
+          </div>
+        </div>
+        <div id="badgesGrid" class="badges-grid"></div>
+      </section>
+
+      <section id="comunidad" class="section reveal misc-section">
+        <div class="section-header">
+          <div>
+            <span class="eyebrow">Comunidad</span>
+            <h3>Práctica social y retos</h3>
+            <p>Un espacio pensado para organizar study groups, retos semanales y práctica con otros estudiantes.</p>
+          </div>
+        </div>
+        <div class="community-grid">
+          <article><strong>Reto semanal</strong><p>3 writings + 2 listening + 20 flashcards.</p><button class="secondary-btn" type="button">Unirme al reto</button></article>
+          <article><strong>Grupo de speaking</strong><p>Práctica guiada con prompts IELTS y feedback entre pares.</p><button class="secondary-btn" type="button">Ver grupos</button></article>
+          <article><strong>Tablero de dudas</strong><p>Guardá preguntas de gramática, vocabulario o pronunciación.</p><button class="secondary-btn" type="button">Agregar duda</button></article>
+        </div>
+      </section>
+
+      <section id="faqs" class="section reveal misc-section">
+        <div class="section-header">
+          <div>
+            <span class="eyebrow">FAQs</span>
+            <h3>Preguntas frecuentes</h3>
+            <p>Guía rápida para entender cómo usar el entrenador de forma ordenada.</p>
+          </div>
+        </div>
+        <div class="faq-list">
+          <details open><summary>¿Dónde se guarda mi información?</summary><p>En el almacenamiento local del navegador. Si cambiás de navegador o dispositivo, esos datos no viajan automáticamente.</p></details>
+          <details><summary>¿Cómo se registra el tiempo de estudio?</summary><p>Se suma cuando hay interacción reciente con la página. Si la dejás abierta sin usarla, el contador se pausa.</p></details>
+          <details><summary>¿El calendario se vincula al progreso?</summary><p>Sí. Los días activos quedan marcados y el tiempo diario se refleja en el calendario mensual.</p></details>
+          <details><summary>¿Puedo usarlo sin internet?</summary><p>La mayoría de las funciones son locales. Las voces dependen de las voces disponibles en tu navegador/sistema.</p></details>
+        </div>
+      </section>
+
+      <section id="privacidad" class="section reveal misc-section">
+        <div class="section-header">
+          <div>
+            <span class="eyebrow">Términos y privacidad</span>
+            <h3>Uso local y control de datos</h3>
+            <p>Texto base para que puedas adaptar si luego publicás el proyecto.</p>
+          </div>
+        </div>
+        <div class="policy-card">
+          <p>Esta herramienta está pensada como entrenador personal de inglés. Los apuntes, progreso, calendario y prácticas se almacenan localmente en el navegador mediante localStorage.</p>
+          <p>No se envían datos a un servidor desde esta versión estática. Si más adelante agregás backend, login o IA real, conviene actualizar esta sección con una política formal.</p>
+        </div>
+      </section>
+
+      <section id="suscripciones" class="section reveal misc-section">
+        <div class="section-header">
+          <div>
+            <span class="eyebrow">Suscripciones</span>
+            <h3>Planes de práctica</h3>
+            <p>Diseño preparado para una futura versión con planes, sin activar pagos todavía.</p>
+          </div>
+        </div>
+        <div class="plans-grid">
+          <article><span>Free</span><strong>Rutina personal</strong><p>Gramática, calendario, flashcards y práctica local.</p><button class="ghost-btn" type="button">Actual</button></article>
+          <article><span>Plus</span><strong>Feedback avanzado</strong><p>Más exámenes, reportes y coaching de writing.</p><button class="secondary-btn" type="button">Próximamente</button></article>
+          <article><span>Pro</span><strong>IELTS intensivo</strong><p>Planificación, simulacros y métricas avanzadas.</p><button class="secondary-btn" type="button">Próximamente</button></article>
+        </div>
+      </section>
+
+      <section id="soporte" class="section reveal misc-section">
+        <div class="section-header">
+          <div>
+            <span class="eyebrow">Soporte</span>
+            <h3>Feedback y mejoras</h3>
+            <p>Dejá ideas, errores o ajustes que quieras implementar en próximas versiones.</p>
+          </div>
+        </div>
+        <form id="supportForm" class="support-card">
+          <label>Tipo de consulta
+            <select id="supportType">
+              <option>Error visual</option>
+              <option>Función que no responde</option>
+              <option>Idea nueva</option>
+              <option>Contenido de inglés</option>
+            </select>
+          </label>
+          <label>Detalle
+            <textarea id="supportMessage" placeholder="Escribí qué mejorarías o qué error encontraste..."></textarea>
+          </label>
+          <button class="primary-btn" type="submit">Guardar feedback</button>
+          <p id="supportStatus"></p>
+        </form>
       </section>
 
       <section id="progreso" class="section reveal">
@@ -625,12 +1034,80 @@
 
           <div class="flashcard-actions">
             <button id="flipCardBtn" class="primary-btn" type="button">Mostrar / ocultar</button>
-            <button id="knownCardBtn" class="secondary-btn" type="button">Lo sabía</button>
-            <button id="hardCardBtn" class="secondary-btn" type="button">Me costó</button>
-            <button id="repeatCardBtn" class="ghost-btn" type="button">Repetir después</button>
             <button id="nextCardBtn" class="primary-btn" type="button">Siguiente</button>
           </div>
 </div>
+      </section>
+
+
+      <section id="tab-flashvoice" class="resource-pane section">
+        <div class="section-header">
+          <div>
+            <span class="eyebrow">Listening activo</span>
+            <h3>Flashvoice</h3>
+            <p>Escuchá audios cortos de 2 o 3 oraciones, transcribí literalmente y compará con el transcript real.</p>
+          </div>
+
+          <div class="flashvoice-toolbar">
+            <select id="flashvoiceSource" class="compact-select">
+              <option value="mixed">Banco mixto</option>
+              <option value="phrasals">Phrasal verbs</option>
+              <option value="modals">Modales</option>
+              <option value="vocabulario">Mi vocabulario</option>
+            </select>
+            <select id="flashvoiceVoice" class="compact-select">
+              <option value="female">Voz femenina</option>
+              <option value="male">Voz masculina</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flashvoice-layout">
+          <article class="flashvoice-card">
+            <div class="flashvoice-head">
+              <span id="flashvoiceType" class="level-pill">Dictation</span>
+              <strong id="flashvoiceTitle">Escuchá y transcribí</strong>
+            </div>
+
+            <p class="flashvoice-help">
+              Reproducí el audio, escribí exactamente lo que escuchás en inglés y corregí tu transcripción.
+            </p>
+
+            <div class="flashvoice-controls">
+              <button id="playFlashvoiceBtn" class="primary-btn" type="button">Play audio</button>
+              <button id="pauseFlashvoiceBtn" class="secondary-btn" type="button">Pausa</button>
+              <button id="nextFlashvoiceBtn" class="primary-btn" type="button">Siguiente audio</button>
+            </div>
+
+            <div class="flashvoice-ranges">
+              <label>
+                Volumen
+                <input id="flashvoiceVolume" type="range" min="0" max="1" step="0.05" value="0.85" />
+              </label>
+
+              <label>
+                WPM
+                <input id="flashvoiceWpm" type="range" min="90" max="185" step="5" value="130" />
+                <em id="flashvoiceWpmValue">130 WPM</em>
+              </label>
+            </div>
+
+            <textarea id="flashvoiceAnswer" placeholder="Transcribí acá lo que escuchaste en inglés..."></textarea>
+
+            <div class="flashvoice-actions">
+              <button id="checkFlashvoiceBtn" class="primary-btn" type="button">Corregir transcripción</button>
+              <button id="toggleFlashvoiceTranscriptBtn" class="secondary-btn" type="button">Mostrar transcript</button>
+            </div>
+
+            <div id="flashvoiceFeedback" class="quick-feedback"></div>
+          </article>
+
+          <aside id="flashvoiceTranscriptBox" class="flashvoice-transcript-box" hidden>
+            <span>Transcript real</span>
+            <p id="flashvoiceTranscript"></p>
+            <em id="flashvoicePhonetic"></em>
+          </aside>
+        </div>
       </section>
 
       <section id="tab-phrasals" class="resource-pane section">
@@ -756,6 +1233,6 @@
     })();
   </script>
 
-  <script src="app.js?v=v31-listening-audio-fix"></script>
+  <script src="app.js?v=v47-hero-strip-full-calendar"></script>
 </body>
 </html>
