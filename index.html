@@ -58,7 +58,6 @@
       <div class="resource-menu" id="resourceMenu">
         <button id="resourceMenuToggle" class="resource-menu-toggle nav-pill-theme" type="button" aria-expanded="false" aria-controls="resourceMenuPanel">
           <span class="resource-menu-mark">Estudio</span>
-          <span class="resource-menu-caret" aria-hidden="true">⌄</span>
         </button>
 
         <div id="resourceMenuPanel" class="resource-menu-panel premium-grid-menu-panel" aria-label="Secciones de estudio">
@@ -123,7 +122,6 @@
       <div class="misc-menu" id="miscMenu">
         <button id="miscMenuToggle" class="misc-menu-toggle resource-menu-toggle nav-pill-theme" type="button" aria-expanded="false" aria-controls="miscMenuPanel" aria-label="Abrir menú misceláneo">
           <span class="misc-menu-mark">Más</span>
-          <span class="misc-menu-caret" aria-hidden="true">⌄</span>
         </button>
 
         <div id="miscMenuPanel" class="misc-menu-panel premium-grid-menu-panel" aria-label="Opciones adicionales">
@@ -204,22 +202,19 @@
 
     <div class="settings-block">
       <h4>Theme de color</h4>
-      <p>Elegí una paleta y una intensidad. Toda la página adapta sus acentos, brillos, botones y detalles visuales.</p>
 
-      <div class="theme-grid" id="themeGrid">
-        <button type="button" class="theme-swatch" data-theme="orange" title="Naranja"></button>
-        <button type="button" class="theme-swatch" data-theme="blue" title="Azul"></button>
-        <button type="button" class="theme-swatch" data-theme="gray" title="Gris"></button>
-        <button type="button" class="theme-swatch" data-theme="gold" title="Dorado"></button>
-        <button type="button" class="theme-swatch" data-theme="red" title="Rojo"></button>
-        <button type="button" class="theme-swatch" data-theme="green" title="Verde"></button>
-        <button type="button" class="theme-swatch" data-theme="purple" title="Morado"></button>
+      <div class="color-wheel-wrap">
+        <canvas id="colorWheel" class="color-wheel" width="400" height="400" aria-label="Rueda de color"></canvas>
+        <div id="colorWheelCursor" class="color-wheel-cursor" aria-hidden="true"></div>
       </div>
 
-      <label class="intensity-label" for="themeIntensity">Intensidad</label>
-      <input id="themeIntensity" class="intensity-range" type="range" min="0" max="4" step="0.01" value="2" />
-
-      <div class="palette-preview" id="palettePreview" aria-hidden="true"></div>
+      <div class="intensity-label">
+        <span>Intensidad</span>
+        <span id="intensityValueLabel" class="intensity-value">Medio</span>
+      </div>
+      <div class="intensity-wrap">
+        <input id="themeIntensity" class="intensity-range" type="range" min="0" max="4" step="0.01" value="2" />
+      </div>
     </div>
 
     <div class="settings-block">

@@ -2562,11 +2562,14 @@ function exportVocabulary() {
 const themePalettes = {
   orange: ["#7c2d12", "#c2410c", "#ff7a00", "#ff9f1c", "#fed7aa"],
   blue: ["#0f172a", "#1d4ed8", "#2563eb", "#38bdf8", "#dbeafe"],
-  gray: ["#0f0f0f", "#27272a", "#52525b", "#a1a1aa", "#f4f4f5"],
+  teal: ["#042f2e", "#0f766e", "#14b8a6", "#5eead4", "#ccfbf1"],
+  indigo: ["#1e1b4b", "#4338ca", "#6366f1", "#a5b4fc", "#e0e7ff"],
   gold: ["#422006", "#a16207", "#d97706", "#facc15", "#fef3c7"],
   red: ["#450a0a", "#b91c1c", "#ef4444", "#fb7185", "#fee2e2"],
+  rose: ["#4c0519", "#be123c", "#f43f5e", "#fda4af", "#ffe4e6"],
   green: ["#052e16", "#15803d", "#22c55e", "#86efac", "#dcfce7"],
   purple: ["#2e1065", "#6d28d9", "#8b5cf6", "#c084fc", "#f3e8ff"],
+  gray: ["#0f0f0f", "#27272a", "#52525b", "#a1a1aa", "#f4f4f5"],
   white: ["#44403c", "#78716c", "#d6d3d1", "#f5f5f4", "#ffffff"],
   black: ["#030303", "#0a0a0a", "#171717", "#262626", "#404040"]
 };
@@ -2629,6 +2632,16 @@ function applyTheme(theme = selectedTheme, intensity = selectedIntensity) {
   document.documentElement.style.setProperty("--theme-range-gradient", `linear-gradient(90deg, ${palette.join(", ")})`);
 
   if (themeIntensity) themeIntensity.value = String(selectedIntensity);
+
+  // Relleno del slider (barra del theme) y etiqueta de valor
+  const pct = (Number(selectedIntensity) / 4) * 100;
+  if (themeIntensity) themeIntensity.style.setProperty("--intensity-pct", `${pct}%`);
+  const intensityValueLabel = document.getElementById("intensityValueLabel");
+  if (intensityValueLabel) {
+    const names = ["Muy oscuro", "Oscuro", "Medio", "Claro", "Luminoso"];
+    const idx = Math.max(0, Math.min(names.length - 1, Math.round(Number(selectedIntensity))));
+    intensityValueLabel.textContent = names[idx];
+  }
 
   document.querySelectorAll(".theme-swatch").forEach((button) => {
     button.classList.toggle("active", button.dataset.theme === selectedTheme);
@@ -10027,4 +10040,160 @@ window.addEventListener("load", () => {
     boot();
   }
   window.addEventListener("load", () => setTimeout(boot, 120));
+})();
+
+
+/* =========================================================
+   V64 — RUEDA DE COLOR (reemplaza los swatches predefinidos)
+   El usuario elige cualquier color de la rueda. A partir del
+   matiz + saturación se genera una paleta de 5 tonos que se
+   inyecta como theme "custom" y reutiliza applyTheme() para
+   respetar la lógica de intensidad existente.
+========================================================= */
+(function colorWheelPickerV64() {
+  if (window.__colorWheelV64) return;
+  window.__colorWheelV64 = true;
+
+  function hslToRgb(h, s, l) {
+    s /= 100; l /= 100;
+    const k = (n) => (n + h / 30) % 12;
+    const a = s * Math.min(l, 1 - l);
+    const f = (n) => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+    return {
+      r: Math.round(255 * f(0)),
+      g: Math.round(255 * f(8)),
+      b: Math.round(255 * f(4))
+    };
+  }
+  function rgbHex({ r, g, b }) {
+    return "#" + [r, g, b].map((v) => v.toString(16).padStart(2, "0")).join("");
+  }
+  function hslHex(h, s, l) { return rgbHex(hslToRgb(h, s, l)); }
+
+  // Paleta de 5 tonos (oscuro -> claro) a partir de un matiz/saturación.
+  // Respeta la saturación real: cerca del centro (sat baja) da grises/neutros.
+  function paletteFromHue(h, s) {
+    const sat = Math.max(0, Math.min(s, 100));   // sin mínimo forzado
+    return [
+      hslHex(h, Math.min(sat + 4, 100), 14),
+      hslHex(h, sat, 32),
+      hslHex(h, sat, 50),
+      hslHex(h, Math.max(sat - 8, 0), 68),
+      hslHex(h, Math.max(sat - 18, 0), 88)
+    ];
+  }
+
+  function drawWheel(canvas) {
+    const ctx = canvas.getContext("2d");
+    const size = canvas.width;
+    const cx = size / 2, cy = size / 2, radius = size / 2;
+    const img = ctx.createImageData(size, size);
+    const data = img.data;
+
+    for (let y = 0; y < size; y++) {
+      for (let x = 0; x < size; x++) {
+        const dx = x - cx, dy = y - cy;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const idx = (y * size + x) * 4;
+        if (dist > radius) { data[idx + 3] = 0; continue; }
+
+        let angle = Math.atan2(dy, dx) * 180 / Math.PI;
+        if (angle < 0) angle += 360;
+
+        const t = Math.min(dist / radius, 1);   // 0 centro -> 1 borde
+        const sat = t * 100;                     // centro neutro (gris) -> borde saturado
+        const light = 90 - t * 40;               // centro claro -> borde medio
+        const { r, g, b } = hslToRgb(angle, sat, light);
+
+        data[idx] = r; data[idx + 1] = g; data[idx + 2] = b;
+        // antialias suave del borde exterior
+        data[idx + 3] = dist > radius - 1.5 ? Math.max(0, (radius - dist) / 1.5) * 255 : 255;
+      }
+    }
+    ctx.putImageData(img, 0, 0);
+
+    // Anillo exterior sutil que enmarca la rueda
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius - 0.5, 0, Math.PI * 2);
+    ctx.strokeStyle = "rgba(255,255,255,0.08)";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  let currentHue = 28, currentSat = 90; // por defecto ~naranja
+
+  function applyFromWheel(h, s, canvas) {
+    currentHue = h; currentSat = s;
+    // Inyectar paleta custom y aplicar respetando la intensidad actual
+    if (typeof themePalettes === "object") {
+      themePalettes.custom = paletteFromHue(h, s);
+    }
+    const intensity = (typeof selectedIntensity === "number") ? selectedIntensity : 2;
+    if (typeof applyTheme === "function") applyTheme("custom", intensity);
+    localStorage.setItem("englishTrainerWheelHue", String(h));
+    localStorage.setItem("englishTrainerWheelSat", String(s));
+    positionCursor(canvas, h, s);
+  }
+
+  function positionCursor(canvas, h, s) {
+    const cursor = document.getElementById("colorWheelCursor");
+    if (!cursor || !canvas) return;
+    // offset del canvas dentro del wrap (por el padding del marco)
+    const offset = canvas.offsetLeft;
+    const offsetTop = canvas.offsetTop;
+    const radius = canvas.clientWidth / 2;
+    const r = (s / 100) * radius;
+    const angle = h * Math.PI / 180;
+    const x = offset + radius + r * Math.cos(angle);
+    const y = offsetTop + radius + r * Math.sin(angle);
+    cursor.style.left = `${x}px`;
+    cursor.style.top = `${y}px`;
+    cursor.style.background = hslHex(h, s, 100 - (s / 100) * 50);
+  }
+
+  function pickFromEvent(canvas, event) {
+    const rect = canvas.getBoundingClientRect();
+    const x = (event.clientX ?? (event.touches && event.touches[0].clientX)) - rect.left;
+    const y = (event.clientY ?? (event.touches && event.touches[0].clientY)) - rect.top;
+    const cx = rect.width / 2, cy = rect.height / 2;
+    const dx = x - cx, dy = y - cy;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const radius = rect.width / 2;
+    let angle = Math.atan2(dy, dx) * 180 / Math.PI;
+    if (angle < 0) angle += 360;
+
+    // Selección libre: el matiz es el ángulo exacto y la saturación la
+    // distancia al centro. Sin engancharse a secciones.
+    const sat = Math.round(Math.min(dist / radius, 1) * 100);
+    applyFromWheel(Math.round(angle), sat, canvas);
+  }
+
+  function init() {
+    const canvas = document.getElementById("colorWheel");
+    if (!canvas || canvas.dataset.wheelReady === "true") return;
+    canvas.dataset.wheelReady = "true";
+
+    drawWheel(canvas);
+
+    let dragging = false;
+    canvas.addEventListener("pointerdown", (e) => { dragging = true; pickFromEvent(canvas, e); });
+    window.addEventListener("pointermove", (e) => { if (dragging) pickFromEvent(canvas, e); });
+    window.addEventListener("pointerup", () => { dragging = false; });
+
+    // Restaurar última elección de la rueda (si existe)
+    const savedH = Number(localStorage.getItem("englishTrainerWheelHue"));
+    const savedS = Number(localStorage.getItem("englishTrainerWheelSat"));
+    if (!Number.isNaN(savedH) && localStorage.getItem("englishTrainerWheelHue") !== null) {
+      applyFromWheel(savedH, savedS || 90, canvas);
+    } else {
+      positionCursor(canvas, currentHue, currentSat);
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+  window.addEventListener("load", () => setTimeout(init, 150));
 })();

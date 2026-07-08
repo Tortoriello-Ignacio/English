@@ -10755,3 +10755,414 @@ h3 {
     radial-gradient(circle at 80% 12%, rgba(var(--accent-rgb), .08), transparent 30%),
     linear-gradient(135deg, rgba(19, 17, 28, .98), rgba(11, 15, 23, .92) 58%, rgba(19, 17, 28, .98)) !important;
 }
+
+/* =========================================================
+   V60 — FLIP CLOCK: números finos, centrados, sin corte visible
+========================================================= */
+
+/* 1) Números más finos y bien encajados */
+.flip-static span,
+.flip-leaf span {
+  font-weight: 500 !important;      /* más finos, como la referencia */
+  font-size: 3.15rem !important;    /* entran justos sin tocar bordes */
+  letter-spacing: -.02em !important;
+  color: var(--accent) !important;
+  text-shadow: 0 1px 6px rgba(var(--accent-rgb), .14) !important;
+}
+
+/* 2) Que la línea del medio no se note tanto:
+   fondo idéntico en ambas mitades + separación casi invisible */
+.flip-static,
+.flip-leaf-top,
+.flip-leaf-bottom {
+  background: #1c1c1f !important;   /* mismo tono arriba y abajo */
+}
+.flip-top,
+.flip-leaf-top {
+  border-bottom: 1px solid rgba(255,255,255,.035) !important; /* costura sutil */
+}
+.flip-bottom,
+.flip-leaf-bottom {
+  border-top: none !important;
+}
+
+/* Un leve degradé de profundidad, pero sin quiebre brusco de color */
+.flip-card {
+  background: #1c1c1f !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+}
+
+/* =========================================================
+   V61 — MINI TIMER (flotante al cerrar el panel): prolijo,
+   centrado y con ancho suficiente para el tablero flip.
+========================================================= */
+.mini-timer-bubble.mini-flip-bubble {
+  width: auto !important;              /* se ajusta al contenido, no 54px fijos */
+  left: 12px !important;
+  padding: 8px 12px !important;
+  border-radius: 16px !important;
+  background: linear-gradient(150deg, rgba(28,28,32,.96), rgba(16,16,20,.96)) !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  box-shadow: 0 12px 30px rgba(0,0,0,.4), 0 0 20px rgba(var(--accent-rgb),.14) !important;
+  box-sizing: border-box !important;
+}
+
+.mini-flip-bubble .mini-flip-orb {
+  display: grid !important;
+  place-items: center !important;
+  width: auto !important;
+  height: auto !important;
+  background: transparent !important;
+  overflow: visible !important;
+}
+
+.mini-flip-bubble .flip-board {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 5px !important;
+}
+
+/* Cards del mini flip: fondo unificado y costura sutil (igual que el grande) */
+.mini-flip-bubble .flip-card {
+  width: 28px !important;
+  height: 36px !important;
+  background: #1c1c1f !important;
+  border-radius: 7px !important;
+  overflow: hidden;
+}
+.mini-flip-bubble .flip-static,
+.mini-flip-bubble .flip-leaf-top,
+.mini-flip-bubble .flip-leaf-bottom {
+  background: #1c1c1f !important;
+}
+.mini-flip-bubble .flip-top,
+.mini-flip-bubble .flip-leaf-top {
+  border-bottom: 1px solid rgba(255,255,255,.04) !important;
+}
+.mini-flip-bubble .flip-static span,
+.mini-flip-bubble .flip-leaf span {
+  font-size: 1.35rem !important;
+  line-height: 36px !important;
+  font-weight: 500 !important;
+  letter-spacing: -.02em !important;
+}
+.mini-flip-bubble .flip-bottom span,
+.mini-flip-bubble .flip-leaf-bottom span {
+  top: -18px !important;         /* mitad del alto (36/2) */
+  line-height: 36px !important;
+}
+.mini-flip-bubble .flip-colon {
+  font-size: 1.1rem !important;
+  margin-top: 0 !important;
+  line-height: 36px !important;
+}
+
+/* =========================================================
+   V62 — BADGES (eyebrow / level-tag): fondo OSCURO según el
+   theme, en vez del naranja hardcodeado que no se adaptaba.
+========================================================= */
+.eyebrow,
+.level-tag,
+.level-pill,
+.hero-premium-section .eyebrow,
+.tense-card .level-tag,
+section .eyebrow {
+  background: rgba(var(--accent-rgb), .09) !important;
+  background-color: rgba(20, 20, 24, .55) !important;
+  color: var(--accent-soft, rgb(var(--accent-rgb))) !important;
+  border: 1px solid rgba(var(--accent-rgb), .30) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.03) !important;
+}
+
+/* =========================================================
+   V63 — SELECTOR DE THEME REDISEÑADO (profesional/sofisticado)
+========================================================= */
+
+/* Grilla de swatches: círculos suaves, 2 filas prolijas */
+#themeGrid.theme-grid {
+  display: grid !important;
+  grid-template-columns: repeat(5, 1fr) !important;
+  gap: 12px !important;
+  margin-bottom: 22px !important;
+}
+
+.theme-swatch {
+  aspect-ratio: 1 !important;
+  border-radius: 50% !important;      /* círculos, más elegante */
+  cursor: pointer;
+  border: none !important;
+  position: relative;
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.25),
+    inset 0 -2px 4px rgba(0,0,0,.3),
+    0 4px 10px rgba(0,0,0,.3) !important;
+  transition: transform .2s cubic-bezier(.34,1.56,.64,1), box-shadow .2s ease !important;
+  outline: 2px solid transparent;
+  outline-offset: 3px;
+}
+
+.theme-swatch:hover {
+  transform: translateY(-3px) scale(1.06) !important;
+}
+
+/* Anillo de selección sofisticado + check */
+.theme-swatch.active {
+  transform: translateY(-2px) scale(1.04) !important;
+  outline: 2px solid rgba(var(--accent-rgb), .9);
+  outline-offset: 3px;
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.3),
+    0 6px 16px rgba(0,0,0,.4),
+    0 0 22px rgba(var(--accent-rgb), .4) !important;
+}
+.theme-swatch.active::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.92);
+  box-shadow: 0 0 8px rgba(0,0,0,.5);
+}
+
+/* Colores suavizados pero brillantes (radiales para dar profundidad) */
+.theme-swatch[data-theme="orange"] { background: radial-gradient(circle at 32% 28%, #ffb066, #ff7a00 55%, #b34700); }
+.theme-swatch[data-theme="blue"]   { background: radial-gradient(circle at 32% 28%, #7cc4ff, #2563eb 55%, #16327d); }
+.theme-swatch[data-theme="teal"]   { background: radial-gradient(circle at 32% 28%, #7dedd8, #14b8a6 55%, #0b6157); }
+.theme-swatch[data-theme="indigo"] { background: radial-gradient(circle at 32% 28%, #b3bcff, #6366f1 55%, #363bad); }
+.theme-swatch[data-theme="gold"]   { background: radial-gradient(circle at 32% 28%, #ffe08a, #f0b429 55%, #a9750b); }
+.theme-swatch[data-theme="red"]    { background: radial-gradient(circle at 32% 28%, #ff8a8a, #ef4444 55%, #a01d1d); }
+.theme-swatch[data-theme="rose"]   { background: radial-gradient(circle at 32% 28%, #ffa1b6, #f43f5e 55%, #a01133); }
+.theme-swatch[data-theme="green"]  { background: radial-gradient(circle at 32% 28%, #86efac, #22c55e 55%, #12793b); }
+.theme-swatch[data-theme="purple"] { background: radial-gradient(circle at 32% 28%, #cbabff, #8b5cf6 55%, #542bab); }
+.theme-swatch[data-theme="gray"]   { background: radial-gradient(circle at 32% 28%, #d4d4d8, #71717a 55%, #3f3f46); }
+.theme-swatch[data-theme="white"]  { background: radial-gradient(circle at 32% 28%, #ffffff, #e5e5e5 55%, #a3a3a3); }
+.theme-swatch[data-theme="black"]  { background: radial-gradient(circle at 32% 28%, #3a3a3a, #171717 55%, #030303); }
+
+/* ---- Intensidad: etiqueta con valor dinámico ---- */
+.intensity-label {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  color: var(--muted) !important;
+  margin-bottom: 12px !important;
+}
+.intensity-label > span:first-child {
+  color: var(--muted) !important;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-size: .72rem;
+  font-weight: 850;
+}
+.intensity-value {
+  color: var(--accent-soft, rgb(var(--accent-rgb))) !important;
+  font-size: .78rem !important;
+  font-weight: 900 !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(var(--accent-rgb), .12);
+  border: 1px solid rgba(var(--accent-rgb), .25);
+}
+
+/* ---- Slider rediseñado: barra fina, relleno del theme, thumb sofisticado ---- */
+.intensity-wrap {
+  padding: 4px 0 6px;
+  margin-bottom: 4px;
+}
+.intensity-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg,
+      rgba(var(--accent-rgb), .9) 0%,
+      rgba(var(--accent-rgb), .9) var(--intensity-pct, 50%),
+      rgba(255,255,255,.10) var(--intensity-pct, 50%),
+      rgba(255,255,255,.10) 100%) !important;
+  outline: none;
+  cursor: pointer;
+  margin: 0 !important;
+}
+.intensity-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 3px solid rgb(var(--accent-rgb));
+  box-shadow: 0 2px 8px rgba(0,0,0,.4), 0 0 12px rgba(var(--accent-rgb), .35);
+  transition: transform .15s ease;
+}
+.intensity-range::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+.intensity-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 3px solid rgb(var(--accent-rgb));
+  box-shadow: 0 2px 8px rgba(0,0,0,.4);
+  cursor: pointer;
+}
+.intensity-range::-moz-range-track {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.10);
+}
+
+/* =========================================================
+   V64 — RUEDA DE COLOR
+========================================================= */
+.color-wheel-wrap {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 6px auto 20px;
+}
+.color-wheel {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  cursor: crosshair;
+  box-shadow:
+    0 8px 24px rgba(0,0,0,.4),
+    inset 0 0 0 1px rgba(255,255,255,.08),
+    0 0 0 6px rgba(255,255,255,.03);
+  touch-action: none;
+}
+.color-wheel-cursor {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,.5), 0 0 0 1px rgba(0,0,0,.3);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: background .1s ease;
+}
+
+/* Ocultar restos del selector viejo por si quedan en el DOM */
+.theme-grid, .palette-preview { display: none !important; }
+
+/* =========================================================
+   V65 — RUEDA DE COLOR: marco profesional (anillo + brillo)
+========================================================= */
+.color-wheel-wrap {
+  position: relative;
+  width: 210px;
+  height: 210px;
+  margin: 8px auto 22px;
+  border-radius: 50%;
+  padding: 8px;
+  /* anillo exterior tipo bisel metálico oscuro */
+  background:
+    conic-gradient(from 0deg, rgba(255,255,255,.06), rgba(0,0,0,.35), rgba(255,255,255,.06), rgba(0,0,0,.35), rgba(255,255,255,.06));
+  box-shadow:
+    0 12px 30px rgba(0,0,0,.5),
+    inset 0 0 0 1px rgba(255,255,255,.06);
+}
+.color-wheel {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  cursor: crosshair;
+  display: block;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.05);
+  touch-action: none;
+}
+.color-wheel-cursor {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow:
+    0 2px 10px rgba(0,0,0,.6),
+    0 0 0 1px rgba(0,0,0,.4),
+    0 0 12px rgba(var(--accent-rgb), .5);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: background .1s ease;
+}
+
+/* =========================================================
+   V66 — NAVBAR CUADRADO (cuadrantes sin bordes visibles)
+========================================================= */
+/* Los links y toggles ocupan cuadrantes rectangulares, pegados,
+   sin píldoras redondeadas ni cuadros sueltos visibles. */
+.top-nav {
+  gap: 0 !important;
+  align-items: stretch !important;
+}
+
+.top-nav .nav-link,
+.top-nav .nav-pill-minimal,
+.top-nav .resource-menu-toggle,
+.top-nav .misc-menu-toggle,
+.top-nav .nav-pill-theme {
+  border-radius: 0 !important;
+  border: none !important;
+  min-height: 46px !important;
+  padding: 0 20px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  transition: background .2s ease, color .2s ease !important;
+}
+
+/* Hover / activo: llena todo el cuadrante, sin cuadro flotante */
+.top-nav .nav-link:hover,
+.top-nav .nav-link.active,
+.top-nav .resource-menu-toggle:hover,
+.top-nav .misc-menu-toggle:hover,
+.top-nav .resource-menu.open .resource-menu-toggle,
+.top-nav .misc-menu.open .misc-menu-toggle {
+  background: rgba(var(--accent-rgb), .14) !important;
+  color: var(--text) !important;
+  box-shadow: none !important;      /* sin sombra/elevación que desnivele */
+  border: none !important;
+  transform: none !important;
+}
+/* Anular específicamente las sombras heredadas de estilos de pill viejos */
+.top-nav .nav-link.active,
+.top-nav .nav-link:hover,
+.top-nav .resource-nav-btn.active,
+.top-nav .resource-nav-btn:hover {
+  box-shadow: none !important;
+}
+
+/* Separadores finos verticales entre cuadrantes (opcionales, muy sutiles) */
+.top-nav > a.nav-link + a.nav-link,
+.top-nav > a.nav-link + .resource-menu,
+.top-nav > .resource-menu + .misc-menu {
+  position: relative;
+}
+
+/* El contenedor de menú (Estudio/Más) también estira su cuadrante */
+.top-nav .resource-menu,
+.top-nav .misc-menu {
+  display: flex !important;
+  align-items: stretch !important;
+}
+.top-nav .resource-menu-toggle,
+.top-nav .misc-menu-toggle {
+  height: 100% !important;
+}
+
+/* Ocultar por completo cualquier resto de caret */
+.resource-menu-caret,
+.misc-menu-caret { display: none !important; }
