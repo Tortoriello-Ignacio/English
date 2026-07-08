@@ -18,33 +18,25 @@
   <button id="timerToggleBtn" class="timer-toggle" type="button" aria-label="Abrir o cerrar timer">Timer</button>
 
   <aside id="timerPanel" class="timer-panel" aria-label="Focus timer">
-    <div class="timer-head">
-      <div>
-        <span>Focus</span>
-        <h3>Timer de estudio</h3>
-      </div>
-    </div>
-
     <div id="timerProgressRing" class="flip-timer-card" aria-label="Tiempo restante del timer">
       <span id="timerDisplay" class="timer-display" hidden>00:00</span>
       <!-- El tablero flip (minutos | segundos) se inyecta y anima desde app.js -->
     </div>
 
-    <div class="timer-presets">
-      <button class="preset-btn" type="button" data-minutes="5">5 min</button>
-      <button class="preset-btn" type="button" data-minutes="10">10 min</button>
-      <button class="preset-btn" type="button" data-minutes="15">15 min</button>
-    </div>
-
     <div class="timer-custom">
       <input id="customMinutes" type="number" min="1" max="180" placeholder="N minutos" />
-      <button id="customTimerBtn" class="primary-btn compact-btn" type="button">Setear</button>
     </div>
 
-    <div class="timer-actions timer-actions-three">
-      <button id="startTimerBtn" class="primary-btn" type="button">Start</button>
-      <button id="pauseTimerBtn" class="secondary-btn" type="button">Pausar</button>
-      <button id="resetTimerBtn" class="danger-btn" type="button">Reset</button>
+    <div class="timer-actions timer-actions-icons">
+      <button id="startTimerBtn" class="timer-icon-btn timer-icon-start" type="button" aria-label="Iniciar timer" title="Iniciar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+      <button id="pauseTimerBtn" class="timer-icon-btn timer-icon-pause" type="button" aria-label="Pausar timer" title="Pausar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+      </button>
+      <button id="resetTimerBtn" class="timer-icon-btn timer-icon-reset" type="button" aria-label="Reiniciar timer" title="Reiniciar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5V2L7 6l5 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg>
+      </button>
     </div>
   </aside>
 
@@ -60,7 +52,6 @@
 
     <nav class="top-nav">
       <a href="#inicio" class="nav-link nav-pill-minimal active" data-dashboard-link>Inicio</a>
-      <a href="#progreso" class="nav-link nav-pill-minimal" data-dashboard-link>Progreso</a>
       <a href="#tiempos" class="nav-link nav-pill-minimal" data-dashboard-link>Tiempos</a>
       <a href="#practica-rapida" class="nav-link nav-pill-minimal" data-dashboard-link>Práctica</a>
       <a href="#examen" class="nav-link nav-pill-minimal" data-dashboard-link>Examen</a>
@@ -254,29 +245,6 @@
             <div class="hero-actions">
               <a href="#tiempos" class="primary-btn" data-dashboard-link>Estudiar tiempos</a>
               <a href="#calendario" class="secondary-btn" data-dashboard-link>Ver calendario</a>
-            </div>
-
-            <div class="hero-compact-progress" aria-label="Progreso mensual compacto">
-              <div class="hero-compact-progress-head">
-                <div class="hero-compact-month">
-                  <button id="heroCompactPrevBtn" class="hero-compact-nav" type="button" aria-label="Mes anterior">‹</button>
-                  <div>
-                    <span>Progreso del mes</span>
-                    <strong id="heroCompactTitle">Mes actual</strong>
-                  </div>
-                  <button id="heroCompactNextBtn" class="hero-compact-nav" type="button" aria-label="Mes siguiente">›</button>
-                </div>
-
-                <div class="hero-compact-stats">
-                  <article><span>Racha</span><strong id="heroCompactCurrentStreak">0d</strong></article>
-                  <article><span>Mejor</span><strong id="heroCompactLongestStreak">0d</strong></article>
-                  <article><span>Total</span><strong id="heroCompactMonthTotal">0m</strong></article>
-                </div>
-              </div>
-
-              <div class="hero-compact-strip-wrap">
-                <div id="heroCompactMonthStrip" class="hero-compact-strip" aria-label="Heatmap horizontal del mes"></div>
-              </div>
             </div>
 
           </div>
@@ -518,48 +486,6 @@
         </form>
       </section>
 
-      <section id="progreso" class="section reveal">
-        <div class="section-header">
-          <div>
-            <span class="eyebrow">Seguimiento personal</span>
-            <h3>Progreso, nivel y objetivos</h3>
-            <p>
-              Visualizá tu continuidad de estudio, meta semanal, nivel estimado y rendimiento por tema.
-            </p>
-          </div>
-        </div>
-
-        <div class="progress-insight-grid">
-          <article class="insight-card">
-            <span>Objetivo semanal</span>
-            <strong id="weeklyGoalText">0m / 5h</strong>
-            <div class="bar-track"><div id="weeklyGoalBar" class="bar-fill orange-fill"></div></div>
-            <small>Meta recomendada para avanzar de forma constante.</small>
-          </article>
-
-          <article class="insight-card">
-            <span>Nivel estimado</span>
-            <strong id="levelText">B1</strong>
-            <div class="bar-track"><div id="levelBar" class="bar-fill purple-fill"></div></div>
-            <small id="levelProgressText">Camino IELTS: Band 5.0 → 5.5</small>
-          </article>
-
-          <article class="insight-card">
-            <span>Última actividad</span>
-            <strong id="lastActivityText">Sin actividad todavía</strong>
-            <small>Se actualiza cuando guardás writings, hacés exámenes o sumás vocabulario.</small>
-          </article>
-        </div>
-
-        <div class="topic-stats">
-          <article><span>Grammar</span><strong id="statGrammar">0%</strong></article>
-          <article><span>Conditionals</span><strong id="statConditionals">0%</strong></article>
-          <article><span>Phrasal verbs</span><strong id="statPhrasals">0%</strong></article>
-          <article><span>Modals</span><strong id="statModals">0%</strong></article>
-          <article><span>Writing</span><strong id="statWriting">0</strong></article>
-        </div>
-      </section>
-
       <section id="tiempos" class="section reveal">
         <div class="section-header">
           <div>
@@ -788,40 +714,92 @@
         </div>
       </section>
 
-      <section id="examen" class="section reveal">
+      <section id="examen" class="section reveal express-section">
         <div class="section-header">
           <div>
-            <span class="eyebrow">Evaluación</span>
-            <h3>Multiple choice · 10 preguntas</h3>
-            <p>Cada examen trae 10 preguntas. Elegí dificultad IELTS y cambiá entre 100 exámenes por nivel: 400 variantes en total.</p>
+            <span class="eyebrow">IELTS Express</span>
+            <h3>Simulacros rápidos de IELTS</h3>
+            <p>Practicá las 4 habilidades en versiones cortas (5–15 min) que evalúan los mismos criterios que el examen oficial de 3 horas. Ideal para una sesión diaria e intensiva.</p>
           </div>
-          <button id="resetQuizBtn" class="secondary-btn" type="button">Reiniciar examen</button>
         </div>
 
-        <div class="quiz-toolbar">
-          <label>
-            Dificultad:
-            <select id="examDifficulty">
-              <option value="4-5">Band 4-5</option>
-              <option value="6" selected>Band 6</option>
-              <option value="7">Band 7</option>
-              <option value="8-9">Band 8-9</option>
-            </select>
-          </label>
+        <!-- Vista dashboard de módulos -->
+        <div id="expressDashboard" class="express-dashboard">
+          <button id="expressFullBtn" class="express-full-card" type="button">
+            <div class="express-full-copy">
+              <span class="express-full-tag">Modo intensivo</span>
+              <strong>Iniciar Simulacro Express Completo</strong>
+              <p>Recorrido consecutivo por Listening, Reading, Writing y Speaking.</p>
+            </div>
+            <div class="express-full-cta">
+              <span class="express-full-time">≈ 25 min</span>
+              <span class="express-full-go" aria-hidden="true">→</span>
+            </div>
+          </button>
 
-          <label>
-            Examen:
-            <select id="examSelector"></select>
-          </label>
+          <div class="express-modules-grid">
+            <button class="express-module-card" type="button" data-express-module="listening">
+              <span class="express-module-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M4.5 13v-1.2a7.5 7.5 0 0 1 15 0V13"/><rect x="3.5" y="12" width="4" height="7" rx="2"/><rect x="16.5" y="12" width="4" height="7" rx="2"/></svg>
+              </span>
+              <strong>Express Listening</strong>
+              <p>1 audio corto · 10 preguntas variadas.</p>
+              <span class="express-module-time">5–7 min</span>
+            </button>
 
-          <span id="quizProgress">0/10 respondidas</span>
+            <button class="express-module-card" type="button" data-express-module="reading">
+              <span class="express-module-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4H11v16H6.5A2.5 2.5 0 0 0 4 22V6.5Z"/><path d="M20 6.5A2.5 2.5 0 0 0 17.5 4H13v16h4.5A2.5 2.5 0 0 1 20 22V6.5Z"/></svg>
+              </span>
+              <strong>Express Reading</strong>
+              <p>1 texto académico · True/False/Not Given.</p>
+              <span class="express-module-time">7–10 min</span>
+            </button>
+
+            <button class="express-module-card" type="button" data-express-module="writing">
+              <span class="express-module-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M5 19l4.2-1.1L18 9.1 14.9 6 6.1 14.8 5 19Z"/><path d="M13.8 7.1l3.1 3.1"/></svg>
+              </span>
+              <strong>Express Writing</strong>
+              <p>Ensayo corto de opinión · corrección IA Coach.</p>
+              <span class="express-module-time">15 min</span>
+            </button>
+
+            <button class="express-module-card" type="button" data-express-module="speaking">
+              <span class="express-module-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><rect x="9" y="4" width="6" height="10" rx="3"/><path d="M6.5 11.5a5.5 5.5 0 0 0 11 0"/><path d="M12 17v3"/><path d="M9 20h6"/></svg>
+              </span>
+              <strong>Express Speaking</strong>
+              <p>3 preguntas rápidas · grabación de voz.</p>
+              <span class="express-module-time">3–5 min</span>
+            </button>
+          </div>
         </div>
 
-        <div id="quizContainer" class="quiz-container"></div>
+        <!-- Vista de prueba en curso (se llena dinámicamente) -->
+        <div id="expressRunner" class="express-runner" hidden>
+          <div class="express-progress-track" aria-hidden="true">
+            <div id="expressProgressBar" class="express-progress-bar"></div>
+          </div>
 
-        <div class="quiz-actions">
-          <button id="submitQuizBtn" class="primary-btn" type="button">Corregir examen</button>
-          <div id="quizResult" class="quiz-result"></div>
+          <div class="express-runner-head">
+            <div>
+              <span id="expressRunnerTag" class="express-runner-tag">Express</span>
+              <h4 id="expressRunnerTitle">Módulo</h4>
+            </div>
+            <div class="express-runner-meta">
+              <span id="expressRunnerTimer" class="express-runner-timer">00:00</span>
+            </div>
+          </div>
+
+          <div id="expressRunnerBody" class="express-runner-body"></div>
+
+          <div class="express-runner-actions">
+            <span id="expressRunnerProgress" class="express-runner-progresstext"></span>
+            <button id="expressSubmitBtn" class="primary-btn" type="button">Enviar</button>
+          </div>
+
+          <div id="expressResult" class="express-result" hidden></div>
         </div>
       </section>
 
@@ -1108,6 +1086,7 @@
 
       let i = 1;
       let intervalo = null;
+      let cambios = 0;
 
       function iniciarTituloDinamico() {
         const titulo = document.getElementById("titulo-dinamico");
@@ -1122,9 +1101,12 @@
           window.setTimeout(function () {
             titulo.innerText = frases[i];
             i = (i + 1) % frases.length;
+            cambios += 1;
+            // Cada 3 cambios, la frase aparece en cursiva/itálica.
+            titulo.classList.toggle("title-italic", cambios % 3 === 0);
             titulo.classList.remove("title-changing");
-          }, 280);
-        }, 10000);
+          }, 220);
+        }, 3000);
       }
 
       if (document.readyState === "loading") {

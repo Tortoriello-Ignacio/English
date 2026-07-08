@@ -19,6 +19,7 @@
   ];
 
   let i = 1;
+  let changeCount = 0;
 
   function init() {
     const titulo = document.getElementById("titulo-dinamico");
@@ -33,9 +34,15 @@
       window.setTimeout(() => {
         titulo.innerText = frases[i];
         i = (i + 1) % frases.length;
+        changeCount += 1;
+
+        // Cada 3 cambios, la frase aparece en cursiva/itálica.
+        const italic = changeCount % 3 === 0;
+        titulo.classList.toggle("title-italic", italic);
+
         titulo.classList.remove("title-changing");
-      }, 280);
-    }, 10000);
+      }, 220);
+    }, 3000);
   }
 
   if (document.readyState === "loading") {
@@ -1677,10 +1684,10 @@ function toggleTimerPanel() {
   timerPanel.classList.toggle("open");
 }
 
-function setTimer(minutes) {
+function setTimer(minutes, silent) {
   const mins = Number(minutes);
   if (!mins || mins < 1) {
-    alert("Ingresá una cantidad válida de minutos.");
+    if (!silent) alert("Ingresá una cantidad válida de minutos.");
     return;
   }
 
@@ -1692,9 +1699,9 @@ function setTimer(minutes) {
 
   if (timerProgressRing) timerProgressRing.classList.remove("timer-running", "timer-paused");
 
-  if (pauseTimerBtn) pauseTimerBtn.textContent = "Pausar";
+  if (pauseTimerBtn) pauseTimerBtn.classList.remove("is-active");
   if (startTimerBtn) {
-    startTimerBtn.textContent = "Start";
+    startTimerBtn.classList.remove("is-running");
     startTimerBtn.disabled = false;
   }
   updateTimerUI();
@@ -1702,17 +1709,25 @@ function setTimer(minutes) {
 
 function startTimer() {
   if (!timerInitialSeconds || timerInitialSeconds < 1) {
-    alert("Primero elegí 5, 10, 15 minutos o seteá una cantidad personalizada.");
-    return;
+    // Intentar tomar el valor del input directamente.
+    const fromInput = customMinutes ? Number(customMinutes.value) : 0;
+    if (fromInput >= 1) {
+      setTimer(fromInput, true);
+    } else {
+      if (customMinutes) customMinutes.focus();
+      return;
+    }
   }
   if (timerInterval) return;
 
+  // Quitar cualquier efecto de "tiempo cumplido" al reiniciar la cuenta.
+  if (timerProgressRing) timerProgressRing.classList.remove("timer-finished");
   timerPaused = false;
   if (timerProgressRing) timerProgressRing.classList.add("timer-running");
   if (timerProgressRing) timerProgressRing.classList.remove("timer-paused");
-  if (pauseTimerBtn) pauseTimerBtn.textContent = "Pausar";
+  if (pauseTimerBtn) pauseTimerBtn.classList.remove("is-active");
   if (startTimerBtn) {
-    startTimerBtn.textContent = "En curso";
+    startTimerBtn.classList.add("is-running");
     startTimerBtn.disabled = true;
   }
 
@@ -1732,10 +1747,11 @@ function startTimer() {
       if (timerProgressRing) timerProgressRing.classList.remove("timer-running", "timer-paused");
 
       if (startTimerBtn) {
-        startTimerBtn.textContent = "Start";
+        startTimerBtn.classList.remove("is-running");
         startTimerBtn.disabled = false;
       }
-      alert("¡Tiempo cumplido! Excelente sesión de estudio.");
+      // Sin aviso emergente: el timer emite ondas brillantes del color del theme.
+      if (timerProgressRing) timerProgressRing.classList.add("timer-finished");
     }
   }, 1000);
 }
@@ -1770,6 +1786,14 @@ document.querySelectorAll(".preset-btn").forEach((button) => {
   button.addEventListener("click", () => setTimer(button.dataset.minutes));
 });
 
+if (customMinutes) {
+  // Sin botón "Setear": el input configura el timer al cambiar.
+  customMinutes.addEventListener("input", () => {
+    if (timerInterval) return; // no reconfigurar mientras corre
+    const v = Number(customMinutes.value);
+    if (v >= 1) setTimer(v, true);
+  });
+}
 if (customTimerBtn) customTimerBtn.addEventListener("click", () => setTimer(customMinutes.value));
 if (startTimerBtn) startTimerBtn.addEventListener("click", startTimer);
 
@@ -1777,10 +1801,10 @@ if (pauseTimerBtn) {
   pauseTimerBtn.addEventListener("click", () => {
     if (!timerInterval) return;
     timerPaused = !timerPaused;
-    pauseTimerBtn.textContent = timerPaused ? "Continuar" : "Pausar";
+    pauseTimerBtn.classList.toggle("is-active", timerPaused);
     if (timerProgressRing) timerProgressRing.classList.toggle("timer-paused", timerPaused);
     if (timerProgressRing) timerProgressRing.classList.toggle("timer-running", !timerPaused);
-    if (startTimerBtn) startTimerBtn.textContent = timerPaused ? "Pausado" : "En curso";
+    if (startTimerBtn) startTimerBtn.classList.toggle("is-running", !timerPaused);
   });
 }
 
@@ -1791,10 +1815,9 @@ if (resetTimerBtn) {
     timerSecondsLeft = 0;
     timerInitialSeconds = 0;
     timerPaused = false;
-    if (timerProgressRing) timerProgressRing.classList.remove("timer-running", "timer-paused");
-    if (pauseTimerBtn) pauseTimerBtn.textContent = "Pausar";
+    if (timerProgressRing) timerProgressRing.classList.remove("timer-running", "timer-paused", "timer-finished");
     if (startTimerBtn) {
-      startTimerBtn.textContent = "Start";
+      startTimerBtn.classList.remove("is-running");
       startTimerBtn.disabled = false;
     }
     updateTimerUI();
@@ -6450,193 +6473,7 @@ window.addEventListener("load", () => {
    Main timer and mini timer share exact progress sector.
    The consumed sector begins at 12 o'clock.
 ========================================================= */
-(function timerMiniAndSectorV25() {
-  function getRoot() {
-    return document.getElementById("timerProgressRing") || document.getElementById("timerVisual");
-  }
-
-  function polarToCartesian(cx, cy, r, angleDeg) {
-    const angleRad = (angleDeg - 90) * Math.PI / 180;
-    return {
-      x: cx + (r * Math.cos(angleRad)),
-      y: cy + (r * Math.sin(angleRad))
-    };
-  }
-
-  function describeSector(cx, cy, r, angleDeg) {
-    const angle = Math.max(0, Math.min(359.999, Number(angleDeg) || 0));
-
-    if (angle <= 0.001) return "";
-
-    if (angle >= 359.5) {
-      return [
-        `M ${cx} ${cy - r}`,
-        `A ${r} ${r} 0 1 1 ${cx - 0.01} ${cy - r}`,
-        `A ${r} ${r} 0 1 1 ${cx} ${cy - r}`,
-        "Z"
-      ].join(" ");
-    }
-
-    const start = polarToCartesian(cx, cy, r, 0);
-    const end = polarToCartesian(cx, cy, r, angle);
-    const largeArcFlag = angle > 180 ? 1 : 0;
-
-    return [
-      `M ${cx} ${cy}`,
-      `L ${start.x} ${start.y}`,
-      `A ${r} ${r} 0 ${largeArcFlag} 1 ${end.x} ${end.y}`,
-      "Z"
-    ].join(" ");
-  }
-
-  function ensureSvgTimerMarkup() {
-    const root = getRoot();
-    if (!root) return;
-
-    root.id = "timerProgressRing";
-    root.classList.remove("water-hourglass", "digital-timer-card", "hourglass-timer-card");
-    root.classList.add("circle-timer-card");
-
-    if (root.querySelector("#timerEatenPath")) return;
-
-    root.innerHTML = `
-      <div class="circle-timer-time">
-        <span id="timerDisplay" class="timer-display">00:00</span>
-        <small>sesión de foco</small>
-      </div>
-
-      <div class="circle-timer-orb" aria-hidden="true">
-        <svg viewBox="0 0 100 100" class="circle-timer-svg" role="img" aria-label="Progreso circular del timer">
-          <circle class="circle-timer-base" cx="50" cy="50" r="48"></circle>
-          <path id="timerEatenPath" class="circle-timer-eaten"></path>
-          <circle class="circle-timer-gloss" cx="50" cy="50" r="40"></circle>
-        </svg>
-        <span class="circle-inner-glow"></span>
-      </div>
-
-      <p class="circle-timer-caption">El relleno se consume desde arriba.</p>
-    `;
-  }
-
-  function ensureMiniTimerMarkup() {
-    if (document.getElementById("miniTimerBubble")) return;
-
-    const button = document.getElementById("timerToggleBtn");
-    if (!button) return;
-
-    const mini = document.createElement("div");
-    mini.id = "miniTimerBubble";
-    mini.className = "mini-timer-bubble";
-    mini.setAttribute("aria-hidden", "true");
-    mini.innerHTML = `
-      <div class="mini-timer-orb">
-        <svg viewBox="0 0 100 100" class="mini-timer-svg" role="img" aria-label="Progreso del timer">
-          <circle class="mini-timer-base" cx="50" cy="50" r="47"></circle>
-          <path id="miniTimerEatenPath" class="mini-timer-eaten"></path>
-          <circle class="mini-timer-gloss" cx="50" cy="50" r="39"></circle>
-        </svg>
-      </div>
-      <span id="miniTimerDisplay">00:00</span>
-    `;
-
-    button.insertAdjacentElement("beforebegin", mini);
-  }
-
-  function isTimerPanelOpen() {
-    const panel = document.getElementById("timerPanel");
-    return !!panel && panel.classList.contains("open");
-  }
-
-  function updateMiniVisibility() {
-    const mini = document.getElementById("miniTimerBubble");
-    if (!mini) return;
-
-    const shouldShow = !!timerInitialSeconds && !isTimerPanelOpen();
-
-    mini.classList.toggle("visible", shouldShow);
-    mini.setAttribute("aria-hidden", shouldShow ? "false" : "true");
-    document.body.classList.toggle("timer-panel-open", isTimerPanelOpen());
-  }
-
-  function updateTimerUIV25() {
-    ensureSvgTimerMarkup();
-    ensureMiniTimerMarkup();
-
-    const remaining = Math.max(Number(timerSecondsLeft) || 0, 0);
-    const minutes = Math.floor(remaining / 60);
-    const seconds = remaining % 60;
-    const timeText = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-
-    const display = document.getElementById("timerDisplay");
-    const miniDisplay = document.getElementById("miniTimerDisplay");
-
-    if (display) display.textContent = timeText;
-    if (miniDisplay) miniDisplay.textContent = timeText;
-
-    const progress = timerInitialSeconds
-      ? (timerInitialSeconds - remaining) / timerInitialSeconds
-      : 0;
-
-    const elapsedDegrees = Math.max(0, Math.min(360, progress * 360));
-    const sectorPath = describeSector(50, 50, 50, elapsedDegrees);
-
-    const mainPath = document.getElementById("timerEatenPath");
-    const miniPath = document.getElementById("miniTimerEatenPath");
-
-    if (mainPath) mainPath.setAttribute("d", sectorPath);
-    if (miniPath) miniPath.setAttribute("d", sectorPath);
-
-    const root = getRoot();
-    if (root) {
-      root.style.setProperty("--timer-elapsed", `${elapsedDegrees}deg`);
-      root.style.setProperty("--timer-progress-ratio", String(progress));
-    }
-
-    updateMiniVisibility();
-  }
-
-  updateTimerUI = updateTimerUIV25;
-
-  function afterTimerToggle() {
-    window.setTimeout(() => {
-      updateTimerUIV25();
-      updateMiniVisibility();
-    }, 0);
-  }
-
-  function bootTimerMini() {
-    ensureSvgTimerMarkup();
-    ensureMiniTimerMarkup();
-    updateTimerUIV25();
-
-    const toggleBtn = document.getElementById("timerToggleBtn");
-    if (toggleBtn && toggleBtn.dataset.timerMiniV25 !== "true") {
-      toggleBtn.dataset.timerMiniV25 = "true";
-      toggleBtn.addEventListener("click", afterTimerToggle, true);
-      toggleBtn.addEventListener("click", afterTimerToggle, false);
-    }
-
-    const panel = document.getElementById("timerPanel");
-    if (panel && panel.dataset.timerMiniObserverV25 !== "true") {
-      panel.dataset.timerMiniObserverV25 = "true";
-      const observer = new MutationObserver(() => {
-        updateTimerUIV25();
-        updateMiniVisibility();
-      });
-      observer.observe(panel, { attributes: true, attributeFilter: ["class"] });
-    }
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", bootTimerMini);
-  } else {
-    bootTimerMini();
-  }
-
-  window.addEventListener("load", () => {
-    window.setTimeout(bootTimerMini, 80);
-  });
-})();
+/* [LIMPIEZA] Timer circular (timerMiniAndSectorV25) eliminado: reemplazado por el flip clock V51. */
 
 
 /* =========================================================
@@ -9118,9 +8955,10 @@ window.addEventListener("load", () => {
       }
     });
 
-    // Cancelar al perder foco (sin guardar) salvo que ya se haya guardado.
+    // Cancelar al perder foco (sin guardar) salvo que ya se haya guardado o cerrado.
     editor.addEventListener("blur", () => {
-      if (!editor.dataset.saved) closeInlineNoteEditor();
+      if (editor.dataset.saved || closingEditor || !editor.parentNode) return;
+      closeInlineNoteEditor();
     });
 
     setTimeout(() => {
@@ -9150,11 +8988,18 @@ window.addEventListener("load", () => {
     if (typeof logActivity === "function") logActivity("Calendario actualizado");
   }
 
+  let closingEditor = false;
   function closeInlineNoteEditor() {
+    if (closingEditor) return;      // evita reentrada desde el propio blur
+    closingEditor = true;
     document.querySelectorAll(".heatmap-day.is-editing").forEach((cell) => {
       cell.classList.remove("is-editing");
     });
-    document.querySelectorAll(".heatmap-day-editor").forEach((el) => el.remove());
+    document.querySelectorAll(".heatmap-day-editor").forEach((el) => {
+      el.onblur = null;             // desactiva el blur antes de quitarlo
+      if (el.parentNode) el.parentNode.removeChild(el);
+    });
+    closingEditor = false;
   }
 
   function setupHeatmapCalendar() {
@@ -9353,6 +9198,51 @@ window.addEventListener("load", () => {
     zone.addEventListener("mousemove", updatePosition, { passive: true });
     zone.addEventListener("mouseleave", resetPosition);
     window.addEventListener("blur", resetPosition);
+
+    // ── Hover sobre EN: salen 1 o 2 palabras en inglés desde el puntero ──
+    const WORDS = [
+      "English","Fluent","Speak","Listen","Write","Read","Grammar","Vocabulary",
+      "Practice","Learn","Confident","Improve","IELTS","Band 7","Master","Words",
+      "Sentence","Verb","Tense","Study","Progress","Skill","Native","Clarity"
+    ];
+
+    if (!wrap.dataset.enBurstBound) {
+      wrap.dataset.enBurstBound = "true";
+      wrap.style.position = wrap.style.position || "relative";
+
+      wrap.addEventListener("click", (event) => {
+        const rect = wrap.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        spawnWordsAt(wrap, x, y);
+      });
+    }
+
+    function spawnWordsAt(container, x, y) {
+      const count = 1 + Math.floor(Math.random() * 2); // 1 o 2 palabras
+      for (let i = 0; i < count; i++) {
+        const el = document.createElement("span");
+        el.className = "hero-en-word";
+        el.textContent = WORDS[Math.floor(Math.random() * WORDS.length)];
+        const drift = (Math.random() - 0.5) * 60;   // leve deriva horizontal
+        const rise = 30 + Math.random() * 22;       // impulso hacia arriba
+        const fall = 190 + Math.random() * 120;     // cae más y más lejos
+        const rot = (Math.random() - 0.5) * 30;
+        const dur = 1600 + Math.random() * 800;
+        el.style.left = `${x + (Math.random() - 0.5) * 16}px`;
+        el.style.top = `${y + (Math.random() - 0.5) * 10}px`;
+        el.style.fontSize = `${0.8 + Math.random() * 0.5}rem`;
+        el.style.setProperty("--drift", `${drift}px`);
+        el.style.setProperty("--rise", `${rise}px`);
+        el.style.setProperty("--fall", `${fall}px`);
+        el.style.setProperty("--rot", `${rot}deg`);
+        el.style.animationDuration = `${dur}ms`;
+        container.appendChild(el);
+        const safeRemove = () => { if (el.parentNode) el.remove(); };
+        el.addEventListener("animationend", safeRemove);
+        setTimeout(safeRemove, dur + 400);
+      }
+    }
   }
 
   if (document.readyState === "loading") {
@@ -9371,212 +9261,7 @@ window.addEventListener("load", () => {
    Tira horizontal del mes dentro del banner. No mezcla IDs con el calendario tradicional.
 ========================================================= */
 
-(function heroCompactMonthStripV47() {
-  if (window.__heroCompactMonthStripV47) return;
-  window.__heroCompactMonthStripV47 = true;
-
-  const $ = (id) => document.getElementById(id);
-  const STORAGE_DAILY = "englishTrainerDailyStudyV34";
-
-  window.data_estudio = window.data_estudio || {};
-
-  const state = {
-    monthDate: new Date()
-  };
-
-  function pad(value) {
-    return String(value).padStart(2, "0");
-  }
-
-  function toISODate(date) {
-    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
-  }
-
-  function fromISODate(iso) {
-    const [year, month, day] = String(iso).split("-").map(Number);
-    return new Date(year, month - 1, day);
-  }
-
-  function readJSON(key, fallback) {
-    try {
-      const parsed = JSON.parse(localStorage.getItem(key));
-      return parsed ?? fallback;
-    } catch {
-      return fallback;
-    }
-  }
-
-  function getStudyDataMinutes() {
-    const storedSeconds = readJSON(STORAGE_DAILY, {});
-    const merged = { ...(window.data_estudio || {}) };
-
-    Object.entries(storedSeconds).forEach(([date, seconds]) => {
-      const minutes = Math.round(Number(seconds || 0) / 60);
-      merged[date] = Math.max(Number(merged[date] || 0), minutes);
-    });
-
-    return merged;
-  }
-
-  function minutesForDate(iso) {
-    return Number(getStudyDataMinutes()[iso] || 0);
-  }
-
-  function heatLevel(minutes) {
-    const value = Number(minutes || 0);
-    if (value <= 0) return 0;
-    if (value <= 30) return 1;
-    if (value <= 60) return 2;
-    return 3;
-  }
-
-  function formatMinutes(minutes) {
-    const value = Number(minutes || 0);
-    if (value < 60) return `${value}m`;
-    const hours = Math.floor(value / 60);
-    const rest = value % 60;
-    return rest ? `${hours}h ${rest}m` : `${hours}h`;
-  }
-
-  function humanDate(iso) {
-    return fromISODate(iso).toLocaleDateString("es-AR", {
-      weekday: "long",
-      day: "numeric",
-      month: "long",
-      year: "numeric"
-    });
-  }
-
-  function dayHasStudy(iso) {
-    return minutesForDate(iso) > 0;
-  }
-
-  function getCurrentStreak() {
-    let streak = 0;
-    const cursor = new Date();
-
-    while (true) {
-      const iso = toISODate(cursor);
-      if (!dayHasStudy(iso)) break;
-      streak += 1;
-      cursor.setDate(cursor.getDate() - 1);
-    }
-
-    return streak;
-  }
-
-  function getLongestStreak() {
-    const studiedDays = Object.entries(getStudyDataMinutes())
-      .filter(([, minutes]) => Number(minutes || 0) > 0)
-      .map(([iso]) => iso)
-      .sort();
-
-    if (!studiedDays.length) return 0;
-
-    let longest = 1;
-    let current = 1;
-
-    for (let i = 1; i < studiedDays.length; i += 1) {
-      const prev = fromISODate(studiedDays[i - 1]);
-      const now = fromISODate(studiedDays[i]);
-      const diff = Math.round((now - prev) / 86400000);
-
-      current = diff === 1 ? current + 1 : 1;
-      longest = Math.max(longest, current);
-    }
-
-    return longest;
-  }
-
-  function getMonthTotal(date) {
-    const prefix = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-`;
-    return Object.entries(getStudyDataMinutes())
-      .filter(([iso]) => iso.startsWith(prefix))
-      .reduce((sum, [, minutes]) => sum + Number(minutes || 0), 0);
-  }
-
-  function renderHeroCompactStrip() {
-    const strip = $("heroCompactMonthStrip");
-    const title = $("heroCompactTitle");
-    if (!strip || !title) return;
-
-    const year = state.monthDate.getFullYear();
-    const month = state.monthDate.getMonth();
-    const lastDay = new Date(year, month + 1, 0).getDate();
-    const todayISO = toISODate(new Date());
-
-    const monthLabel = state.monthDate.toLocaleDateString("es-AR", {
-      month: "long",
-      year: "numeric"
-    });
-
-    title.textContent = monthLabel.charAt(0).toUpperCase() + monthLabel.slice(1);
-    strip.style.setProperty("--hero-days-count", String(lastDay));
-
-    const days = [];
-
-    for (let day = 1; day <= lastDay; day += 1) {
-      const iso = `${year}-${pad(month + 1)}-${pad(day)}`;
-      const minutes = minutesForDate(iso);
-      const level = heatLevel(minutes);
-      const today = iso === todayISO;
-
-      days.push(`
-        <button
-          class="hero-compact-day heat-${level} ${minutes > 0 ? "is-active" : ""} ${today ? "is-today" : ""}"
-          type="button"
-          data-hero-compact-date="${iso}"
-          title="${humanDate(iso)} · ${formatMinutes(minutes)}"
-          aria-label="${humanDate(iso)}, ${formatMinutes(minutes)}"
-        >
-          <span>${day}</span>
-        </button>
-      `);
-    }
-
-    strip.innerHTML = days.join("");
-
-    if ($("heroCompactCurrentStreak")) $("heroCompactCurrentStreak").textContent = `${getCurrentStreak()}d`;
-    if ($("heroCompactLongestStreak")) $("heroCompactLongestStreak").textContent = `${getLongestStreak()}d`;
-    if ($("heroCompactMonthTotal")) $("heroCompactMonthTotal").textContent = formatMinutes(getMonthTotal(state.monthDate));
-  }
-
-  function setupHeroCompactStrip() {
-    if (window.__heroCompactStripBoundV47) return;
-    window.__heroCompactStripBoundV47 = true;
-
-    $("heroCompactPrevBtn")?.addEventListener("click", () => {
-      state.monthDate = new Date(state.monthDate.getFullYear(), state.monthDate.getMonth() - 1, 1);
-      renderHeroCompactStrip();
-    });
-
-    $("heroCompactNextBtn")?.addEventListener("click", () => {
-      state.monthDate = new Date(state.monthDate.getFullYear(), state.monthDate.getMonth() + 1, 1);
-      renderHeroCompactStrip();
-    });
-
-    $("heroCompactMonthStrip")?.addEventListener("click", (event) => {
-      const button = event.target.closest("[data-hero-compact-date]");
-      if (!button) return;
-
-      const fullCalendar = document.getElementById("calendario");
-      if (fullCalendar) {
-        fullCalendar.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    });
-
-    renderHeroCompactStrip();
-    setInterval(renderHeroCompactStrip, 12000);
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", setupHeroCompactStrip);
-  } else {
-    setupHeroCompactStrip();
-  }
-
-  window.addEventListener("load", () => setTimeout(setupHeroCompactStrip, 100));
-})();
+/* [LIMPIEZA] Mini-calendario del hero (heroCompactMonthStripV47) eliminado: su HTML fue removido. */
 
 
 /* =========================================================
@@ -9632,7 +9317,8 @@ window.addEventListener("load", () => {
     const root = getRoot();
     if (!root) return;
     root.id = "timerProgressRing";
-    root.className = "flip-timer-card";
+    root.classList.remove("circle-timer-card", "water-timer-card", "hourglass-timer-card", "digital-timer-card");
+    root.classList.add("flip-timer-card");
     root.setAttribute("aria-label", "Tiempo restante del timer");
 
     if (root.querySelector(".flip-board")) return;
@@ -9805,6 +9491,534 @@ window.addEventListener("load", () => {
 
     // Refresco de respaldo (por si el intervalo principal del timer no dispara render).
     setInterval(() => updateFlipTimerUI(false), 1000);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
+  window.addEventListener("load", () => setTimeout(boot, 120));
+})();
+
+
+/* =========================================================
+   V52 — IELTS EXPRESS TESTS
+   Simulacros rápidos: Listening, Reading, Writing, Speaking
+   + modo Full Express (los 4 consecutivos). Motor autónomo.
+   Reutiliza helpers globales: logActivity, getWords,
+   detectCommonIssues, escapeHTML si existen.
+========================================================= */
+(function ieltsExpressV52() {
+  if (window.__ieltsExpressV52) return;
+  window.__ieltsExpressV52 = true;
+
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => (typeof escapeHTML === "function"
+    ? escapeHTML(s)
+    : String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"));
+  const log = (m) => { if (typeof logActivity === "function") logActivity(m); };
+  const words = (t) => (typeof getWords === "function" ? getWords(t) : String(t||"").trim().split(/\s+/).filter(Boolean));
+
+  // ---- Contenido de las pruebas ---------------------------------------
+  const LISTENING = {
+    minutes: 7,
+    transcript: `Good morning everyone. Today I want to talk about how our city library is changing. Starting next month, the library will open at eight in the morning instead of nine, and it will stay open until nine at night on weekdays. We are also adding two new study rooms on the second floor, which students can book online for up to three hours. Finally, the annual membership fee will remain free for anyone under eighteen, while adults will pay a small fee of ten dollars per year.`,
+    questions: [
+      { type: "mc", q: "What time will the library open next month?", options: ["Seven a.m.","Eight a.m.","Nine a.m.","Ten a.m."], answer: 1 },
+      { type: "mc", q: "Until what time does it stay open on weekdays?", options: ["Seven p.m.","Eight p.m.","Nine p.m.","Ten p.m."], answer: 2 },
+      { type: "gap", q: "The new study rooms are on the ___ floor.", answer: "second", accepts: ["2nd","second"] },
+      { type: "mc", q: "How can students book a study room?", options: ["By phone","In person","Online","By email"], answer: 2 },
+      { type: "gap", q: "A study room can be booked for up to ___ hours.", answer: "three", accepts: ["3","three"] },
+      { type: "mc", q: "Membership is free for people under what age?", options: ["Sixteen","Seventeen","Eighteen","Twenty"], answer: 2 },
+      { type: "gap", q: "Adults will pay ___ dollars per year.", answer: "ten", accepts: ["10","ten"] },
+      { type: "tfng", q: "The library currently opens at eight a.m.", answer: "false" },
+      { type: "tfng", q: "There will be two new study rooms.", answer: "true" },
+      { type: "tfng", q: "The library mentions a new café.", answer: "not given" }
+    ]
+  };
+
+  const READING = {
+    minutes: 9,
+    title: "The rise of urban vertical farming",
+    text: `Vertical farming is the practice of growing crops in stacked layers, often inside controlled indoor environments. Unlike traditional agriculture, it does not depend on soil or seasonal weather, using instead artificial light and nutrient-rich water. Supporters argue that vertical farms can produce food close to cities, cutting the distance that vegetables travel and reducing waste. Critics point out that the electricity required for lighting makes the method expensive and, in some regions, less environmentally friendly than expected. Despite these concerns, the number of commercial vertical farms has grown steadily over the past decade, particularly in countries with limited farmland. Researchers continue to study whether the approach can become both affordable and sustainable at a large scale.`,
+    questions: [
+      { type: "tfng", q: "Vertical farming grows crops in stacked layers.", answer: "true" },
+      { type: "tfng", q: "Vertical farming depends heavily on seasonal weather.", answer: "false" },
+      { type: "tfng", q: "Vertical farms use nutrient-rich water instead of soil.", answer: "true" },
+      { type: "tfng", q: "Supporters say vertical farms reduce food transport distance.", answer: "true" },
+      { type: "tfng", q: "Critics mention that lighting electricity can be costly.", answer: "true" },
+      { type: "tfng", q: "Vertical farming is always cheaper than traditional farming.", answer: "false" },
+      { type: "tfng", q: "The text states the exact number of vertical farms worldwide.", answer: "not given" },
+      { type: "tfng", q: "Commercial vertical farms have grown over the past decade.", answer: "true" },
+      { type: "gap", q: "Vertical farms are common in countries with limited ___.", answer: "farmland", accepts: ["farmland","farm land"] },
+      { type: "gap", q: "Researchers study if the method can be affordable and ___.", answer: "sustainable", accepts: ["sustainable"] }
+    ]
+  };
+
+  const WRITING_PROMPTS = [
+    "Some people believe that studying a language abroad is the best way to learn it. To what extent do you agree or disagree? Write a short opinion essay.",
+    "Many students now prefer online classes to traditional ones. Discuss the main advantage and the main disadvantage, and give your opinion.",
+    "Technology has changed the way we communicate with friends. Do the advantages outweigh the disadvantages? Give reasons for your answer."
+  ];
+
+  const SPEAKING_SETS = [
+    ["Describe your hometown. What do you like most about it?","Do you prefer studying in the morning or at night? Why?","Talk about a skill you would like to learn in the future."],
+    ["What kind of music do you enjoy and why?","Describe a memorable trip you have taken.","Is it better to work alone or in a team? Explain your view."],
+    ["Describe your typical daily routine.","What are the benefits of learning English for you?","Talk about a book or film that influenced you."]
+  ];
+
+  // ---- Estado del runner ----------------------------------------------
+  let state = null; // { module, minutes, secondsLeft, interval, sequence, seqIndex, scores }
+  let expressInterval = null; // intervalo único: se limpia siempre, no depende de state
+
+  function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+  // ---- Timer con barra fina -------------------------------------------
+  function startCountdown(minutes) {
+    stopCountdown();
+    state.secondsLeft = minutes * 60;
+    state.totalSeconds = minutes * 60;
+    renderTimer();
+    expressInterval = setInterval(() => {
+      if (!state) { stopCountdown(); return; }
+      state.secondsLeft -= 1;
+      if (state.secondsLeft <= 0) {
+        state.secondsLeft = 0;
+        renderTimer();
+        stopCountdown();
+        // tiempo agotado: autoenviar
+        submitCurrent(true);
+        return;
+      }
+      renderTimer();
+    }, 1000);
+  }
+  function stopCountdown() {
+    if (expressInterval) { clearInterval(expressInterval); expressInterval = null; }
+    if (state && state.interval) { clearInterval(state.interval); state.interval = null; }
+  }
+  function renderTimer() {
+    const m = Math.floor(state.secondsLeft / 60);
+    const s = state.secondsLeft % 60;
+    const el = $("expressRunnerTimer");
+    if (el) el.textContent = `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+    const bar = $("expressProgressBar");
+    if (bar && state.totalSeconds) {
+      const pct = (1 - state.secondsLeft / state.totalSeconds) * 100;
+      bar.style.width = `${Math.min(100, Math.max(0, pct)).toFixed(1)}%`;
+      bar.classList.toggle("is-urgent", state.secondsLeft <= 30);
+    }
+  }
+
+  // ---- Vistas ----------------------------------------------------------
+  function showDashboard() {
+    stopCountdown();
+    $("expressDashboard").hidden = false;
+    $("expressRunner").hidden = true;
+    $("expressResult").hidden = true;
+    state = null;
+  }
+
+  function openRunner(tag, title) {
+    stopCountdown();
+    $("expressDashboard").hidden = true;
+    $("expressRunner").hidden = false;
+    $("expressResult").hidden = true;
+    $("expressRunnerTag").textContent = tag;
+    $("expressRunnerTitle").textContent = title;
+    $("expressResult").innerHTML = "";
+    const submit = $("expressSubmitBtn");
+    if (submit) submit.disabled = false;
+    const bar = $("expressProgressBar");
+    if (bar) { bar.style.width = "0%"; bar.classList.remove("is-urgent"); }
+  }
+
+  // ---- Render de preguntas objetivas (listening / reading) ------------
+  function questionMarkup(qs) {
+    return qs.map((item, i) => {
+      let inner = "";
+      if (item.type === "mc") {
+        inner = `<div class="express-options">${item.options.map((o, oi) =>
+          `<label class="express-opt"><input type="radio" name="eq-${i}" value="${oi}"><span>${esc(o)}</span></label>`).join("")}</div>`;
+      } else if (item.type === "tfng") {
+        inner = `<div class="express-options express-tfng">${["true","false","not given"].map((o) =>
+          `<label class="express-opt"><input type="radio" name="eq-${i}" value="${o}"><span>${o === "not given" ? "Not Given" : o.charAt(0).toUpperCase()+o.slice(1)}</span></label>`).join("")}</div>`;
+      } else if (item.type === "gap") {
+        inner = `<input type="text" class="express-gap-input" name="eq-${i}" placeholder="Tu respuesta" autocomplete="off">`;
+      }
+      return `<article class="express-question" data-eq="${i}">
+        <h5>${i + 1}. ${esc(item.q)}</h5>
+        ${inner}
+      </article>`;
+    }).join("");
+  }
+
+  function gradeObjective(qs) {
+    let correct = 0;
+    qs.forEach((item, i) => {
+      let ok = false;
+      if (item.type === "gap") {
+        const val = (document.querySelector(`[name="eq-${i}"]`)?.value || "").trim().toLowerCase();
+        const accepts = (item.accepts || [item.answer]).map((a) => String(a).toLowerCase());
+        ok = accepts.includes(val);
+      } else {
+        const sel = document.querySelector(`[name="eq-${i}"]:checked`);
+        if (sel) ok = String(sel.value) === String(item.answer);
+      }
+      const node = document.querySelector(`.express-question[data-eq="${i}"]`);
+      if (node) { node.classList.remove("correct","incorrect"); node.classList.add(ok ? "correct" : "incorrect"); }
+      if (ok) correct += 1;
+    });
+    return correct;
+  }
+
+  // Escala IELTS aproximada por aciertos sobre 10
+  function bandFromScore(correct, total) {
+    const ratio = correct / total;
+    if (ratio >= 0.95) return 9.0;
+    if (ratio >= 0.85) return 8.0;
+    if (ratio >= 0.75) return 7.5;
+    if (ratio >= 0.65) return 7.0;
+    if (ratio >= 0.55) return 6.5;
+    if (ratio >= 0.45) return 6.0;
+    if (ratio >= 0.35) return 5.5;
+    if (ratio >= 0.25) return 5.0;
+    return 4.5;
+  }
+
+  // ---- Módulo LISTENING ------------------------------------------------
+  function startListening() {
+    openRunner("Express Listening", "Escuchá el audio y respondé");
+    const body = $("expressRunnerBody");
+    body.innerHTML = `
+      <div class="express-audio-card">
+        <p class="express-hint">Reproducí el audio (voz del navegador) las veces que necesites y respondé las 10 preguntas.</p>
+        <div class="express-audio-controls">
+          <button id="expressPlayAudio" class="secondary-btn" type="button">▶ Reproducir audio</button>
+          <button id="expressStopAudio" class="secondary-btn" type="button">■ Detener</button>
+        </div>
+      </div>
+      <div class="express-questions">${questionMarkup(LISTENING.questions)}</div>
+    `;
+    body.querySelector("#expressPlayAudio")?.addEventListener("click", () => speak(LISTENING.transcript));
+    body.querySelector("#expressStopAudio")?.addEventListener("click", () => window.speechSynthesis?.cancel());
+    state.grader = () => gradeListeningReading(LISTENING.questions, "Listening");
+    startCountdown(LISTENING.minutes);
+  }
+
+  function speak(text) {
+    if (!("speechSynthesis" in window)) { alert("Tu navegador no soporta audio por voz."); return; }
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "en-US"; u.rate = 0.95;
+    window.speechSynthesis.speak(u);
+  }
+
+  // ---- Módulo READING --------------------------------------------------
+  function startReading() {
+    openRunner("Express Reading", READING.title);
+    const body = $("expressRunnerBody");
+    body.innerHTML = `
+      <div class="express-reading-text">
+        <h5>${esc(READING.title)}</h5>
+        <p>${esc(READING.text)}</p>
+      </div>
+      <div class="express-questions">${questionMarkup(READING.questions)}</div>
+    `;
+    state.grader = () => gradeListeningReading(READING.questions, "Reading");
+    startCountdown(READING.minutes);
+  }
+
+  function gradeListeningReading(qs, label) {
+    const correct = gradeObjective(qs);
+    const band = bandFromScore(correct, qs.length);
+    saveScore(label, band);
+    return {
+      band,
+      html: `<div class="express-band"><strong>Band ${band.toFixed(1)}</strong><span>${label} · ${correct}/${qs.length} correctas</span></div>
+        <p class="express-result-note">${band >= 7 ? "Muy buen desempeño. Mantené el ritmo bajo presión de tiempo." : band >= 6 ? "Buen nivel. Repasá las que fallaste para afinar precisión." : "Seguí practicando: enfocá en palabras clave y detalles del texto/audio."}</p>`
+    };
+  }
+
+  // ---- Módulo WRITING --------------------------------------------------
+  function startWriting() {
+    openRunner("Express Writing", "Ensayo corto de opinión");
+    const prompt = pick(WRITING_PROMPTS);
+    const body = $("expressRunnerBody");
+    body.innerHTML = `
+      <div class="express-writing-prompt">
+        <span class="express-hint">Consigna (Task 2 · máx. 150 palabras)</span>
+        <p>${esc(prompt)}</p>
+      </div>
+      <textarea id="expressWritingInput" class="express-writing-input" placeholder="Escribí tu ensayo en inglés..."></textarea>
+      <div class="express-wordcount"><span id="expressWordCount">0</span> palabras</div>
+    `;
+    const ta = body.querySelector("#expressWritingInput");
+    ta?.addEventListener("input", () => {
+      const c = words(ta.value).length;
+      const el = $("expressWordCount");
+      if (el) el.textContent = c;
+    });
+    state.grader = () => gradeWriting(ta?.value || "");
+    startCountdown(15);
+  }
+
+  function gradeWriting(text) {
+    const w = words(text);
+    const lower = text.toLowerCase();
+    const sentences = text.split(/[.!?]+/).filter((s) => s.trim().length > 0);
+    const connectors = ["however","therefore","moreover","although","because","while","whereas","in addition","for example","as a result","on the other hand"];
+    const found = connectors.filter((c) => lower.includes(c));
+    const issues = (typeof detectCommonIssues === "function") ? detectCommonIssues(text) : [];
+
+    let band = 5;
+    if (w.length >= 80) band += 0.5;
+    if (w.length >= 130) band += 0.5;
+    if (sentences.length >= 4) band += 0.5;
+    if (found.length >= 2) band += 0.5;
+    if (found.length >= 4) band += 0.5;
+    if (w.length < 60) band -= 0.75;
+    band -= issues.length * 0.25;
+    band = Math.max(4, Math.min(8.5, Math.round(band * 2) / 2));
+
+    saveScore("Writing", band);
+    const feedback = w.length < 40
+      ? "El texto es muy corto para evaluar bien. Apuntá a 120–150 palabras."
+      : `Usaste ${found.length} conector(es) y ${sentences.length} oración(es). ${found.length >= 2 ? "Buena cohesión." : "Sumá conectores para mejorar la fluidez."} ${issues.length ? "Revisá: " + issues.slice(0,2).join(" ") : "Sin errores frecuentes graves."}`;
+
+    return {
+      band,
+      html: `<div class="express-band"><strong>Band ${band.toFixed(1)}</strong><span>Writing · ${w.length} palabras</span></div>
+        <p class="express-result-note">${esc(feedback)}</p>`
+    };
+  }
+
+  // ---- Módulo SPEAKING -------------------------------------------------
+  let mediaRecorder = null, recordedChunks = [], recognition = null, recognizedText = "";
+
+  function startSpeaking() {
+    openRunner("Express Speaking", "Respondé en voz alta");
+    const set = pick(SPEAKING_SETS);
+    const body = $("expressRunnerBody");
+    body.innerHTML = `
+      <div class="express-speaking">
+        <p class="express-hint">Grabá tus respuestas a estas 3 preguntas. Hablá con naturalidad, como en la Parte 1 del examen.</p>
+        <ol class="express-speaking-list">${set.map((q) => `<li>${esc(q)}</li>`).join("")}</ol>
+        <div class="express-speaking-controls">
+          <button id="expressRecBtn" class="primary-btn" type="button">● Grabar</button>
+          <button id="expressRecStop" class="secondary-btn" type="button" disabled>■ Detener</button>
+          <span id="expressRecStatus" class="express-rec-status">Listo para grabar</span>
+        </div>
+        <audio id="expressPlayback" class="express-playback" controls hidden></audio>
+        <div id="expressTranscript" class="express-transcript" hidden></div>
+      </div>
+    `;
+    body.querySelector("#expressRecBtn")?.addEventListener("click", startRecording);
+    body.querySelector("#expressRecStop")?.addEventListener("click", stopRecording);
+    state.grader = () => gradeSpeaking();
+    state.spokenSet = set;
+    startCountdown(5);
+  }
+
+  async function startRecording() {
+    recognizedText = "";
+    const status = $("expressRecStatus");
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      recordedChunks = [];
+      mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.ondataavailable = (e) => { if (e.data.size) recordedChunks.push(e.data); };
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(recordedChunks, { type: "audio/webm" });
+        const audio = $("expressPlayback");
+        if (audio) { audio.src = URL.createObjectURL(blob); audio.hidden = false; }
+        stream.getTracks().forEach((t) => t.stop());
+      };
+      mediaRecorder.start();
+      if (status) status.textContent = "Grabando...";
+      $("expressRecBtn").disabled = true;
+      $("expressRecStop").disabled = false;
+
+      // Transcripción en vivo si está disponible
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (SR) {
+        recognition = new SR();
+        recognition.lang = "en-US";
+        recognition.continuous = true;
+        recognition.interimResults = false;
+        recognition.onresult = (ev) => {
+          for (let i = ev.resultIndex; i < ev.results.length; i++) {
+            recognizedText += ev.results[i][0].transcript + " ";
+          }
+        };
+        try { recognition.start(); } catch (e) {}
+      }
+    } catch (err) {
+      if (status) status.textContent = "No se pudo acceder al micrófono. Podés continuar igual.";
+    }
+  }
+
+  function stopRecording() {
+    if (mediaRecorder && mediaRecorder.state !== "inactive") mediaRecorder.stop();
+    if (recognition) { try { recognition.stop(); } catch (e) {} }
+    const status = $("expressRecStatus");
+    if (status) status.textContent = "Grabación lista. Ya podés enviar.";
+    if ($("expressRecBtn")) $("expressRecBtn").disabled = false;
+    if ($("expressRecStop")) $("expressRecStop").disabled = true;
+
+    const t = recognizedText.trim();
+    const box = $("expressTranscript");
+    if (box && t) {
+      box.hidden = false;
+      box.innerHTML = `<span>Transcripción aproximada:</span><p>${esc(t)}</p>`;
+    }
+  }
+
+  function gradeSpeaking() {
+    if (mediaRecorder && mediaRecorder.state === "recording") stopRecording();
+    const t = recognizedText.trim();
+    const w = words(t);
+    // Si hubo transcripción, estimamos por fluidez; si no, band orientativa por participación.
+    let band;
+    if (w.length === 0) {
+      band = 6.0; // sin transcripción disponible: estimación neutra por completar
+    } else {
+      band = 5.5;
+      if (w.length >= 30) band += 0.5;
+      if (w.length >= 60) band += 0.5;
+      if (w.length >= 100) band += 0.5;
+      const uniq = new Set(w.map((x) => x.toLowerCase())).size;
+      if (uniq / Math.max(1, w.length) > 0.55) band += 0.5;
+      band = Math.max(4.5, Math.min(8.0, Math.round(band * 2) / 2));
+    }
+    saveScore("Speaking", band);
+    const note = w.length === 0
+      ? "No detectamos transcripción automática (tu navegador puede no soportarla). Band orientativa por completar el módulo."
+      : `Detectamos ~${w.length} palabras habladas. ${band >= 7 ? "Buena fluidez y variedad." : "Intentá extender tus respuestas con ejemplos y conectores."}`;
+    return {
+      band,
+      html: `<div class="express-band"><strong>Band ${band.toFixed(1)}</strong><span>Speaking</span></div>
+        <p class="express-result-note">${esc(note)}</p>`
+    };
+  }
+
+  // ---- Envío / resultado ----------------------------------------------
+  function submitCurrent(auto) {
+    stopCountdown();
+    if (!state || !state.grader) return;
+    const result = state.grader();
+
+    if (state.sequence) {
+      // Modo Full Express: guardar y avanzar
+      state.scores.push({ module: state.moduleLabel, band: result.band });
+      state.seqIndex += 1;
+      if (state.seqIndex < state.sequence.length) {
+        runSequenceStep();
+      } else {
+        finishSequence();
+      }
+      return;
+    }
+
+    // Modo individual: mostrar resultado
+    const res = $("expressResult");
+    res.hidden = false;
+    res.innerHTML = `${result.html}
+      <div class="express-result-actions">
+        <button id="expressBackBtn" class="primary-btn" type="button">Volver a módulos</button>
+      </div>`;
+    res.querySelector("#expressBackBtn")?.addEventListener("click", showDashboard);
+    $("expressSubmitBtn").disabled = true;
+    log(`Express ${state.moduleLabel} · Band ${result.band.toFixed(1)}`);
+    persistScore(result.band);
+  }
+
+  function persistScore(band) {
+    // Integrar con el progreso global (misma escala % que el resto usa)
+    try {
+      const pct = Math.round((band / 9) * 100);
+      const hist = JSON.parse(localStorage.getItem("englishTrainerScoreHistory")) || [];
+      hist.push(pct);
+      localStorage.setItem("englishTrainerScoreHistory", JSON.stringify(hist));
+      const done = Number(localStorage.getItem("englishTrainerExamsCompleted") || 0) + 1;
+      localStorage.setItem("englishTrainerExamsCompleted", String(done));
+    } catch (e) {}
+  }
+
+  const scoreStore = {};
+  function saveScore(label, band) { scoreStore[label] = band; }
+
+  // ---- Full Express (secuencia) ---------------------------------------
+  function startFullExpress() {
+    state = { sequence: ["listening","reading","writing","speaking"], seqIndex: 0, scores: [] };
+    runSequenceStep();
+  }
+
+  function runSequenceStep() {
+    const mod = state.sequence[state.seqIndex];
+    const seq = state.sequence, idx = state.seqIndex, scores = state.scores;
+    // starters reinician state; preservamos la secuencia
+    const starter = { listening: startListening, reading: startReading, writing: startWriting, speaking: startSpeaking }[mod];
+    state = { sequence: seq, seqIndex: idx, scores };
+    state.moduleLabel = mod.charAt(0).toUpperCase() + mod.slice(1);
+    starter();
+    // marcar progreso de secuencia
+    const pt = $("expressRunnerProgress");
+    if (pt) pt.textContent = `Full Express · paso ${idx + 1} de 4 (${state.moduleLabel})`;
+  }
+
+  function finishSequence() {
+    const scores = state.scores;
+    const overall = scores.reduce((a, s) => a + s.band, 0) / scores.length;
+    const rounded = Math.round(overall * 2) / 2;
+    $("expressResult").hidden = false;
+    $("expressResult").innerHTML = `
+      <div class="express-band express-band-overall"><strong>Band ${rounded.toFixed(1)}</strong><span>Overall Express</span></div>
+      <div class="express-overall-grid">
+        ${scores.map((s) => `<div><span>${esc(s.module)}</span><strong>${s.band.toFixed(1)}</strong></div>`).join("")}
+      </div>
+      <div class="express-result-actions">
+        <button id="expressBackBtn" class="primary-btn" type="button">Volver a módulos</button>
+      </div>`;
+    $("expressResult").querySelector("#expressBackBtn")?.addEventListener("click", showDashboard);
+    $("expressSubmitBtn").disabled = true;
+    log(`Full Express completado · Band ${rounded.toFixed(1)}`);
+    persistScore(rounded);
+  }
+
+  // ---- Wiring ----------------------------------------------------------
+  function initModuleState(moduleLabel) {
+    stopCountdown();
+    state = { moduleLabel };
+    const pt = $("expressRunnerProgress");
+    if (pt) pt.textContent = "";
+  }
+
+  function boot() {
+    const dash = $("expressDashboard");
+    if (!dash || dash.dataset.expressBound === "true") return;
+    dash.dataset.expressBound = "true";
+
+    document.querySelectorAll("[data-express-module]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const mod = btn.dataset.expressModule;
+        initModuleState(mod.charAt(0).toUpperCase() + mod.slice(1));
+        ({ listening: startListening, reading: startReading, writing: startWriting, speaking: startSpeaking }[mod])();
+      });
+    });
+
+    $("expressFullBtn")?.addEventListener("click", startFullExpress);
+    $("expressExitBtn")?.addEventListener("click", () => {
+      if (state && state.sequence) {
+        if (!confirm("¿Salir del Simulacro Express Completo? Se perderá el progreso.")) return;
+      }
+      showDashboard();
+    });
+    $("expressSubmitBtn")?.addEventListener("click", () => {
+      $("expressSubmitBtn").disabled = false;
+      submitCurrent(false);
+    });
   }
 
   if (document.readyState === "loading") {
