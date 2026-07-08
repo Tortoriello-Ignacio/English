@@ -5204,6 +5204,15 @@ function buildQuickPracticePoolV21() {
   return pool;
 }
 
+function shuffleArray(array) {
+  const arr = Array.isArray(array) ? array.slice() : [];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
 function resetQuickPracticeTopicCycleV21() {
   quickPracticeTopicCycleV21 = shuffleArray([...quickPracticeTopicsV21]);
 }
@@ -8960,6 +8969,15 @@ window.addEventListener("load", () => {
     return longest;
   }
 
+  function escapeHtml(str) {
+    return String(str == null ? "" : str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
   function renderHeatmapCalendar() {
     const grid = $("heatmapMonthGrid");
     const title = $("heatmapTitle");
@@ -8992,13 +9010,17 @@ window.addEventListener("load", () => {
       const level = heatLevel(minutes);
       const selected = iso === heatmapState.selectedDate;
       const today = iso === todayISO;
-      const hasNote = Boolean((notes[iso] || "").trim());
+      const noteText = (notes[iso] || "").trim();
+      const hasNote = Boolean(noteText);
+      const safeNote = escapeHtml(noteText);
 
       return `
-        <button class="heatmap-day heat-${level} ${selected ? "selected" : ""} ${today ? "today" : ""} ${hasNote ? "has-note" : ""}" type="button" data-heatmap-date="${iso}" aria-label="${iso}, ${minutes} minutos">
-          <strong>${date.getDate()}</strong>
-          <span>${minutes ? formatMinutes(minutes) : "0m"}</span>
-          ${hasNote ? "<i></i>" : ""}
+        <button class="heatmap-day heat-${level} ${selected ? "selected" : ""} ${today ? "today" : ""} ${hasNote ? "has-note" : ""}" type="button" data-heatmap-date="${iso}" aria-label="${iso}, ${minutes} minutos${hasNote ? ", nota: " + safeNote : ""}"${hasNote ? ` title="${safeNote}"` : ""}>
+          <span class="heatmap-day-head">
+            <strong>${date.getDate()}</strong>
+            <span class="heatmap-day-min">${minutes ? formatMinutes(minutes) : ""}</span>
+          </span>
+          ${hasNote ? `<span class="heatmap-day-note">${safeNote}</span>` : ""}
         </button>
       `;
     }).join("");
@@ -9060,45 +9082,79 @@ window.addEventListener("load", () => {
     }).join("");
   }
 
-  function openHeatmapModal(iso) {
+  // Edición inline: al tocar un día se abre un textarea DENTRO de la celda.
+  // Enter guarda, Escape o click afuera cancela. No hay modal ni bloqueo.
+  function openInlineNoteEditor(cell) {
+    if (!cell) return;
+    const iso = cell.dataset.heatmapDate;
+    if (!iso) return;
+
+    // Si ya hay un editor abierto en otra celda, cerralo sin guardar.
+    closeInlineNoteEditor();
+
     heatmapState.selectedDate = iso;
-    const modal = $("heatmapModal");
-    const input = $("heatmapNoteInput");
     const notes = getHeatmapNotes();
-    const minutes = minutesForDate(iso);
+    const current = notes[iso] || "";
 
-    if ($("heatmapModalTitle")) $("heatmapModalTitle").textContent = humanDate(iso);
-    if ($("heatmapModalStudyInfo")) $("heatmapModalStudyInfo").textContent = `Tiempo registrado: ${formatMinutes(minutes)}.`;
-    if (input) input.value = notes[iso] || "";
+    cell.classList.add("is-editing");
+    const editor = document.createElement("textarea");
+    editor.className = "heatmap-day-editor";
+    editor.value = current;
+    editor.setAttribute("rows", "2");
+    editor.setAttribute("placeholder", "Nota… (Enter guarda)");
+    editor.setAttribute("aria-label", `Nota para ${iso}`);
+    cell.appendChild(editor);
 
-    if (modal) {
-      modal.hidden = false;
-      document.body.classList.add("heatmap-modal-open");
-      setTimeout(() => input?.focus(), 60);
-    }
+    // Evitar que el click dentro del textarea burbujee y reabra el editor.
+    editor.addEventListener("click", (e) => e.stopPropagation());
 
-    renderHeatmapCalendar();
+    editor.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        saveInlineNote(iso, editor.value);
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        closeInlineNoteEditor();
+      }
+    });
+
+    // Cancelar al perder foco (sin guardar) salvo que ya se haya guardado.
+    editor.addEventListener("blur", () => {
+      if (!editor.dataset.saved) closeInlineNoteEditor();
+    });
+
+    setTimeout(() => {
+      editor.focus();
+      editor.setSelectionRange(editor.value.length, editor.value.length);
+    }, 20);
+
+    renderHeatmapSidePanel();
   }
 
-  function closeHeatmapModal() {
-    const modal = $("heatmapModal");
-    if (modal) modal.hidden = true;
-    document.body.classList.remove("heatmap-modal-open");
-  }
-
-  function saveHeatmapNote() {
-    const input = $("heatmapNoteInput");
+  function saveInlineNote(iso, rawValue) {
     const notes = getHeatmapNotes();
-    const value = input?.value.trim() || "";
+    const value = (rawValue || "").trim();
 
-    if (value) notes[heatmapState.selectedDate] = value;
-    else delete notes[heatmapState.selectedDate];
+    if (value) notes[iso] = value;
+    else delete notes[iso];
 
     setHeatmapNotes(notes);
-    closeHeatmapModal();
+
+    // Marcar como guardado para que el blur no dispare "cancelar".
+    const openEditor = document.querySelector(".heatmap-day-editor");
+    if (openEditor) openEditor.dataset.saved = "true";
+
+    closeInlineNoteEditor();
     renderHeatmapCalendar();
 
     if (typeof logActivity === "function") logActivity("Calendario actualizado");
+  }
+
+  function closeInlineNoteEditor() {
+    document.querySelectorAll(".heatmap-day.is-editing").forEach((cell) => {
+      cell.classList.remove("is-editing");
+    });
+    document.querySelectorAll(".heatmap-day-editor").forEach((el) => el.remove());
   }
 
   function setupHeatmapCalendar() {
@@ -9118,21 +9174,29 @@ window.addEventListener("load", () => {
     $("heatmapMonthGrid")?.addEventListener("click", (event) => {
       const day = event.target.closest("[data-heatmap-date]");
       if (!day) return;
-      openHeatmapModal(day.dataset.heatmapDate);
+      // No reabrir si ya se está editando esta misma celda.
+      if (day.classList.contains("is-editing")) return;
+      openInlineNoteEditor(day);
     });
 
-    document.querySelectorAll("[data-close-heatmap-modal]").forEach((button) => {
-      button.addEventListener("click", closeHeatmapModal);
+    // Click fuera de la celda en edición => cancelar.
+    document.addEventListener("click", (event) => {
+      const editingCell = document.querySelector(".heatmap-day.is-editing");
+      if (editingCell && !event.target.closest(".heatmap-day.is-editing")) {
+        closeInlineNoteEditor();
+      }
     });
-
-    $("heatmapSaveNoteBtn")?.addEventListener("click", saveHeatmapNote);
 
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && !$("heatmapModal")?.hidden) closeHeatmapModal();
+      if (event.key === "Escape") closeInlineNoteEditor();
     });
 
     // When other progress code updates localStorage, keep calendar visually synced.
-    window.addEventListener("storage", renderHeatmapCalendar);
+    // Pero NO re-renderizar si el usuario está escribiendo una nota inline.
+    window.addEventListener("storage", () => {
+      if (document.querySelector(".heatmap-day.is-editing")) return;
+      renderHeatmapCalendar();
+    });
 
     setInterval(() => {
       if (document.hidden) return;
@@ -9214,23 +9278,65 @@ window.addEventListener("load", () => {
   function initHeroEnMouseTracking() {
     const wrap = document.querySelector(".hero-en-interactive-wrap");
     const circle = document.getElementById("heroEnCircle");
+    const zone = document.getElementById("inicio") || document;
     if (!wrap || !circle) return;
 
     const maxMove = 14;
 
-    function updatePosition(event) {
-      const rect = wrap.getBoundingClientRect();
-      const relativeX = (event.clientX - rect.left) / rect.width - 0.5;
-      const relativeY = (event.clientY - rect.top) / rect.height - 0.5;
+    // ── Alcance del efecto ──────────────────────────────────────────
+    // El imán del EN ahora reacciona desde MUCHO más lejos: se activa
+    // dentro de un radio alrededor del centro del círculo, no solo al
+    // pasar por encima. Subí/bajá ACTIVATION_RADIUS para cambiar el
+    // alcance (en px). CORE_RADIUS es la distancia a la que el efecto
+    // llega a su intensidad máxima.
+    const ACTIVATION_RADIUS = 520; // "desde lejos": ~medio hero
+    const CORE_RADIUS = 150;       // adentro de esto = intensidad plena
+    // ────────────────────────────────────────────────────────────────
 
-      const moveX = Math.max(-maxMove, Math.min(maxMove, relativeX * maxMove * 2));
-      const moveY = Math.max(-maxMove, Math.min(maxMove, relativeY * maxMove * 2));
+    let raf = null;
+    let pending = null;
+
+    function apply(event) {
+      const rect = circle.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+
+      const dx = event.clientX - cx;
+      const dy = event.clientY - cy;
+      const dist = Math.hypot(dx, dy);
+
+      if (dist > ACTIVATION_RADIUS) {
+        resetPosition();
+        return;
+      }
+
+      // 0 (borde del alcance) → 1 (dentro del núcleo). Curva suave.
+      let near = (ACTIVATION_RADIUS - dist) / (ACTIVATION_RADIUS - CORE_RADIUS);
+      near = Math.max(0, Math.min(1, near));
+      const eased = near * near * (3 - 2 * near); // smoothstep
+
+      // Parallax: apunta hacia el mouse aunque esté lejos, escalado por cercanía.
+      const dirX = Math.max(-1, Math.min(1, dx / CORE_RADIUS));
+      const dirY = Math.max(-1, Math.min(1, dy / CORE_RADIUS));
+      const moveX = dirX * maxMove * eased;
+      const moveY = dirY * maxMove * eased;
 
       circle.style.setProperty("--hero-mx", `${moveX.toFixed(2)}px`);
       circle.style.setProperty("--hero-my", `${moveY.toFixed(2)}px`);
-      circle.style.setProperty("--hero-rx", `${(-relativeY * 4).toFixed(2)}deg`);
-      circle.style.setProperty("--hero-ry", `${(relativeX * 4).toFixed(2)}deg`);
+      circle.style.setProperty("--hero-rx", `${(-dirY * 6 * eased).toFixed(2)}deg`);
+      circle.style.setProperty("--hero-ry", `${(dirX * 6 * eased).toFixed(2)}deg`);
+      circle.style.setProperty("--hero-near", eased.toFixed(3));
       circle.classList.add("is-tracking");
+      circle.classList.toggle("is-near", eased > 0.02);
+    }
+
+    function updatePosition(event) {
+      pending = event;
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = null;
+        if (pending) apply(pending);
+      });
     }
 
     function resetPosition() {
@@ -9238,12 +9344,15 @@ window.addEventListener("load", () => {
       circle.style.setProperty("--hero-my", "0px");
       circle.style.setProperty("--hero-rx", "0deg");
       circle.style.setProperty("--hero-ry", "0deg");
+      circle.style.setProperty("--hero-near", "0");
       circle.classList.remove("is-tracking");
+      circle.classList.remove("is-near");
     }
 
-    wrap.addEventListener("mousemove", updatePosition);
-    wrap.addEventListener("mouseleave", resetPosition);
-    wrap.addEventListener("blur", resetPosition, true);
+    // Escuchamos sobre toda la sección de inicio: alcance amplio.
+    zone.addEventListener("mousemove", updatePosition, { passive: true });
+    zone.addEventListener("mouseleave", resetPosition);
+    window.addEventListener("blur", resetPosition);
   }
 
   if (document.readyState === "loading") {
@@ -9467,4 +9576,241 @@ window.addEventListener("load", () => {
   }
 
   window.addEventListener("load", () => setTimeout(setupHeroCompactStrip, 100));
+})();
+
+
+/* =========================================================
+   V51 — FLIP CLOCK TIMER (dos recuadros: minutos | segundos)
+   Reemplaza el reloj de agua por un tablero tipo aeropuerto.
+   Recuadro izquierdo = minutos, derecho = segundos. Al cambiar
+   un número cae una solapa animada.
+   Es la ÚLTIMA definición de updateTimerUI y de los constructores
+   de markup, así que gana en la cascada. Reutiliza el mismo estado:
+   timerSecondsLeft, timerInitialSeconds, timerPaused, timerInterval.
+   IDs preservadas: timerDisplay, miniTimerDisplay.
+========================================================= */
+(function flipClockTimerV51() {
+  if (window.__flipClockV51) return;
+  window.__flipClockV51 = true;
+
+  function getRoot() {
+    return document.getElementById("timerProgressRing") || document.getElementById("timerVisual");
+  }
+
+  function isTimerPanelOpen() {
+    const panel = document.getElementById("timerPanel");
+    return !!panel && panel.classList.contains("open");
+  }
+
+  // Estructura de un recuadro flip. `label` va debajo (Minutos / Segundos).
+  function flipUnitMarkup(prefix, label) {
+    return `
+      <div class="flip-unit" data-flip="${prefix}">
+        <div class="flip-card">
+          <div class="flip-static flip-top"><span>00</span></div>
+          <div class="flip-static flip-bottom"><span>00</span></div>
+          <div class="flip-leaf flip-leaf-top"><span>00</span></div>
+          <div class="flip-leaf flip-leaf-bottom"><span>00</span></div>
+        </div>
+        <span class="flip-label">${label}</span>
+      </div>
+    `;
+  }
+
+  function flipBoardMarkup() {
+    return `
+      <div class="flip-board">
+        ${flipUnitMarkup("min", "Minutos")}
+        <span class="flip-colon" aria-hidden="true">:</span>
+        ${flipUnitMarkup("sec", "Segundos")}
+      </div>
+    `;
+  }
+
+  // Panel principal
+  function ensureMainMarkup() {
+    const root = getRoot();
+    if (!root) return;
+    root.id = "timerProgressRing";
+    root.className = "flip-timer-card";
+    root.setAttribute("aria-label", "Tiempo restante del timer");
+
+    if (root.querySelector(".flip-board")) return;
+
+    root.innerHTML = `
+      <span id="timerDisplay" class="timer-display" hidden>00:00</span>
+      ${flipBoardMarkup()}
+    `;
+  }
+
+  // Burbuja mini (versión compacta del tablero)
+  function ensureMiniMarkup() {
+    let mini = document.getElementById("miniTimerBubble");
+    const button = document.getElementById("timerToggleBtn");
+    if (!mini) {
+      if (!button) return;
+      mini = document.createElement("div");
+      mini.id = "miniTimerBubble";
+      mini.setAttribute("aria-hidden", "true");
+      button.insertAdjacentElement("beforebegin", mini);
+    }
+    mini.className = "mini-timer-bubble mini-flip-bubble";
+    if (!mini.querySelector(".flip-board")) {
+      mini.innerHTML = `
+        <div class="mini-flip-orb">${flipBoardMarkup()}</div>
+        <span id="miniTimerDisplay" hidden>00:00</span>
+      `;
+    }
+  }
+
+  function isTimerRunning() {
+    return typeof timerInterval !== "undefined" && !!timerInterval && !timerPaused;
+  }
+
+  // Actualiza un recuadro flip a un nuevo valor de 2 dígitos, animando la solapa.
+  function setFlipValue(scope, prefix, value) {
+    const unit = scope.querySelector(`.flip-unit[data-flip="${prefix}"]`);
+    if (!unit) return;
+
+    const str = String(value).padStart(2, "0");
+    const card = unit.querySelector(".flip-card");
+    const topStatic = unit.querySelector(".flip-top span");
+    const bottomStatic = unit.querySelector(".flip-bottom span");
+    const leafTop = unit.querySelector(".flip-leaf-top span");
+    const leafBottom = unit.querySelector(".flip-leaf-bottom span");
+
+    const current = card.dataset.value;
+    if (current === str) return; // sin cambios, no animar
+
+    const previous = current == null ? str : current;
+
+    // La solapa superior muestra el número saliente; la inferior el entrante.
+    if (leafTop) leafTop.textContent = previous;
+    if (leafBottom) leafBottom.textContent = str;
+    // El fondo superior ya muestra el nuevo; el inferior aún el viejo hasta que cae.
+    if (topStatic) topStatic.textContent = str;
+    if (bottomStatic) bottomStatic.textContent = previous;
+
+    card.dataset.value = str;
+
+    // Reinicia la animación
+    card.classList.remove("is-flipping");
+    // reflow para reiniciar la animación CSS
+    void card.offsetWidth;
+    card.classList.add("is-flipping");
+
+    // Al terminar, fijar el número entrante en ambas mitades.
+    window.clearTimeout(card.__flipTimeout);
+    card.__flipTimeout = window.setTimeout(() => {
+      if (bottomStatic) bottomStatic.textContent = str;
+      card.classList.remove("is-flipping");
+    }, 480);
+  }
+
+  // Setea sin animación (al inicializar o resetear)
+  function setFlipInstant(scope, prefix, value) {
+    const unit = scope.querySelector(`.flip-unit[data-flip="${prefix}"]`);
+    if (!unit) return;
+    const str = String(value).padStart(2, "0");
+    const card = unit.querySelector(".flip-card");
+    card.dataset.value = str;
+    // Solo los dígitos dentro del card, NUNCA el .flip-label.
+    card.querySelectorAll("span").forEach((s) => { s.textContent = str; });
+    card.classList.remove("is-flipping");
+  }
+
+  function updateMiniVisibility() {
+    const mini = document.getElementById("miniTimerBubble");
+    if (!mini) return;
+    const shouldShow = !!timerInitialSeconds && !isTimerPanelOpen();
+    mini.classList.toggle("visible", shouldShow);
+    mini.setAttribute("aria-hidden", shouldShow ? "false" : "true");
+    document.body.classList.toggle("timer-panel-open", isTimerPanelOpen());
+  }
+
+  let lastMin = null;
+  let lastSec = null;
+
+  function updateFlipTimerUI(force) {
+    ensureMainMarkup();
+    ensureMiniMarkup();
+
+    const remaining = Math.max(Number(timerSecondsLeft) || 0, 0);
+    const minutes = Math.floor(remaining / 60);
+    const seconds = remaining % 60;
+    const timeText = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+
+    const display = document.getElementById("timerDisplay");
+    const miniDisplay = document.getElementById("miniTimerDisplay");
+    if (display) display.textContent = timeText;
+    if (miniDisplay) miniDisplay.textContent = timeText;
+
+    const root = getRoot();
+    const mini = document.getElementById("miniTimerBubble");
+
+    const changed = force || minutes !== lastMin || seconds !== lastSec;
+    if (changed) {
+      [root, mini].forEach((scope) => {
+        if (!scope) return;
+        if (force) {
+          setFlipInstant(scope, "min", minutes);
+          setFlipInstant(scope, "sec", seconds);
+        } else {
+          setFlipValue(scope, "min", minutes);
+          setFlipValue(scope, "sec", seconds);
+        }
+      });
+      lastMin = minutes;
+      lastSec = seconds;
+    }
+
+    [root, mini].forEach((el) => {
+      if (el) el.classList.toggle("is-running", isTimerRunning());
+    });
+
+    updateMiniVisibility();
+  }
+
+  // Sobrescribe la función global (gana por ser la última definición).
+  updateTimerUI = function () { updateFlipTimerUI(false); };
+
+  function boot() {
+    ensureMainMarkup();
+    ensureMiniMarkup();
+    updateFlipTimerUI(true); // primer render sin animación
+
+    const panel = document.getElementById("timerPanel");
+    if (panel && panel.dataset.flipV51 !== "true") {
+      panel.dataset.flipV51 = "true";
+      new MutationObserver(() => updateFlipTimerUI(false))
+        .observe(panel, { attributes: true, attributeFilter: ["class"] });
+    }
+
+    ["startTimerBtn", "pauseTimerBtn", "resetTimerBtn", "timerToggleBtn", "customTimerBtn"]
+      .forEach((id) => {
+        const btn = document.getElementById(id);
+        if (btn && btn.dataset.flipV51 !== "true") {
+          btn.dataset.flipV51 = "true";
+          // reset / setear cambian el total de golpe: render instantáneo.
+          const instant = (id === "resetTimerBtn" || id === "customTimerBtn");
+          btn.addEventListener("click", () => setTimeout(() => updateFlipTimerUI(instant), 0));
+        }
+      });
+    document.querySelectorAll(".preset-btn").forEach((btn) => {
+      if (btn.dataset.flipV51 !== "true") {
+        btn.dataset.flipV51 = "true";
+        btn.addEventListener("click", () => setTimeout(() => updateFlipTimerUI(true), 0));
+      }
+    });
+
+    // Refresco de respaldo (por si el intervalo principal del timer no dispara render).
+    setInterval(() => updateFlipTimerUI(false), 1000);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
+  window.addEventListener("load", () => setTimeout(boot, 120));
 })();

@@ -10,15 +10,9 @@
 
 <body>
   <!-- TIMER LATERAL -->
-  <div id="miniTimerBubble" class="mini-timer-bubble" aria-hidden="true">
-    <div class="mini-timer-orb">
-      <svg viewBox="0 0 100 100" class="mini-timer-svg" role="img" aria-label="Progreso del timer">
-        <circle class="mini-timer-base" cx="50" cy="50" r="47"></circle>
-        <path id="miniTimerEatenPath" class="mini-timer-eaten"></path>
-        <circle class="mini-timer-gloss" cx="50" cy="50" r="39"></circle>
-      </svg>
-    </div>
-    <span id="miniTimerDisplay">00:00</span>
+  <div id="miniTimerBubble" class="mini-timer-bubble mini-flip-bubble" aria-hidden="true">
+    <div class="mini-flip-orb" id="miniFlipOrb"></div>
+    <span id="miniTimerDisplay" hidden>00:00</span>
   </div>
 
   <button id="timerToggleBtn" class="timer-toggle" type="button" aria-label="Abrir o cerrar timer">Timer</button>
@@ -31,22 +25,9 @@
       </div>
     </div>
 
-    <div id="timerProgressRing" class="circle-timer-card" aria-label="Tiempo restante del timer">
-      <div class="circle-timer-time">
-        <span id="timerDisplay" class="timer-display">00:00</span>
-        <small>sesión de foco</small>
-      </div>
-
-      <div class="circle-timer-orb" aria-hidden="true">
-        <svg viewBox="0 0 100 100" class="circle-timer-svg" role="img" aria-label="Progreso circular del timer">
-          <circle class="circle-timer-base" cx="50" cy="50" r="48"></circle>
-          <path id="timerEatenPath" class="circle-timer-eaten"></path>
-          <circle class="circle-timer-gloss" cx="50" cy="50" r="40"></circle>
-        </svg>
-        <span class="circle-inner-glow"></span>
-      </div>
-
-      <p class="circle-timer-caption">El relleno se consume desde arriba.</p>
+    <div id="timerProgressRing" class="flip-timer-card" aria-label="Tiempo restante del timer">
+      <span id="timerDisplay" class="timer-display" hidden>00:00</span>
+      <!-- El tablero flip (minutos | segundos) se inyecta y anima desde app.js -->
     </div>
 
     <div class="timer-presets">
@@ -312,51 +293,22 @@
           </div>
         </div>
 
-        <div class="progress-panel hero-progress-grid">
-          <article class="progress-card">
-            <div>
-              <strong id="studyTimeText">0m</strong>
-              <span>Tiempo acumulado</span>
+        <div class="hero-progress-lines" aria-label="Progreso general">
+          <div class="progress-line-row">
+            <div class="progress-line-labels">
+              <span class="progress-line-name">Tiempo acumulado</span>
+              <strong id="studyTimeText" class="progress-line-value">0m</strong>
             </div>
-            <div class="bar-track"><div id="studyTimeBar" class="bar-fill orange-fill"></div></div>
-            <small>Meta sugerida: 10 horas</small>
-          </article>
+            <div class="thin-track"><div id="studyTimeBar" class="thin-fill"></div></div>
+          </div>
 
-          <article class="progress-card current-session-card">
-            <div>
-              <strong id="currentSessionText">0m</strong>
-              <span>Sesión actual</span>
+          <div class="progress-line-row">
+            <div class="progress-line-labels">
+              <span class="progress-line-name">Promedio global</span>
+              <strong id="avgScoreText" class="progress-line-value">0%</strong>
             </div>
-            <div class="bar-track"><div id="currentSessionBar" class="bar-fill session-fill"></div></div>
-            <small>Tiempo activo usando la página. Se pausa si no hay interacción.</small>
-          </article>
-
-          <article class="progress-card">
-            <div>
-              <strong id="streakText">0</strong>
-              <span>Racha de estudio</span>
-            </div>
-            <div class="bar-track"><div id="streakBar" class="bar-fill gold-fill"></div></div>
-            <small>Días seguidos de actividad</small>
-          </article>
-
-          <article class="progress-card">
-            <div>
-              <strong id="savedParagraphsCount">0</strong>
-              <span>Párrafos guardados</span>
-            </div>
-            <div class="bar-track"><div id="paragraphProgressBar" class="bar-fill blue-fill"></div></div>
-            <small>Meta sugerida: 20 writings</small>
-          </article>
-
-          <article class="progress-card wide-card">
-            <div>
-              <strong id="avgScoreText">0%</strong>
-              <span>Promedio global</span>
-            </div>
-            <div class="bar-track"><div id="avgScoreBar" class="bar-fill purple-fill"></div></div>
-            <small>Resultado acumulado de tus exámenes</small>
-          </article>
+            <div class="thin-track"><div id="avgScoreBar" class="thin-fill"></div></div>
+          </div>
         </div>
       </section>
 
@@ -366,20 +318,8 @@
             <span class="eyebrow">Mapa de calor</span>
             <h3>Calendario de progreso</h3>
             <p>
-              Visualizá tus minutos de estudio por día con un heatmap mensual. Los colores se basan en el tiempo registrado:
-              gris sin actividad, claro 1-30m, medio 31-60m y oscuro más de 60m.
+              Visualizá tus minutos de estudio por día. Tocá un día para anotar un recordatorio y presioná Enter para guardar.
             </p>
-          </div>
-
-          <div class="calendar-summary heatmap-summary">
-            <div>
-              <strong id="heatmapMonthTotal">0h</strong>
-              <span>Total del mes</span>
-            </div>
-            <div>
-              <strong id="heatmapCurrentStreak">0</strong>
-              <span>Racha actual</span>
-            </div>
           </div>
         </div>
 
@@ -423,24 +363,6 @@
           </div>
 
           <aside class="heatmap-side-panel">
-            <div class="heatmap-metric-card">
-              <span>Racha actual</span>
-              <strong id="heatmapStreakNow">0 días</strong>
-              <p>Días seguidos con actividad registrada.</p>
-            </div>
-
-            <div class="heatmap-metric-card">
-              <span>Racha más larga</span>
-              <strong id="heatmapLongestStreak">0 días</strong>
-              <p>Tu mejor continuidad histórica.</p>
-            </div>
-
-            <div class="heatmap-metric-card">
-              <span>Total de horas del mes</span>
-              <strong id="heatmapMonthHours">0h</strong>
-              <p>Suma de minutos registrados en este mes.</p>
-            </div>
-
             <div class="heatmap-selected-card">
               <span class="eyebrow">Día seleccionado</span>
               <h4 id="heatmapSelectedTitle">Hoy</h4>
@@ -448,24 +370,6 @@
               <p id="heatmapSelectedNote" class="heatmap-note-preview">Sin recordatorio.</p>
             </div>
           </aside>
-        </div>
-
-        <div id="heatmapModal" class="heatmap-modal" hidden>
-          <div class="heatmap-modal-backdrop" data-close-heatmap-modal></div>
-          <article class="heatmap-modal-card" role="dialog" aria-modal="true" aria-labelledby="heatmapModalTitle">
-            <button class="heatmap-modal-close" type="button" data-close-heatmap-modal aria-label="Cerrar">×</button>
-            <span class="eyebrow">Recordatorio</span>
-            <h4 id="heatmapModalTitle">Día seleccionado</h4>
-            <p id="heatmapModalStudyInfo">Tiempo registrado: 0m.</p>
-            <label>
-              Nota del día
-              <textarea id="heatmapNoteInput" placeholder="Ej: Simulacro IELTS, repasar phrasal verbs, hacer listening 20 min..."></textarea>
-            </label>
-            <div class="heatmap-modal-actions">
-              <button id="heatmapSaveNoteBtn" class="primary-btn" type="button">Guardar</button>
-              <button class="secondary-btn" type="button" data-close-heatmap-modal>Cancelar</button>
-            </div>
-          </article>
         </div>
       </section>
 
