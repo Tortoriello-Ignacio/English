@@ -11166,3 +11166,927 @@ section .eyebrow {
 /* Ocultar por completo cualquier resto de caret */
 .resource-menu-caret,
 .misc-menu-caret { display: none !important; }
+
+/* =========================================================
+   V67 — FIX UX: el botón EN no debe seleccionarse al arrastrar
+========================================================= */
+.hero-en-interactive-wrap,
+.hero-en-interactive-wrap * {
+  -webkit-user-select: none !important;
+  user-select: none !important;
+}
+
+/* =========================================================
+   V68 — REDISEÑO PROFESIONAL (Stripe / Notion / GitHub)
+   Compacto, simétrico, minimalista. Solo estética:
+   no toca IDs ni lógica de app.js.
+========================================================= */
+
+/* ---------- 1. TOKENS: una sola escala para toda la página ---------- */
+:root {
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px;
+  --sp-4: 16px; --sp-5: 20px; --sp-6: 24px; --sp-8: 32px;
+
+  --r-card: 16px;   /* tarjetas internas */
+  --r-section: 20px; /* secciones */
+  --r-pill: 999px;
+
+  --line-soft: rgba(255,255,255,.07);
+  --line-hover: rgba(255,255,255,.12);
+}
+
+/* ---------- 2. SIMETRÍA RIGUROSA: mismo padding y radio ---------- */
+/* El hero tenía 57.6px de padding y 43.2px de radio; el resto 40.32/24.
+   Se unifican para que los bloques adyacentes coincidan matemáticamente. */
+.section,
+#inicio.hero-section,
+#calendario.heatmap-calendar-section {
+  padding: var(--sp-8) !important;
+  border-radius: var(--r-section) !important;
+  margin-bottom: var(--sp-6) !important;
+}
+
+/* Cabeceras de sección compactas: menos espacio muerto vertical */
+.section-header { margin-bottom: var(--sp-5) !important; }
+.section-header h3 { margin-bottom: var(--sp-1) !important; line-height: 1.2; }
+.section-header p { margin: 0; max-width: 62ch; line-height: 1.5; }
+.eyebrow { margin-bottom: var(--sp-2) !important; }
+
+/* ---------- 3. LOGROS: insignias outline que se encienden ---------- */
+.badges-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+  gap: var(--sp-3) !important;
+}
+
+.badge-card {
+  display: grid !important;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "icon title"
+    "icon detail"
+    "icon status";
+  column-gap: var(--sp-3);
+  row-gap: 2px;
+  align-content: center;
+  padding: var(--sp-4) !important;
+  min-height: 0 !important;               /* sin estirado vertical */
+  border-radius: var(--r-card) !important;
+  border: 1px solid var(--line-soft) !important;
+  background: rgba(255,255,255,.02) !important;
+  box-shadow: none !important;
+  transition: border-color .25s ease, background .25s ease, transform .25s ease;
+}
+.badge-card:hover { transform: translateY(-2px); border-color: var(--line-hover) !important; }
+
+.badge-icon {
+  grid-area: icon;
+  align-self: center;
+  width: 40px; height: 40px;
+  display: grid; place-items: center;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line-soft);
+  color: var(--muted);                     /* apagado por defecto */
+  transition: color .3s ease, border-color .3s ease, box-shadow .3s ease;
+}
+.badge-icon svg {
+  width: 20px; height: 20px;
+  fill: none;
+  stroke: currentColor;                    /* hereda el color -> se enciende */
+  stroke-width: 1.5;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+
+.badge-card strong { grid-area: title; font-size: .92rem; color: var(--text); letter-spacing: -.01em; }
+.badge-card p { grid-area: detail; font-size: .78rem; color: var(--muted); line-height: 1.4; margin: 0; }
+.badge-card small { grid-area: status; font-size: .68rem; color: var(--muted); opacity: .7; margin-top: 2px; }
+
+/* Desbloqueado: se enciende con el color del tema, sin bordes toscos */
+.badge-card.unlocked {
+  border-color: rgba(var(--accent-rgb), .26) !important;
+  background: rgba(var(--accent-rgb), .05) !important;
+}
+.badge-card.unlocked .badge-icon {
+  color: rgb(var(--accent-rgb));
+  border-color: rgba(var(--accent-rgb), .4);
+  box-shadow: 0 0 16px rgba(var(--accent-rgb), .22);
+}
+.badge-card.unlocked small { color: var(--accent-soft); opacity: 1; }
+
+/* ---------- 4. COMUNIDAD: filas horizontales compactas ---------- */
+.community-grid {
+  display: grid !important;
+  grid-template-columns: 1fr !important;   /* filas, no columnas altas */
+  gap: var(--sp-2) !important;
+}
+
+.community-row {
+  display: grid !important;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-3) var(--sp-4) !important;
+  border-radius: var(--r-card);
+  border: 1px solid var(--line-soft);
+  background: rgba(255,255,255,.02);
+  transition: border-color .2s ease, background .2s ease;
+}
+.community-row:hover {
+  border-color: rgba(var(--accent-rgb), .28);
+  background: rgba(var(--accent-rgb), .04);
+}
+
+.community-icon {
+  width: 36px; height: 36px;
+  display: grid; place-items: center;
+  border-radius: var(--r-pill);
+  background: rgba(var(--accent-rgb), .1);
+  color: rgb(var(--accent-rgb));
+}
+.community-icon svg {
+  width: 18px; height: 18px;
+  fill: none; stroke: currentColor; stroke-width: 1.5;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+
+.community-copy { min-width: 0; }
+.community-copy strong { display: block; font-size: .92rem; color: var(--text); letter-spacing: -.01em; }
+.community-copy p { margin: 2px 0 0; font-size: .8rem; color: var(--muted); line-height: 1.4; }
+
+.community-action {
+  flex-shrink: 0;
+  padding: 7px 14px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line-soft);
+  background: transparent;
+  color: var(--muted);
+  font-size: .78rem; font-weight: 800;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+.community-action:hover {
+  color: rgb(var(--accent-rgb));
+  border-color: rgba(var(--accent-rgb), .4);
+  background: rgba(var(--accent-rgb), .08);
+}
+
+/* ---------- 5. FAQs: acordeón fluido con flecha que rota ---------- */
+.faq-list { display: grid !important; gap: var(--sp-2) !important; }
+
+.faq-item {
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-card);
+  background: rgba(255,255,255,.02);
+  overflow: hidden;
+  transition: border-color .25s ease, background .25s ease;
+}
+.faq-item[open] {
+  border-color: rgba(var(--accent-rgb), .22);
+  background: rgba(var(--accent-rgb), .03);
+}
+
+.faq-item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding: var(--sp-3) var(--sp-4);
+  cursor: pointer;
+  list-style: none;
+  font-size: .9rem; font-weight: 700;
+  color: var(--muted);
+  transition: color .2s ease;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary:hover { color: var(--text); }
+.faq-item[open] summary { color: var(--text); }
+
+/* Flecha fina que rota suavemente */
+.faq-caret {
+  flex-shrink: 0;
+  width: 16px; height: 16px;
+  fill: none; stroke: currentColor; stroke-width: 1.6;
+  stroke-linecap: round; stroke-linejoin: round;
+  transition: transform .3s cubic-bezier(.4,0,.2,1);
+}
+.faq-item[open] .faq-caret { transform: rotate(180deg); }
+
+/* Transición fluida de altura: grid-template-rows 0fr -> 1fr */
+.faq-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows .32s cubic-bezier(.4,0,.2,1), opacity .3s ease;
+  opacity: 0;
+}
+.faq-item[open] .faq-body { grid-template-rows: 1fr; opacity: 1; }
+.faq-body > div { overflow: hidden; }
+.faq-body p {
+  margin: 0;
+  padding: 0 var(--sp-4) var(--sp-4);
+  font-size: .85rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* ---------- 6. SUSCRIPCIONES: pasarela premium tipo Stripe ---------- */
+.plans-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)) !important;
+  gap: var(--sp-3) !important;
+  align-items: stretch;
+}
+
+.plan-card {
+  position: relative;
+  display: flex !important;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-5) !important;
+  border-radius: var(--r-card) !important;
+  border: 1px solid var(--line-soft) !important;
+  background: rgba(255,255,255,.02) !important;
+  box-shadow: none !important;
+  transition: border-color .25s ease, transform .25s ease;
+}
+.plan-card:hover { transform: translateY(-2px); border-color: var(--line-hover) !important; }
+
+/* Plan recomendado: relieve MUY sutil del color del tema */
+.plan-card-featured {
+  border-color: rgba(var(--accent-rgb), .32) !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(var(--accent-rgb), .07), transparent 60%),
+    rgba(255,255,255,.02) !important;
+  box-shadow: 0 0 0 1px rgba(var(--accent-rgb), .10), 0 10px 30px rgba(0,0,0,.24) !important;
+}
+.plan-ribbon {
+  position: absolute;
+  top: -1px; right: var(--sp-4);
+  padding: 3px 10px;
+  border-radius: 0 0 8px 8px;
+  background: rgba(var(--accent-rgb), .16);
+  border: 1px solid rgba(var(--accent-rgb), .3);
+  border-top: none;
+  color: var(--accent-soft);
+  font-size: .62rem; font-weight: 900;
+  letter-spacing: .06em; text-transform: uppercase;
+}
+
+.plan-head { display: grid; gap: var(--sp-2); }
+.plan-tier {
+  font-size: .7rem; font-weight: 900;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--muted);
+}
+.plan-price { display: flex; align-items: baseline; gap: 4px; }
+.plan-amount {
+  font-size: 2.1rem;
+  font-weight: 400;               /* trazo FINO para el precio */
+  letter-spacing: -.04em;
+  color: var(--text);
+  line-height: 1;
+}
+.plan-period { font-size: .8rem; color: var(--muted); font-weight: 600; }
+
+.plan-desc { font-size: .82rem; color: var(--muted); line-height: 1.45; margin: 0; }
+
+.plan-features { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--sp-2); flex: 1; }
+.plan-features li {
+  position: relative;
+  padding-left: 20px;
+  font-size: .82rem;
+  font-weight: 400;               /* trazo fino en features */
+  color: var(--muted);
+  line-height: 1.4;
+}
+.plan-features li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 6px;
+  width: 11px; height: 6px;
+  border-left: 1.5px solid rgb(var(--accent-rgb));
+  border-bottom: 1.5px solid rgb(var(--accent-rgb));
+  transform: rotate(-45deg);
+}
+
+.plan-cta {
+  width: 100%;
+  padding: 9px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--line-soft);
+  background: transparent;
+  color: var(--text);
+  font-size: .82rem; font-weight: 800;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+.plan-cta:hover:not(:disabled) {
+  border-color: rgba(var(--accent-rgb), .4);
+  background: rgba(var(--accent-rgb), .08);
+}
+.plan-cta-primary {
+  background: rgb(var(--accent-rgb)) !important;
+  border-color: transparent !important;
+  color: #14110c !important;
+}
+.plan-cta-primary:hover { filter: brightness(1.08); }
+.plan-cta-current { opacity: .5; cursor: default; }
+
+/* ---------- 7. SOPORTE: formulario limpio y centrado ---------- */
+.support-card {
+  display: grid !important;
+  gap: var(--sp-4) !important;
+  max-width: 520px;
+  margin-inline: auto;             /* centrado */
+  padding: var(--sp-5) !important;
+  border-radius: var(--r-card) !important;
+  border: 1px solid var(--line-soft) !important;
+  background: rgba(255,255,255,.02) !important;
+  box-shadow: none !important;
+}
+
+.support-field { display: grid; gap: 6px; }
+.support-label {
+  font-size: .72rem; font-weight: 850;
+  letter-spacing: .06em; text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Campos delgados, bordes casi invisibles que se iluminan en focus */
+.support-card select,
+.support-card textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px !important;
+  border-radius: 10px !important;
+  border: 1px solid rgba(255,255,255,.06) !important;
+  background: rgba(0,0,0,.24) !important;
+  color: var(--text) !important;
+  font-family: inherit;
+  font-size: .88rem;
+  outline: none;
+  transition: border-color .22s ease, box-shadow .22s ease, background .22s ease;
+}
+.support-card textarea { min-height: 100px; resize: vertical; line-height: 1.55; }
+
+.support-card select:focus,
+.support-card textarea:focus {
+  border-color: rgba(var(--accent-rgb), .5) !important;
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), .12);
+  background: rgba(0,0,0,.3) !important;
+}
+.support-card select:hover,
+.support-card textarea:hover { border-color: rgba(255,255,255,.11) !important; }
+
+.support-submit { justify-self: start; padding: 9px 20px !important; }
+.support-status { font-size: .8rem; color: var(--accent-soft); margin: 0; min-height: 1em; }
+
+/* ---------- 8. Responsive fluido (sin breakpoints duros) ---------- */
+@media (max-width: 640px) {
+  .community-row { grid-template-columns: auto 1fr; row-gap: var(--sp-3); }
+  .community-action { grid-column: 1 / -1; justify-self: stretch; }
+  .support-card { max-width: 100%; }
+}
+
+/* Simetría del hero: el clamp() generaba 57.6/51.84px (valores mágicos).
+   Se alinea al mismo padding que el resto de secciones. */
+.hero-section.hero-premium-section,
+#inicio.hero-section.hero-premium-section {
+  padding: var(--sp-8) !important;
+  border-radius: var(--r-section) !important;
+}
+
+/* Grilla de logros: todas las tarjetas del mismo alto (simetría rigurosa) */
+/* Filas de igual alto: grid-auto-rows iguala todas las tarjetas */
+.badges-grid {
+  align-items: stretch !important;
+  grid-auto-rows: 1fr !important;
+}
+.badge-card { height: 100% !important; }
+.badge-card p {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;          /* 2 líneas máx: alturas iguales */
+  line-clamp: 2;                  /* propiedad estándar (compatibilidad) */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* =========================================================
+   V69 — FLASHVOICE: controles compactos con iconos + tuerca
+========================================================= */
+
+/* Toolbar del header eliminada (los selects viven en la tuerca) */
+.flashvoice-toolbar { display: none !important; }
+/* El bloque de sliders sueltos ya no se usa */
+.flashvoice-ranges { display: none !important; }
+
+/* ---- Fila de controles: solo 3 iconos ---- */
+.flashvoice-controls {
+  display: flex !important;
+  align-items: center;
+  gap: 10px !important;
+  margin-bottom: 16px;
+}
+
+.fv-icon-btn {
+  width: 44px; height: 44px;
+  display: grid; place-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.1);
+  background: rgba(255,255,255,.04);
+  cursor: pointer;
+  transition: transform .16s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+.fv-icon-btn svg { width: 19px; height: 19px; fill: var(--text); }
+.fv-icon-btn:hover { transform: translateY(-2px); border-color: rgba(var(--accent-rgb), .5); }
+
+/* Play destacado con el color del theme */
+.fv-icon-play {
+  background: linear-gradient(145deg, rgb(var(--accent-rgb)), rgba(var(--accent-rgb), .78));
+  border-color: transparent;
+}
+.fv-icon-play svg { fill: #14110c; }
+.fv-icon-play:hover { box-shadow: 0 10px 24px rgba(var(--accent-rgb), .3); }
+/* Mientras suena, se ve "activo" (el JS solo cambia la clase, no el SVG) */
+.fv-icon-play.is-playing { box-shadow: 0 0 0 3px rgba(var(--accent-rgb), .22); }
+
+/* ---- Tuerca + panel flotante ---- */
+.fv-settings { position: relative; margin-left: auto; }
+
+.fv-settings.open .fv-icon-btn {
+  border-color: rgba(var(--accent-rgb), .5);
+  background: rgba(var(--accent-rgb), .12);
+}
+.fv-settings.open .fv-icon-btn svg { fill: rgb(var(--accent-rgb)); }
+
+.fv-settings-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 40;
+  width: 260px;
+  display: grid;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.09);
+  background: linear-gradient(150deg, rgba(26,26,30,.98), rgba(16,16,20,.98));
+  box-shadow: 0 18px 44px rgba(0,0,0,.5);
+}
+.fv-settings-panel[hidden] { display: none; }
+
+.fv-opt { display: grid; gap: 8px; }
+.fv-opt-label {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: .72rem; font-weight: 850;
+  letter-spacing: .06em; text-transform: uppercase;
+  color: var(--muted);
+}
+.fv-opt-label em {
+  font-style: normal;
+  text-transform: none; letter-spacing: 0;
+  color: var(--accent-soft);
+  font-size: .74rem; font-weight: 800;
+}
+
+/* Sliders del panel: barra fina con relleno del theme */
+.fv-settings-panel input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 5px;
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg,
+      rgb(var(--accent-rgb)) 0%,
+      rgb(var(--accent-rgb)) var(--fv-pct, 50%),
+      rgba(255,255,255,.1) var(--fv-pct, 50%),
+      rgba(255,255,255,.1) 100%);
+  outline: none; cursor: pointer; margin: 0;
+}
+.fv-settings-panel input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid rgb(var(--accent-rgb));
+  box-shadow: 0 2px 6px rgba(0,0,0,.4);
+  transition: transform .15s ease;
+}
+.fv-settings-panel input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+.fv-settings-panel input[type="range"]::-moz-range-thumb {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: #fff; border: 3px solid rgb(var(--accent-rgb)); cursor: pointer;
+}
+
+/* Switch de voz (femenina / masculina) */
+.fv-voice-switch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 10px;
+  background: rgba(0,0,0,.3);
+  border: 1px solid rgba(255,255,255,.06);
+}
+.fv-voice-btn {
+  padding: 7px 8px;
+  border-radius: 7px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: .78rem; font-weight: 800;
+  cursor: pointer;
+  transition: background .18s ease, color .18s ease;
+}
+.fv-voice-btn:hover { color: var(--text); }
+.fv-voice-btn.is-active {
+  background: rgba(var(--accent-rgb), .16);
+  color: rgb(var(--accent-rgb));
+}
+
+.fv-select {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 9px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(0,0,0,.3);
+  color: var(--text);
+  font-family: inherit; font-size: .82rem;
+  outline: none;
+}
+.fv-select:focus { border-color: rgba(var(--accent-rgb), .5); }
+
+/* ---- Botones de acción compactos (no alargados) ---- */
+.flashvoice-actions {
+  display: flex !important;
+  gap: 10px !important;
+  justify-content: flex-start !important;
+  margin-top: 14px;
+}
+.fv-action {
+  flex: 0 0 auto !important;      /* no se estiran */
+  width: auto !important;
+  padding: 9px 18px !important;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.1);
+  background: transparent;
+  color: var(--text);
+  font-size: .82rem; font-weight: 800;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+.fv-action:hover {
+  border-color: rgba(var(--accent-rgb), .45);
+  background: rgba(var(--accent-rgb), .08);
+}
+.fv-action-primary {
+  background: rgb(var(--accent-rgb));
+  border-color: transparent;
+  color: #14110c;
+}
+.fv-action-primary:hover { filter: brightness(1.08); border-color: transparent; }
+
+@media (max-width: 560px) {
+  .fv-settings-panel { width: min(260px, 78vw); }
+}
+
+/* =========================================================
+   V70 — FLASHVOICE: tuerca outline + sliders refinados
+========================================================= */
+
+/* Tuerca dibujada con líneas (hueca), no rellena */
+.fv-icon-gear svg {
+  fill: none !important;
+  stroke: var(--text);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  width: 20px; height: 20px;
+  transition: stroke .2s ease, transform .35s cubic-bezier(.4,0,.2,1);
+}
+.fv-icon-gear:hover svg { transform: rotate(45deg); }
+.fv-settings.open .fv-icon-gear svg {
+  fill: none !important;
+  stroke: rgb(var(--accent-rgb));
+  transform: rotate(90deg);
+}
+
+/* ---- Sliders del panel: barra fina, pista con relieve, thumb elegante ---- */
+.fv-opt { gap: 10px; }
+
+.fv-settings-panel input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  width: 100%;
+  height: 4px;                       /* más fina y elegante */
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg,
+      rgba(var(--accent-rgb), .95) 0%,
+      rgba(var(--accent-rgb), .95) var(--fv-pct, 50%),
+      rgba(255,255,255,.08) var(--fv-pct, 50%),
+      rgba(255,255,255,.08) 100%) !important;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.4);
+  outline: none;
+  cursor: pointer;
+  margin: 6px 0 !important;
+}
+
+/* Thumb: círculo blanco con anillo del theme y halo al interactuar */
+.fv-settings-panel input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 15px; height: 15px;
+  border-radius: 50%;
+  background: #fff;
+  border: none;
+  box-shadow:
+    0 0 0 3px rgb(var(--accent-rgb)),
+    0 2px 6px rgba(0,0,0,.5);
+  transition: transform .16s cubic-bezier(.34,1.56,.64,1), box-shadow .18s ease;
+}
+.fv-settings-panel input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.18);
+  box-shadow:
+    0 0 0 3px rgb(var(--accent-rgb)),
+    0 0 0 8px rgba(var(--accent-rgb), .16),
+    0 2px 8px rgba(0,0,0,.5);
+}
+.fv-settings-panel input[type="range"]:active::-webkit-slider-thumb {
+  transform: scale(1.05);
+  box-shadow:
+    0 0 0 3px rgb(var(--accent-rgb)),
+    0 0 0 10px rgba(var(--accent-rgb), .2);
+}
+
+.fv-settings-panel input[type="range"]::-moz-range-thumb {
+  width: 15px; height: 15px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid rgb(var(--accent-rgb));
+  box-shadow: 0 2px 6px rgba(0,0,0,.5);
+  cursor: pointer;
+}
+.fv-settings-panel input[type="range"]::-moz-range-track {
+  height: 4px; border-radius: 999px;
+  background: rgba(255,255,255,.08);
+}
+
+/* Etiqueta del valor (130 WPM) en pill sutil */
+.fv-opt-label em {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(var(--accent-rgb), .12);
+  border: 1px solid rgba(var(--accent-rgb), .22);
+}
+
+/* El select de banco ya no se muestra */
+.fv-select { display: none !important; }
+
+/* =========================================================
+   V71 — IELTS EXPRESS: layout ordenado, audio oscuro, nuevo examen
+========================================================= */
+
+/* ---- 1. Reproductor de audio en modo oscuro ----
+   El <audio controls> nativo no acepta estilos directos.
+   invert + hue-rotate lo convierte de blanco a oscuro sin perder los controles. */
+.express-playback {
+  width: 100%;
+  margin-top: 12px;
+  border-radius: 999px;
+  filter: invert(0.92) hue-rotate(180deg) contrast(0.92) brightness(1.05);
+  opacity: .92;
+  transition: opacity .2s ease;
+}
+.express-playback:hover { opacity: 1; }
+
+/* ---- 2. Preguntas: grilla ordenada por tipo, sin huecos ---- */
+.express-questions {
+  display: grid !important;
+  /* auto-fill + minmax mantiene columnas parejas y evita parches vacíos */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+  gap: 12px !important;
+  align-items: start !important;
+  grid-auto-flow: dense;          /* rellena los huecos que dejan las tarjetas cortas */
+}
+
+.express-question {
+  display: flex !important;
+  flex-direction: column;
+  padding: 14px 16px !important;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.07);
+  background: rgba(255,255,255,.025);
+  transition: border-color .2s ease, background .2s ease;
+}
+.express-question:hover { border-color: rgba(255,255,255,.12); }
+
+.express-question h5 {
+  font-size: .86rem !important;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 10px !important;
+  color: var(--text);
+}
+
+/* Las de completar ocupan menos: no estiran la fila */
+.express-question:has(.express-gap-input) { align-self: start; }
+
+/* Opciones: alto uniforme, compactas */
+.express-options { display: grid !important; gap: 6px !important; margin-top: auto; }
+.express-opt {
+  display: flex; align-items: center; gap: 9px;
+  padding: 8px 12px !important;
+  min-height: 36px;
+  border-radius: 9px;
+  border: 1px solid rgba(255,255,255,.06);
+  background: rgba(255,255,255,.02);
+  font-size: .83rem !important;
+  line-height: 1.3;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease;
+}
+.express-opt:hover { background: rgba(var(--accent-rgb), .07); border-color: rgba(var(--accent-rgb), .28); }
+.express-opt input { accent-color: rgb(var(--accent-rgb)); flex-shrink: 0; margin: 0; }
+.express-opt span { flex: 1; }
+
+/* True / False / Not Given: siempre 3 en línea, prolijo */
+.express-tfng {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 6px !important;
+}
+.express-tfng .express-opt {
+  justify-content: center;
+  padding: 8px 4px !important;
+  font-size: .76rem !important;
+  text-align: center;
+  gap: 6px;
+}
+
+/* Completar: input alineado al pie de la tarjeta */
+.express-gap-input {
+  margin-top: auto;
+  padding: 9px 12px !important;
+  border-radius: 9px !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  background: rgba(0,0,0,.26) !important;
+  font-size: .84rem !important;
+}
+.express-gap-input:focus {
+  border-color: rgba(var(--accent-rgb), .5) !important;
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), .1);
+}
+
+/* Estados de corrección */
+.express-question.correct { border-color: rgba(34,197,94,.45); background: rgba(34,197,94,.06); }
+.express-question.incorrect { border-color: rgba(239,68,68,.45); background: rgba(239,68,68,.05); }
+
+/* ---- 3. Botones de audio del Listening (iconos) ---- */
+.express-audio-controls { display: flex; gap: 10px; flex-wrap: wrap; }
+.express-audio-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.1);
+  background: rgba(255,255,255,.04);
+  color: var(--text);
+  font-size: .82rem; font-weight: 800;
+  cursor: pointer;
+  transition: all .18s ease;
+}
+.express-audio-btn svg { width: 15px; height: 15px; fill: currentColor; }
+.express-audio-btn:hover {
+  border-color: rgba(var(--accent-rgb), .45);
+  background: rgba(var(--accent-rgb), .1);
+  color: rgb(var(--accent-rgb));
+}
+
+/* ---- 4. Botón "Nuevo examen" ---- */
+.express-runner-buttons { display: flex; align-items: center; gap: 10px; }
+
+.express-new-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.1);
+  background: transparent;
+  color: var(--muted);
+  font-size: .82rem; font-weight: 800;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+.express-new-btn svg {
+  width: 15px; height: 15px;
+  fill: none; stroke: currentColor; stroke-width: 1.8;
+  stroke-linecap: round; stroke-linejoin: round;
+  transition: transform .4s cubic-bezier(.4,0,.2,1);
+}
+.express-new-btn:hover {
+  color: rgb(var(--accent-rgb));
+  border-color: rgba(var(--accent-rgb), .4);
+  background: rgba(var(--accent-rgb), .07);
+}
+.express-new-btn:hover svg { transform: rotate(-180deg); }
+.express-new-btn[hidden] { display: none !important; }
+
+/* ---- 5. Transcripción en vivo del Speaking ---- */
+.express-transcript {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.06);
+}
+.express-transcript span {
+  color: var(--accent-soft);
+  font-size: .7rem; font-weight: 850;
+  text-transform: uppercase; letter-spacing: .06em;
+}
+.express-transcript p {
+  color: var(--text);
+  font-size: .87rem; line-height: 1.55;
+  margin-top: 6px;
+}
+
+/* ---- 6. Responsive ---- */
+@media (max-width: 720px) {
+  .express-questions { grid-template-columns: 1fr !important; }
+  .express-runner-actions { flex-direction: column; align-items: stretch; gap: 12px; }
+  .express-runner-buttons { justify-content: space-between; }
+}
+
+/* =========================================================
+   V72 — PREGUNTAS DEL EXAMEN: sin espacios vacíos (masonry real)
+   CSS Grid alinea las filas al alto de la tarjeta más alta, dejando
+   huecos bajo las cortas (TFNG, completar). Multi-columns fluye el
+   contenido verticalmente y compacta sin parches vacíos.
+========================================================= */
+.express-questions {
+  display: block !important;      /* anula el grid */
+  columns: 4;
+  column-gap: 12px !important;
+  column-fill: balance;
+  grid-template-columns: none !important;
+}
+
+.express-question {
+  /* Nunca partir una pregunta entre dos columnas */
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  page-break-inside: avoid;
+  display: block !important;
+  width: 100%;
+  margin: 0 0 12px 0;             /* separación vertical entre tarjetas */
+}
+
+/* El contenido interno vuelve a comportarse normal */
+.express-question h5 { margin-bottom: 10px !important; }
+.express-options { display: grid !important; gap: 6px !important; margin-top: 0 !important; }
+.express-tfng { grid-template-columns: repeat(3, minmax(0,1fr)) !important; }
+.express-gap-input { margin-top: 0 !important; width: 100%; box-sizing: border-box; }
+
+/* Responsive: menos columnas en pantallas chicas */
+@media (max-width: 1200px) { .express-questions { columns: 3 260px; } }
+@media (max-width: 900px)  { .express-questions { columns: 2 240px; } }
+@media (max-width: 620px)  { .express-questions { columns: 1; } }
+
+/* Opciones múltiples en 2 columnas cuando son cortas: baja el alto de la
+   tarjeta MC (que era la que desbalanceaba las columnas). */
+.express-question .express-options:not(.express-tfng) {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 6px !important;
+}
+.express-question .express-options:not(.express-tfng) .express-opt {
+  padding: 8px 10px !important;
+  font-size: .8rem !important;
+  min-height: 34px;
+}
+
+/* =========================================================
+   V73 — Botón X del runner (reemplaza "Volver a módulos")
+========================================================= */
+.express-runner-meta { display: flex; align-items: center; gap: 14px; }
+
+.express-close-btn {
+  width: 34px; height: 34px;
+  display: grid; place-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.1);
+  background: rgba(255,255,255,.03);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all .18s ease;
+}
+.express-close-btn svg {
+  width: 15px; height: 15px;
+  fill: none; stroke: var(--muted); stroke-width: 2;
+  stroke-linecap: round;
+  transition: stroke .18s ease, transform .25s ease;
+}
+.express-close-btn:hover {
+  border-color: rgba(239,68,68,.4);
+  background: rgba(239,68,68,.08);
+}
+.express-close-btn:hover svg {
+  stroke: rgb(239,68,68);
+  transform: rotate(90deg);
+}
+
+/* El contenedor de acciones del resultado ya no se usa */
+.express-result-actions { display: none !important; }

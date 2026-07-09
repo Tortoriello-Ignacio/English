@@ -405,9 +405,38 @@
           </div>
         </div>
         <div class="community-grid">
-          <article><strong>Reto semanal</strong><p>3 writings + 2 listening + 20 flashcards.</p><button class="secondary-btn" type="button">Unirme al reto</button></article>
-          <article><strong>Grupo de speaking</strong><p>Práctica guiada con prompts IELTS y feedback entre pares.</p><button class="secondary-btn" type="button">Ver grupos</button></article>
-          <article><strong>Tablero de dudas</strong><p>Guardá preguntas de gramática, vocabulario o pronunciación.</p><button class="secondary-btn" type="button">Agregar duda</button></article>
+          <article class="community-row">
+            <span class="community-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 3.5 14.6 9l6 .9-4.3 4.2 1 6-5.3-2.8L6.7 20l1-6L3.4 9.9 9.4 9z"/></svg>
+            </span>
+            <div class="community-copy">
+              <strong>Reto semanal</strong>
+              <p>3 writings · 2 listening · 20 flashcards.</p>
+            </div>
+            <button class="community-action" type="button">Unirme</button>
+          </article>
+
+          <article class="community-row">
+            <span class="community-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><circle cx="16.5" cy="9.5" r="2.4"/><path d="M3.8 19a5.2 5.2 0 0 1 10.4 0"/><path d="M15 14.6a4 4 0 0 1 5.2 4.4"/></svg>
+            </span>
+            <div class="community-copy">
+              <strong>Grupo de speaking</strong>
+              <p>Práctica guiada con prompts IELTS y feedback entre pares.</p>
+            </div>
+            <button class="community-action" type="button">Ver grupos</button>
+          </article>
+
+          <article class="community-row">
+            <span class="community-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M20 15.5a2.5 2.5 0 0 1-2.5 2.5H8l-4 3V6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5z"/><path d="M10.2 9.4a1.9 1.9 0 1 1 2.6 1.8v1.1"/><path d="M12.5 14.6h.01"/></svg>
+            </span>
+            <div class="community-copy">
+              <strong>Tablero de dudas</strong>
+              <p>Guardá preguntas de gramática, vocabulario o pronunciación.</p>
+            </div>
+            <button class="community-action" type="button">Agregar</button>
+          </article>
         </div>
       </section>
 
@@ -420,10 +449,37 @@
           </div>
         </div>
         <div class="faq-list">
-          <details open><summary>¿Dónde se guarda mi información?</summary><p>En el almacenamiento local del navegador. Si cambiás de navegador o dispositivo, esos datos no viajan automáticamente.</p></details>
-          <details><summary>¿Cómo se registra el tiempo de estudio?</summary><p>Se suma cuando hay interacción reciente con la página. Si la dejás abierta sin usarla, el contador se pausa.</p></details>
-          <details><summary>¿El calendario se vincula al progreso?</summary><p>Sí. Los días activos quedan marcados y el tiempo diario se refleja en el calendario mensual.</p></details>
-          <details><summary>¿Puedo usarlo sin internet?</summary><p>La mayoría de las funciones son locales. Las voces dependen de las voces disponibles en tu navegador/sistema.</p></details>
+          <details class="faq-item" open>
+            <summary>
+              <span>¿Dónde se guarda mi información?</span>
+              <svg class="faq-caret" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </summary>
+            <div class="faq-body"><div><p>En el almacenamiento local del navegador. Si cambiás de navegador o dispositivo, esos datos no viajan automáticamente.</p></div></div>
+          </details>
+
+          <details class="faq-item">
+            <summary>
+              <span>¿Cómo se registra el tiempo de estudio?</span>
+              <svg class="faq-caret" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </summary>
+            <div class="faq-body"><div><p>Se suma cuando hay interacción reciente con la página. Si la dejás abierta sin usarla, el contador se pausa.</p></div></div>
+          </details>
+
+          <details class="faq-item">
+            <summary>
+              <span>¿El calendario se vincula al progreso?</span>
+              <svg class="faq-caret" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </summary>
+            <div class="faq-body"><div><p>Sí. Los días activos quedan marcados y el tiempo diario se refleja en el calendario mensual.</p></div></div>
+          </details>
+
+          <details class="faq-item">
+            <summary>
+              <span>¿Puedo usarlo sin internet?</span>
+              <svg class="faq-caret" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </summary>
+            <div class="faq-body"><div><p>La mayoría de las funciones son locales. Las voces dependen de las voces disponibles en tu navegador/sistema.</p></div></div>
+          </details>
         </div>
       </section>
 
@@ -450,9 +506,48 @@
           </div>
         </div>
         <div class="plans-grid">
-          <article><span>Free</span><strong>Rutina personal</strong><p>Gramática, calendario, flashcards y práctica local.</p><button class="ghost-btn" type="button">Actual</button></article>
-          <article><span>Plus</span><strong>Feedback avanzado</strong><p>Más exámenes, reportes y coaching de writing.</p><button class="secondary-btn" type="button">Próximamente</button></article>
-          <article><span>Pro</span><strong>IELTS intensivo</strong><p>Planificación, simulacros y métricas avanzadas.</p><button class="secondary-btn" type="button">Próximamente</button></article>
+          <article class="plan-card">
+            <header class="plan-head">
+              <span class="plan-tier">Free</span>
+              <div class="plan-price"><span class="plan-amount">$0</span><span class="plan-period">/mes</span></div>
+            </header>
+            <p class="plan-desc">Rutina personal completa, sin costo.</p>
+            <ul class="plan-features">
+              <li>Gramática y tiempos verbales</li>
+              <li>Calendario y flashcards</li>
+              <li>Práctica local ilimitada</li>
+            </ul>
+            <button class="plan-cta plan-cta-current" type="button" disabled>Plan actual</button>
+          </article>
+
+          <article class="plan-card plan-card-featured">
+            <span class="plan-ribbon">Recomendado</span>
+            <header class="plan-head">
+              <span class="plan-tier">Plus</span>
+              <div class="plan-price"><span class="plan-amount">$9</span><span class="plan-period">/mes</span></div>
+            </header>
+            <p class="plan-desc">Feedback avanzado para acelerar tu progreso.</p>
+            <ul class="plan-features">
+              <li>Todo lo del plan Free</li>
+              <li>Más exámenes y reportes</li>
+              <li>Coaching de writing con IA</li>
+            </ul>
+            <button class="plan-cta plan-cta-primary" type="button">Próximamente</button>
+          </article>
+
+          <article class="plan-card">
+            <header class="plan-head">
+              <span class="plan-tier">Pro</span>
+              <div class="plan-price"><span class="plan-amount">$19</span><span class="plan-period">/mes</span></div>
+            </header>
+            <p class="plan-desc">Preparación IELTS intensiva y métricas.</p>
+            <ul class="plan-features">
+              <li>Todo lo del plan Plus</li>
+              <li>Simulacros completos</li>
+              <li>Planificación y métricas avanzadas</li>
+            </ul>
+            <button class="plan-cta" type="button">Próximamente</button>
+          </article>
         </div>
       </section>
 
@@ -465,7 +560,8 @@
           </div>
         </div>
         <form id="supportForm" class="support-card">
-          <label>Tipo de consulta
+          <label class="support-field">
+            <span class="support-label">Tipo de consulta</span>
             <select id="supportType">
               <option>Error visual</option>
               <option>Función que no responde</option>
@@ -473,11 +569,12 @@
               <option>Contenido de inglés</option>
             </select>
           </label>
-          <label>Detalle
-            <textarea id="supportMessage" placeholder="Escribí qué mejorarías o qué error encontraste..."></textarea>
+          <label class="support-field">
+            <span class="support-label">Detalle</span>
+            <textarea id="supportMessage" rows="4" placeholder="Escribí qué mejorarías o qué error encontraste..."></textarea>
           </label>
-          <button class="primary-btn" type="submit">Guardar feedback</button>
-          <p id="supportStatus"></p>
+          <button class="primary-btn support-submit" type="submit">Guardar feedback</button>
+          <p id="supportStatus" class="support-status"></p>
         </form>
       </section>
 
@@ -784,6 +881,9 @@
             </div>
             <div class="express-runner-meta">
               <span id="expressRunnerTimer" class="express-runner-timer">00:00</span>
+              <button id="expressCloseBtn" class="express-close-btn" type="button" aria-label="Cerrar y volver a los módulos" title="Volver a los módulos">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+              </button>
             </div>
           </div>
 
@@ -791,7 +891,13 @@
 
           <div class="express-runner-actions">
             <span id="expressRunnerProgress" class="express-runner-progresstext"></span>
-            <button id="expressSubmitBtn" class="primary-btn" type="button">Enviar</button>
+            <div class="express-runner-buttons">
+              <button id="expressNewTestBtn" class="express-new-btn" type="button" title="Generar otro examen de este módulo">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+                <span>Nuevo examen</span>
+              </button>
+              <button id="expressSubmitBtn" class="primary-btn" type="button">Enviar</button>
+            </div>
           </div>
 
           <div id="expressResult" class="express-result" hidden></div>
@@ -924,19 +1030,6 @@
             <h3>Flashvoice</h3>
             <p>Escuchá audios cortos de 2 o 3 oraciones, transcribí literalmente y compará con el transcript real.</p>
           </div>
-
-          <div class="flashvoice-toolbar">
-            <select id="flashvoiceSource" class="compact-select">
-              <option value="mixed">Banco mixto</option>
-              <option value="phrasals">Phrasal verbs</option>
-              <option value="modals">Modales</option>
-              <option value="vocabulario">Mi vocabulario</option>
-            </select>
-            <select id="flashvoiceVoice" class="compact-select">
-              <option value="female">Voz femenina</option>
-              <option value="male">Voz masculina</option>
-            </select>
-          </div>
         </div>
 
         <div class="flashvoice-layout">
@@ -951,29 +1044,58 @@
             </p>
 
             <div class="flashvoice-controls">
-              <button id="playFlashvoiceBtn" class="primary-btn" type="button">Play audio</button>
-              <button id="pauseFlashvoiceBtn" class="secondary-btn" type="button">Pausa</button>
-              <button id="nextFlashvoiceBtn" class="primary-btn" type="button">Siguiente audio</button>
-            </div>
+              <button id="playFlashvoiceBtn" class="fv-icon-btn fv-icon-play" type="button" aria-label="Reproducir audio" title="Reproducir">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+              </button>
 
-            <div class="flashvoice-ranges">
-              <label>
-                Volumen
-                <input id="flashvoiceVolume" type="range" min="0" max="1" step="0.05" value="0.85" />
-              </label>
+              <button id="nextFlashvoiceBtn" class="fv-icon-btn" type="button" aria-label="Siguiente audio" title="Siguiente audio">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5v14l9-7z"/><rect x="16.5" y="5" width="2.6" height="14" rx="1"/></svg>
+              </button>
 
-              <label>
-                WPM
-                <input id="flashvoiceWpm" type="range" min="90" max="185" step="5" value="130" />
-                <em id="flashvoiceWpmValue">130 WPM</em>
-              </label>
+              <div class="fv-settings" id="flashvoiceSettings">
+                <button id="flashvoiceSettingsToggle" class="fv-icon-btn fv-icon-gear" type="button" aria-expanded="false" aria-controls="flashvoiceSettingsPanel" aria-label="Opciones de audio" title="Opciones">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="12" r="3.4"/>
+                    <path d="M12 2.6v2.6M12 18.8v2.6M21.4 12h-2.6M5.2 12H2.6M18.65 5.35l-1.84 1.84M7.19 16.81l-1.84 1.84M18.65 18.65l-1.84-1.84M7.19 7.19 5.35 5.35"/>
+                  </svg>
+                </button>
+
+                <div id="flashvoiceSettingsPanel" class="fv-settings-panel" hidden>
+                  <div class="fv-opt">
+                    <div class="fv-opt-label"><span>Volumen</span></div>
+                    <input id="flashvoiceVolume" type="range" min="0" max="1" step="0.05" value="0.85" />
+                  </div>
+
+                  <div class="fv-opt">
+                    <div class="fv-opt-label"><span>Velocidad</span><em id="flashvoiceWpmValue">130 WPM</em></div>
+                    <input id="flashvoiceWpm" type="range" min="90" max="185" step="5" value="130" />
+                  </div>
+
+                  <div class="fv-opt">
+                    <div class="fv-opt-label"><span>Voz</span></div>
+                    <div class="fv-voice-switch" role="group" aria-label="Tipo de voz">
+                      <button type="button" class="fv-voice-btn is-active" data-voice="female">Femenina</button>
+                      <button type="button" class="fv-voice-btn" data-voice="male">Masculina</button>
+                    </div>
+                    <select id="flashvoiceVoice" hidden>
+                      <option value="female">Voz femenina</option>
+                      <option value="male">Voz masculina</option>
+                    </select>
+                  </div>
+
+                  <!-- Banco fijo en "mixed": las oraciones salen aleatorias de todos los tipos -->
+                  <select id="flashvoiceSource" hidden>
+                    <option value="mixed" selected>Banco mixto</option>
+                  </select>
+                </div>
+              </div>
             </div>
 
             <textarea id="flashvoiceAnswer" placeholder="Transcribí acá lo que escuchaste en inglés..."></textarea>
 
             <div class="flashvoice-actions">
-              <button id="checkFlashvoiceBtn" class="primary-btn" type="button">Corregir transcripción</button>
-              <button id="toggleFlashvoiceTranscriptBtn" class="secondary-btn" type="button">Mostrar transcript</button>
+              <button id="checkFlashvoiceBtn" class="fv-action fv-action-primary" type="button">Corregir</button>
+              <button id="toggleFlashvoiceTranscriptBtn" class="fv-action" type="button">Mostrar transcript</button>
             </div>
 
             <div id="flashvoiceFeedback" class="quick-feedback"></div>

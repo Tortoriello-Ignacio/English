@@ -7906,8 +7906,13 @@ window.addEventListener("load", () => {
 
     if (!cards.length) addMixed();
 
-    flashvoiceState.cards = cards;
-    flashvoiceState.index = Math.floor(Math.random() * cards.length);
+    // Sin selector de banco: siempre se mezclan todos los tipos y se barajan,
+    // así "Siguiente" puede darte un dictation, un phrasal, un modal o vocabulario.
+    // shuffleArray devuelve una copia (no muta), por eso se reasigna.
+    const mixed = (typeof shuffleArray === "function") ? shuffleArray(cards) : cards;
+
+    flashvoiceState.cards = mixed;
+    flashvoiceState.index = Math.floor(Math.random() * mixed.length);
   }
 
   function currentFlashvoiceCard() {
@@ -7973,8 +7978,8 @@ window.addEventListener("load", () => {
     flashvoiceState.speaking = false;
     flashvoiceState.paused = false;
 
-    if ($("playFlashvoiceBtn")) $("playFlashvoiceBtn").textContent = "Play audio";
-    if ($("pauseFlashvoiceBtn")) $("pauseFlashvoiceBtn").textContent = "Pausa";
+    if ($("playFlashvoiceBtn")) $("playFlashvoiceBtn").classList.remove("is-playing");
+    
   }
 
   function speakFlashvoice() {
@@ -7993,8 +7998,8 @@ window.addEventListener("load", () => {
       if (token !== flashvoiceState.token) return;
       flashvoiceState.speaking = false;
       flashvoiceState.paused = false;
-      if ($("playFlashvoiceBtn")) $("playFlashvoiceBtn").textContent = "Play audio";
-      if ($("pauseFlashvoiceBtn")) $("pauseFlashvoiceBtn").textContent = "Pausa";
+      if ($("playFlashvoiceBtn")) $("playFlashvoiceBtn").classList.remove("is-playing");
+      
     };
 
     utterance.onerror = () => {
@@ -8005,7 +8010,7 @@ window.addEventListener("load", () => {
       }
     };
 
-    if ($("playFlashvoiceBtn")) $("playFlashvoiceBtn").textContent = "Reiniciar audio";
+    if ($("playFlashvoiceBtn")) $("playFlashvoiceBtn").classList.add("is-playing");
     window.speechSynthesis.speak(utterance);
   }
 
@@ -8036,12 +8041,12 @@ window.addEventListener("load", () => {
       flashvoiceState.token += 1;
       flashvoiceState.paused = true;
       flashvoiceState.speaking = true;
-      if ($("pauseFlashvoiceBtn")) $("pauseFlashvoiceBtn").textContent = "Reanudar";
+      
       return;
     }
 
     flashvoiceState.paused = false;
-    if ($("pauseFlashvoiceBtn")) $("pauseFlashvoiceBtn").textContent = "Pausa";
+    
     speakFlashvoice();
   }
 
@@ -8602,9 +8607,16 @@ window.addEventListener("load", () => {
     const grid = $("badgesGrid");
     if (!grid) return;
 
+    // Icono outline (hereda el color por currentColor). Se "enciende" vía CSS
+    // cuando la tarjeta tiene la clase .unlocked. La lógica de `done` no cambia.
+    const badgeIcon = `<svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="9" r="5.2"/>
+      <path d="M8.6 13.4 7 21l5-2.4L17 21l-1.6-7.6"/>
+    </svg>`;
+
     grid.innerHTML = badges.map((badge) => `
       <article class="badge-card ${badge.done ? "unlocked" : ""}">
-        <span>${badge.done ? "🏅" : "○"}</span>
+        <span class="badge-icon" aria-hidden="true">${badgeIcon}</span>
         <strong>${badge.title}</strong>
         <p>${badge.detail}</p>
         <small>${badge.done ? "Desbloqueado" : "Pendiente"}</small>
@@ -9534,51 +9546,176 @@ window.addEventListener("load", () => {
   const words = (t) => (typeof getWords === "function" ? getWords(t) : String(t||"").trim().split(/\s+/).filter(Boolean));
 
   // ---- Contenido de las pruebas ---------------------------------------
-  const LISTENING = {
-    minutes: 7,
-    transcript: `Good morning everyone. Today I want to talk about how our city library is changing. Starting next month, the library will open at eight in the morning instead of nine, and it will stay open until nine at night on weekdays. We are also adding two new study rooms on the second floor, which students can book online for up to three hours. Finally, the annual membership fee will remain free for anyone under eighteen, while adults will pay a small fee of ten dollars per year.`,
-    questions: [
-      { type: "mc", q: "What time will the library open next month?", options: ["Seven a.m.","Eight a.m.","Nine a.m.","Ten a.m."], answer: 1 },
-      { type: "mc", q: "Until what time does it stay open on weekdays?", options: ["Seven p.m.","Eight p.m.","Nine p.m.","Ten p.m."], answer: 2 },
-      { type: "gap", q: "The new study rooms are on the ___ floor.", answer: "second", accepts: ["2nd","second"] },
-      { type: "mc", q: "How can students book a study room?", options: ["By phone","In person","Online","By email"], answer: 2 },
-      { type: "gap", q: "A study room can be booked for up to ___ hours.", answer: "three", accepts: ["3","three"] },
-      { type: "mc", q: "Membership is free for people under what age?", options: ["Sixteen","Seventeen","Eighteen","Twenty"], answer: 2 },
-      { type: "gap", q: "Adults will pay ___ dollars per year.", answer: "ten", accepts: ["10","ten"] },
-      { type: "tfng", q: "The library currently opens at eight a.m.", answer: "false" },
-      { type: "tfng", q: "There will be two new study rooms.", answer: "true" },
-      { type: "tfng", q: "The library mentions a new café.", answer: "not given" }
-    ]
-  };
+  // ═══════════════════════════════════════════════════════════════════
+  // BANCOS DE EXAMEN — múltiples variantes por módulo.
+  // Dificultad estilo IELTS real: las preguntas exigen PARAFRASEO,
+  // no coincidencia literal de palabras con el texto/audio.
+  // ═══════════════════════════════════════════════════════════════════
 
-  const READING = {
-    minutes: 9,
-    title: "The rise of urban vertical farming",
-    text: `Vertical farming is the practice of growing crops in stacked layers, often inside controlled indoor environments. Unlike traditional agriculture, it does not depend on soil or seasonal weather, using instead artificial light and nutrient-rich water. Supporters argue that vertical farms can produce food close to cities, cutting the distance that vegetables travel and reducing waste. Critics point out that the electricity required for lighting makes the method expensive and, in some regions, less environmentally friendly than expected. Despite these concerns, the number of commercial vertical farms has grown steadily over the past decade, particularly in countries with limited farmland. Researchers continue to study whether the approach can become both affordable and sustainable at a large scale.`,
-    questions: [
-      { type: "tfng", q: "Vertical farming grows crops in stacked layers.", answer: "true" },
-      { type: "tfng", q: "Vertical farming depends heavily on seasonal weather.", answer: "false" },
-      { type: "tfng", q: "Vertical farms use nutrient-rich water instead of soil.", answer: "true" },
-      { type: "tfng", q: "Supporters say vertical farms reduce food transport distance.", answer: "true" },
-      { type: "tfng", q: "Critics mention that lighting electricity can be costly.", answer: "true" },
-      { type: "tfng", q: "Vertical farming is always cheaper than traditional farming.", answer: "false" },
-      { type: "tfng", q: "The text states the exact number of vertical farms worldwide.", answer: "not given" },
-      { type: "tfng", q: "Commercial vertical farms have grown over the past decade.", answer: "true" },
-      { type: "gap", q: "Vertical farms are common in countries with limited ___.", answer: "farmland", accepts: ["farmland","farm land"] },
-      { type: "gap", q: "Researchers study if the method can be affordable and ___.", answer: "sustainable", accepts: ["sustainable"] }
-    ]
-  };
+  const LISTENING_BANK = [
+    {
+      minutes: 7,
+      context: "Anuncio de la biblioteca municipal",
+      transcript: `Good morning everyone. Today I want to talk about how our city library is changing. Starting next month, the library will open at eight in the morning instead of nine, and it will stay open until nine at night on weekdays. We are also adding two new study rooms on the second floor, which students can book online for up to three hours. Finally, the annual membership fee will remain free for anyone under eighteen, while adults will pay a small fee of ten dollars per year.`,
+      questions: [
+        { type: "mc", q: "The library's opening time will be brought forward by how long?", options: ["Half an hour","One hour","Two hours","It will not change"], answer: 1 },
+        { type: "mc", q: "On weekdays, the library closes at:", options: ["7 p.m.","8 p.m.","9 p.m.","10 p.m."], answer: 2 },
+        { type: "gap", q: "The additional study rooms are located on the ___ floor.", answer: "second", accepts: ["2nd","second"] },
+        { type: "mc", q: "Reservations for study rooms must be made:", options: ["By telephone","At the front desk","Through the internet","By written request"], answer: 2 },
+        { type: "gap", q: "The maximum booking length is ___ hours.", answer: "three", accepts: ["3","three"] },
+        { type: "mc", q: "Who is exempt from paying the membership fee?", options: ["Students only","Anyone under 18","Local residents","Nobody"], answer: 1 },
+        { type: "gap", q: "The yearly charge for adult members is ___ dollars.", answer: "ten", accepts: ["10","ten"] },
+        { type: "tfng", q: "The library's current opening hour is earlier than the new one.", answer: "false" },
+        { type: "tfng", q: "The number of study rooms will increase.", answer: "true" },
+        { type: "tfng", q: "The speaker explains why the fee was introduced.", answer: "not given" }
+      ]
+    },
+    {
+      minutes: 7,
+      context: "Instrucciones de un profesor sobre un proyecto",
+      transcript: `Right, listen carefully about your group project. Each team must consist of exactly four students, and you cannot change teams once registered. The written report should be between two and three thousand words, and it must be submitted through the online portal by the fifteenth of March. Please note that late submissions lose five percent per day. You will also give a presentation lasting no more than twelve minutes, followed by questions from the class. The report counts for sixty percent of your final mark, and the presentation for the remaining forty.`,
+      questions: [
+        { type: "mc", q: "The size of each team is:", options: ["Three students","Four students","Five students","Flexible"], answer: 1 },
+        { type: "tfng", q: "Students may move to a different team after registering.", answer: "false" },
+        { type: "gap", q: "The report must be submitted by ___ March.", answer: "15", accepts: ["15","15th","fifteenth","the fifteenth"] },
+        { type: "mc", q: "What is the penalty for handing the report in late?", options: ["A fixed 5% deduction","5% for every day late","Automatic failure","No penalty"], answer: 1 },
+        { type: "gap", q: "Reports must be uploaded via the online ___.", answer: "portal", accepts: ["portal"] },
+        { type: "mc", q: "The presentation must not exceed:", options: ["Ten minutes","Twelve minutes","Fifteen minutes","Twenty minutes"], answer: 1 },
+        { type: "gap", q: "The written report is worth ___ percent of the final mark.", answer: "60", accepts: ["60","sixty"] },
+        { type: "tfng", q: "The presentation carries more weight than the report.", answer: "false" },
+        { type: "tfng", q: "Questions follow the presentation.", answer: "true" },
+        { type: "tfng", q: "The professor states how many groups there will be.", answer: "not given" }
+      ]
+    },
+    {
+      minutes: 7,
+      context: "Conversación sobre alquiler de un departamento",
+      transcript: `So, the flat is on Bridge Street, just above the bakery. The rent is six hundred and fifty pounds a month, which includes water but not electricity or internet. There's a deposit of one month's rent, refundable when you leave, provided there's no damage. The landlord prefers a minimum stay of twelve months, though he might accept nine. Viewings are possible on Thursdays after five, or any time at the weekend. Oh, and I should mention: pets aren't allowed, but the building does have a shared garden.`,
+      questions: [
+        { type: "gap", q: "The monthly rent is ___ pounds.", answer: "650", accepts: ["650","six hundred and fifty"] },
+        { type: "mc", q: "Which utility is covered by the rent?", options: ["Electricity","Internet","Water","All of them"], answer: 2 },
+        { type: "mc", q: "The deposit will be returned as long as:", options: ["The tenant stays a year","The flat is undamaged","Rent is paid on time","The landlord agrees"], answer: 1 },
+        { type: "gap", q: "The landlord would ideally like a tenancy of ___ months.", answer: "12", accepts: ["12","twelve"] },
+        { type: "tfng", q: "A nine-month contract is completely impossible.", answer: "false" },
+        { type: "mc", q: "When can the flat be viewed on a weekday?", options: ["Monday mornings","Thursday evenings","Wednesday afternoons","Any weekday"], answer: 1 },
+        { type: "tfng", q: "Tenants may keep a cat in the flat.", answer: "false" },
+        { type: "gap", q: "The building includes a shared ___.", answer: "garden", accepts: ["garden"] },
+        { type: "tfng", q: "The flat is situated above a shop that sells bread.", answer: "true" },
+        { type: "tfng", q: "The current tenant is moving abroad.", answer: "not given" }
+      ]
+    },
+    {
+      minutes: 7,
+      context: "Charla sobre un programa de reciclaje",
+      transcript: `Our new recycling scheme begins on the first of June. Collections will happen every fortnight rather than weekly, so please plan accordingly. Glass, paper and metal go in the blue bin; food waste in the small brown caddy. Plastics are more complicated: only types one and two are accepted, and everything must be rinsed first. If a bin is contaminated with the wrong material, it will be left uncollected and a note attached. Residents who need an additional bin can request one free of charge from the council website.`,
+      questions: [
+        { type: "mc", q: "How often will waste be collected under the new scheme?", options: ["Weekly","Every two weeks","Monthly","Twice a week"], answer: 1 },
+        { type: "gap", q: "Food waste should be placed in the brown ___.", answer: "caddy", accepts: ["caddy"] },
+        { type: "mc", q: "Which materials share the same bin?", options: ["Glass, paper and metal","Plastic and glass","Food and paper","Metal and plastic"], answer: 0 },
+        { type: "tfng", q: "All types of plastic can be recycled in this scheme.", answer: "false" },
+        { type: "gap", q: "Plastic items must be ___ before disposal.", answer: "rinsed", accepts: ["rinsed","washed","cleaned"] },
+        { type: "mc", q: "What happens if the wrong item is put in a bin?", options: ["A fine is issued","The bin is not emptied","It is collected anyway","The council calls the resident"], answer: 1 },
+        { type: "tfng", q: "Extra bins involve an additional cost.", answer: "false" },
+        { type: "gap", q: "Additional bins are requested through the council ___.", answer: "website", accepts: ["website","web site"] },
+        { type: "tfng", q: "The scheme starts in the first half of the year.", answer: "true" },
+        { type: "tfng", q: "The council will publish recycling statistics each month.", answer: "not given" }
+      ]
+    }
+  ];
+
+  const READING_BANK = [
+    {
+      minutes: 9,
+      title: "The rise of urban vertical farming",
+      text: `Vertical farming is the practice of growing crops in stacked layers, often inside controlled indoor environments. Unlike traditional agriculture, it does not depend on soil or seasonal weather, using instead artificial light and nutrient-rich water. Supporters argue that vertical farms can produce food close to cities, cutting the distance that vegetables travel and reducing waste. Critics point out that the electricity required for lighting makes the method expensive and, in some regions, less environmentally friendly than expected. Despite these concerns, the number of commercial vertical farms has grown steadily over the past decade, particularly in countries with limited farmland. Researchers continue to study whether the approach can become both affordable and sustainable at a large scale.`,
+      questions: [
+        { type: "tfng", q: "Vertical farming eliminates the need for arable land.", answer: "true" },
+        { type: "tfng", q: "Seasonal conditions determine when vertical farms can harvest.", answer: "false" },
+        { type: "mc", q: "According to supporters, the principal benefit of vertical farming is:", options: ["Higher crop yields","Shorter supply chains","Lower electricity use","Better-tasting produce"], answer: 1 },
+        { type: "tfng", q: "The environmental advantage of vertical farming is uniform across all regions.", answer: "false" },
+        { type: "mc", q: "The main objection raised by critics concerns:", options: ["Food safety","Water consumption","Energy costs","Consumer demand"], answer: 2 },
+        { type: "tfng", q: "Adoption of vertical farming has declined recently.", answer: "false" },
+        { type: "tfng", q: "Vertical farms are most common where agricultural land is scarce.", answer: "true" },
+        { type: "tfng", q: "The passage identifies which country has the most vertical farms.", answer: "not given" },
+        { type: "gap", q: "Instead of soil, vertical farms rely on nutrient-rich ___.", answer: "water", accepts: ["water"] },
+        { type: "gap", q: "It remains uncertain whether the method can be both affordable and ___.", answer: "sustainable", accepts: ["sustainable"] }
+      ]
+    },
+    {
+      minutes: 9,
+      title: "Why bees are disappearing",
+      text: `Over the past two decades, beekeepers across Europe and North America have reported unusually high colony losses. The phenomenon, sometimes labelled colony collapse disorder, does not appear to have a single cause. Pesticides known as neonicotinoids impair bees' navigation, making it harder for foragers to return to the hive. At the same time, the parasitic varroa mite weakens individual insects and spreads viruses within colonies. Monoculture farming compounds the problem: vast fields of one crop offer abundant food for a few weeks and almost nothing thereafter. Some researchers now argue that no single factor is decisive, and that colonies fail when several stresses coincide. Restoring hedgerows and wildflower margins has produced encouraging local results, though the effect on national bee populations remains unproven.`,
+      questions: [
+        { type: "mc", q: "The passage suggests colony collapse disorder is:", options: ["Caused mainly by pesticides","The result of several combined pressures","A recently invented term","Confined to North America"], answer: 1 },
+        { type: "tfng", q: "Neonicotinoids affect a bee's ability to find its way home.", answer: "true" },
+        { type: "tfng", q: "The varroa mite kills bees instantly on contact.", answer: "false" },
+        { type: "mc", q: "The difficulty with monoculture farming is that it provides:", options: ["Poisonous nectar","Food that is plentiful but brief","Too much competition","Insufficient water"], answer: 1 },
+        { type: "tfng", q: "Scientists have identified one dominant cause of colony loss.", answer: "false" },
+        { type: "tfng", q: "Planting wildflower margins has shown promise on a small scale.", answer: "true" },
+        { type: "tfng", q: "The national impact of hedgerow restoration has been confirmed.", answer: "false" },
+        { type: "tfng", q: "Beekeepers in Asia report similar losses.", answer: "not given" },
+        { type: "gap", q: "The varroa mite transmits ___ inside colonies.", answer: "viruses", accepts: ["viruses","virus"] },
+        { type: "gap", q: "Colonies tend to fail when multiple ___ occur together.", answer: "stresses", accepts: ["stresses","stress","pressures"] }
+      ]
+    },
+    {
+      minutes: 9,
+      title: "The forgotten history of the coffee house",
+      text: `When the first coffee houses opened in seventeenth-century London, they were regarded with suspicion. Unlike taverns, they served no alcohol, and their patrons remained sober enough to argue. For the price of a penny, anyone could enter, read the newspapers provided and join the conversation. Contemporary critics complained that apprentices wasted whole afternoons in them; the government, more alarmed, attempted to close them in 1675, fearing they had become nurseries of sedition. The ban collapsed within days. What made these establishments remarkable was not the drink but the levelling of rank: a merchant might debate with a duke. Historians disagree about how far this equality extended in practice, but the coffee house undoubtedly accelerated the circulation of ideas that shaped the following century.`,
+      questions: [
+        { type: "mc", q: "Early coffee houses differed from taverns chiefly because they:", options: ["Were cheaper to enter","Did not serve alcohol","Excluded the poor","Provided food"], answer: 1 },
+        { type: "tfng", q: "Entry to a coffee house was restricted by social class.", answer: "false" },
+        { type: "mc", q: "The government's attempt to suppress coffee houses was motivated by fear of:", options: ["Public drunkenness","Political dissent","Financial loss","Disease"], answer: 1 },
+        { type: "tfng", q: "The 1675 prohibition remained in force for several years.", answer: "false" },
+        { type: "tfng", q: "Critics objected that young workers spent too long in coffee houses.", answer: "true" },
+        { type: "mc", q: "The writer regards the coffee house's most significant feature as its:", options: ["Cheap prices","Erosion of social hierarchy","Range of newspapers","Quality of coffee"], answer: 1 },
+        { type: "tfng", q: "Historians agree that coffee houses achieved genuine social equality.", answer: "false" },
+        { type: "tfng", q: "Coffee houses first appeared in Paris before London.", answer: "not given" },
+        { type: "gap", q: "Admission to a coffee house cost one ___.", answer: "penny", accepts: ["penny"] },
+        { type: "gap", q: "The government feared coffee houses were breeding grounds of ___.", answer: "sedition", accepts: ["sedition"] }
+      ]
+    },
+    {
+      minutes: 9,
+      title: "Sleep and the adolescent brain",
+      text: `Teenagers are routinely accused of laziness for rising late, yet the evidence suggests biology rather than temperament is responsible. During adolescence, the release of melatonin — the hormone that induces drowsiness — shifts later by roughly two hours. A teenager who feels alert at eleven at night is not being defiant; their internal clock has genuinely moved. School start times, however, have not moved with it. Studies in the United States found that districts delaying the first lesson until half past eight recorded improved attendance and modestly higher grades. Critics of such reforms cite the cost of rescheduling transport and the disruption to after-school activities. What is not in dispute is that chronic sleep restriction during these years is associated with impaired memory consolidation, and that catching up at weekends does not fully reverse the deficit.`,
+      questions: [
+        { type: "tfng", q: "Late rising among teenagers is primarily a matter of attitude.", answer: "false" },
+        { type: "mc", q: "During adolescence, melatonin is released:", options: ["Earlier than in childhood","About two hours later","In smaller quantities","Only at weekends"], answer: 1 },
+        { type: "tfng", q: "School timetables have adapted to adolescent sleep patterns.", answer: "false" },
+        { type: "mc", q: "Districts that postponed the first lesson observed:", options: ["Dramatically higher grades","Better attendance and slightly better grades","No measurable change","Worse behaviour"], answer: 1 },
+        { type: "mc", q: "Opponents of later start times are mainly concerned about:", options: ["Academic standards","Practical and logistical costs","Teacher workload","Student health"], answer: 1 },
+        { type: "tfng", q: "There is disagreement over whether sleep loss harms memory.", answer: "false" },
+        { type: "tfng", q: "Sleeping longer at weekends completely compensates for lost sleep.", answer: "false" },
+        { type: "tfng", q: "The passage recommends a specific bedtime for teenagers.", answer: "not given" },
+        { type: "gap", q: "Melatonin is described as the hormone that causes ___.", answer: "drowsiness", accepts: ["drowsiness","sleepiness"] },
+        { type: "gap", q: "Long-term lack of sleep damages memory ___.", answer: "consolidation", accepts: ["consolidation"] }
+      ]
+    }
+  ];
 
   const WRITING_PROMPTS = [
-    "Some people believe that studying a language abroad is the best way to learn it. To what extent do you agree or disagree? Write a short opinion essay.",
-    "Many students now prefer online classes to traditional ones. Discuss the main advantage and the main disadvantage, and give your opinion.",
-    "Technology has changed the way we communicate with friends. Do the advantages outweigh the disadvantages? Give reasons for your answer."
+    "Some people believe that studying a language abroad is the best way to learn it. To what extent do you agree or disagree?",
+    "Many students now prefer online classes to traditional ones. Discuss the main advantage and the main disadvantage, and give your own opinion.",
+    "Technology has changed the way we communicate with friends. Do the advantages outweigh the disadvantages?",
+    "In many countries, the gap between the rich and the poor is widening. What problems does this cause, and what measures could reduce it?",
+    "Some argue that governments should fund the arts; others say public money is better spent on healthcare and education. Discuss both views and give your opinion.",
+    "Working from home has become common. Does this development benefit employees more than employers?",
+    "Some people think children should begin formal education as early as possible. Others believe they should not start before the age of seven. Discuss both views.",
+    "Air travel should be made more expensive in order to reduce pollution. To what extent do you agree or disagree?",
+    "Museums and historical sites are mainly visited by tourists rather than local residents. Why is this the case, and how could it be changed?",
+    "Many people believe that social media has damaged the quality of public debate. What is your view?"
   ];
 
   const SPEAKING_SETS = [
-    ["Describe your hometown. What do you like most about it?","Do you prefer studying in the morning or at night? Why?","Talk about a skill you would like to learn in the future."],
-    ["What kind of music do you enjoy and why?","Describe a memorable trip you have taken.","Is it better to work alone or in a team? Explain your view."],
-    ["Describe your typical daily routine.","What are the benefits of learning English for you?","Talk about a book or film that influenced you."]
+    ["Describe your hometown. What do you like most about it?","Do you prefer studying in the morning or at night? Why?","Talk about a skill you would like to learn in the future and explain why."],
+    ["What kind of music do you enjoy, and has your taste changed over time?","Describe a memorable journey you have taken. Where did you go and what made it memorable?","Is it better to work alone or in a team? Explain your view with examples."],
+    ["Describe your typical daily routine. Would you change anything about it?","What are the benefits of learning English for you personally?","Talk about a book or film that influenced the way you think."],
+    ["Describe a person who has had a strong influence on you. Who are they and why?","Do people in your country spend enough time outdoors? Why or why not?","Some say technology makes us less patient. Do you agree?"],
+    ["What is your favourite time of year, and what do you do then?","Describe a place you would like to visit but haven't yet. Explain why.","Should governments invest more in public transport than in roads? Why?"],
+    ["Talk about a meal you enjoy cooking or eating. What makes it special?","How has the way people shop changed in your country?","Do you think children today have more or less freedom than in the past?"],
+    ["Describe something you own that is important to you. Why does it matter?","Do you prefer living in a city or in the countryside? Explain your reasons.","Is it important for a country to preserve its traditional buildings?"],
+    ["Describe a time when you learned something the hard way.","What role does sport play in your life?","Some people believe that failure teaches more than success. Do you agree?"]
   ];
 
   // ---- Estado del runner ----------------------------------------------
@@ -9643,6 +9780,9 @@ window.addEventListener("load", () => {
     $("expressResult").innerHTML = "";
     const submit = $("expressSubmitBtn");
     if (submit) submit.disabled = false;
+    // "Nuevo examen" no aplica dentro del Simulacro Express Completo
+    const newBtn = $("expressNewTestBtn");
+    if (newBtn) newBtn.hidden = !!(state && state.sequence);
     const bar = $("expressProgressBar");
     if (bar) { bar.style.width = "0%"; bar.classList.remove("is-urgent"); }
   }
@@ -9701,23 +9841,55 @@ window.addEventListener("load", () => {
   }
 
   // ---- Módulo LISTENING ------------------------------------------------
+  // Mezcla las opciones de una pregunta MC preservando la respuesta correcta.
+  function shuffleQuestion(item) {
+    if (item.type !== "mc" || !Array.isArray(item.options)) return { ...item };
+    const pairs = item.options.map((opt, i) => ({ opt, correct: i === item.answer }));
+    for (let i = pairs.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pairs[i], pairs[j]] = [pairs[j], pairs[i]];
+    }
+    return { ...item, options: pairs.map((p) => p.opt), answer: pairs.findIndex((p) => p.correct) };
+  }
+
+  // Prepara un set de preguntas: baraja el orden y las opciones de cada MC,
+  // y luego AGRUPA por tipo. Agrupar iguala las alturas de las tarjetas vecinas,
+  // lo que elimina los huecos verticales del layout en columnas.
+  function prepareQuestions(questions) {
+    const list = questions.map(shuffleQuestion);
+    // Barajar dentro de cada grupo (el orden entre tipos queda fijo)
+    for (let i = list.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [list[i], list[j]] = [list[j], list[i]];
+    }
+    // Orden por altura de tarjeta: MC (alta) -> TFNG (media) -> gap (baja)
+    const rank = { mc: 0, tfng: 1, gap: 2 };
+    return list.sort((a, b) => (rank[a.type] ?? 3) - (rank[b.type] ?? 3));
+  }
+
   function startListening() {
-    openRunner("Express Listening", "Escuchá el audio y respondé");
+    const test = pick(LISTENING_BANK);
+    const questions = prepareQuestions(test.questions);
+    openRunner("Express Listening", test.context || "Escuchá el audio y respondé");
     const body = $("expressRunnerBody");
     body.innerHTML = `
       <div class="express-audio-card">
         <p class="express-hint">Reproducí el audio (voz del navegador) las veces que necesites y respondé las 10 preguntas.</p>
         <div class="express-audio-controls">
-          <button id="expressPlayAudio" class="secondary-btn" type="button">▶ Reproducir audio</button>
-          <button id="expressStopAudio" class="secondary-btn" type="button">■ Detener</button>
+          <button id="expressPlayAudio" class="express-audio-btn" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span>Reproducir</span>
+          </button>
+          <button id="expressStopAudio" class="express-audio-btn" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/></svg><span>Detener</span>
+          </button>
         </div>
       </div>
-      <div class="express-questions">${questionMarkup(LISTENING.questions)}</div>
+      <div class="express-questions">${questionMarkup(questions)}</div>
     `;
-    body.querySelector("#expressPlayAudio")?.addEventListener("click", () => speak(LISTENING.transcript));
+    body.querySelector("#expressPlayAudio")?.addEventListener("click", () => speak(test.transcript));
     body.querySelector("#expressStopAudio")?.addEventListener("click", () => window.speechSynthesis?.cancel());
-    state.grader = () => gradeListeningReading(LISTENING.questions, "Listening");
-    startCountdown(LISTENING.minutes);
+    state.grader = () => gradeListeningReading(questions, "Listening");
+    startCountdown(test.minutes);
   }
 
   function speak(text) {
@@ -9730,17 +9902,19 @@ window.addEventListener("load", () => {
 
   // ---- Módulo READING --------------------------------------------------
   function startReading() {
-    openRunner("Express Reading", READING.title);
+    const test = pick(READING_BANK);
+    const questions = prepareQuestions(test.questions);
+    openRunner("Express Reading", test.title);
     const body = $("expressRunnerBody");
     body.innerHTML = `
       <div class="express-reading-text">
-        <h5>${esc(READING.title)}</h5>
-        <p>${esc(READING.text)}</p>
+        <h5>${esc(test.title)}</h5>
+        <p>${esc(test.text)}</p>
       </div>
-      <div class="express-questions">${questionMarkup(READING.questions)}</div>
+      <div class="express-questions">${questionMarkup(questions)}</div>
     `;
-    state.grader = () => gradeListeningReading(READING.questions, "Reading");
-    startCountdown(READING.minutes);
+    state.grader = () => gradeListeningReading(questions, "Reading");
+    startCountdown(test.minutes);
   }
 
   function gradeListeningReading(qs, label) {
@@ -9834,11 +10008,77 @@ window.addEventListener("load", () => {
     startCountdown(5);
   }
 
+  // ---- Reconocimiento de voz robusto ----------------------------------
+  // Problema del enfoque simple: el motor se detiene solo tras cada silencio
+  // y deja de capturar. Acá lo reiniciamos mientras el usuario siga grabando,
+  // así se pueden transcribir respuestas largas (150-200+ palabras).
+  let recognitionActive = false;   // el usuario sigue grabando
+  let finalTranscript = "";        // solo resultados definitivos
+
+  function buildRecognition() {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) return null;
+
+    const rec = new SR();
+    rec.lang = "en-US";
+    rec.continuous = true;
+    rec.interimResults = true;     // capta más, incluso frases sin terminar
+    rec.maxAlternatives = 3;       // el motor elige la mejor de 3 hipótesis
+
+    rec.onresult = (ev) => {
+      let interim = "";
+      for (let i = ev.resultIndex; i < ev.results.length; i++) {
+        const result = ev.results[i];
+        // Elegimos la alternativa con mayor confianza disponible
+        let best = result[0];
+        for (let a = 1; a < result.length; a++) {
+          if ((result[a].confidence || 0) > (best.confidence || 0)) best = result[a];
+        }
+        if (result.isFinal) finalTranscript += best.transcript.trim() + " ";
+        else interim += best.transcript;
+      }
+      recognizedText = (finalTranscript + interim).trim();
+      updateTranscriptPreview(recognizedText);
+    };
+
+    // Si el motor se corta por silencio, lo reiniciamos mientras se grabe.
+    rec.onend = () => {
+      if (recognitionActive) {
+        try { rec.start(); } catch (e) { /* ya iniciado: ignorar */ }
+      }
+    };
+    rec.onerror = (e) => {
+      // "no-speech" y "aborted" son normales; el resto se ignora silenciosamente.
+      if (e.error === "not-allowed" || e.error === "service-not-allowed") {
+        recognitionActive = false;
+      }
+    };
+    return rec;
+  }
+
+  function updateTranscriptPreview(text) {
+    const box = $("expressTranscript");
+    if (!box) return;
+    const count = text ? text.trim().split(/\s+/).filter(Boolean).length : 0;
+    if (!text) { box.hidden = true; return; }
+    box.hidden = false;
+    box.innerHTML = `<span>Transcripción en vivo · ${count} palabras</span><p>${esc(text)}</p>`;
+  }
+
   async function startRecording() {
     recognizedText = "";
+    finalTranscript = "";
     const status = $("expressRecStatus");
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      // Pistas de calidad para que la voz se entienda mejor
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+          channelCount: 1
+        }
+      });
       recordedChunks = [];
       mediaRecorder = new MediaRecorder(stream);
       mediaRecorder.ondataavailable = (e) => { if (e.data.size) recordedChunks.push(e.data); };
@@ -9849,23 +10089,16 @@ window.addEventListener("load", () => {
         stream.getTracks().forEach((t) => t.stop());
       };
       mediaRecorder.start();
-      if (status) status.textContent = "Grabando...";
+      if (status) status.textContent = "Grabando... hablá con naturalidad.";
       $("expressRecBtn").disabled = true;
       $("expressRecStop").disabled = false;
 
-      // Transcripción en vivo si está disponible
-      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (SR) {
-        recognition = new SR();
-        recognition.lang = "en-US";
-        recognition.continuous = true;
-        recognition.interimResults = false;
-        recognition.onresult = (ev) => {
-          for (let i = ev.resultIndex; i < ev.results.length; i++) {
-            recognizedText += ev.results[i][0].transcript + " ";
-          }
-        };
+      recognition = buildRecognition();
+      if (recognition) {
+        recognitionActive = true;
         try { recognition.start(); } catch (e) {}
+      } else if (status) {
+        status.textContent = "Grabando (tu navegador no transcribe automáticamente).";
       }
     } catch (err) {
       if (status) status.textContent = "No se pudo acceder al micrófono. Podés continuar igual.";
@@ -9873,6 +10106,7 @@ window.addEventListener("load", () => {
   }
 
   function stopRecording() {
+    recognitionActive = false;    // frena el reinicio automático
     if (mediaRecorder && mediaRecorder.state !== "inactive") mediaRecorder.stop();
     if (recognition) { try { recognition.stop(); } catch (e) {} }
     const status = $("expressRecStatus");
@@ -9880,38 +10114,58 @@ window.addEventListener("load", () => {
     if ($("expressRecBtn")) $("expressRecBtn").disabled = false;
     if ($("expressRecStop")) $("expressRecStop").disabled = true;
 
-    const t = recognizedText.trim();
-    const box = $("expressTranscript");
-    if (box && t) {
-      box.hidden = false;
-      box.innerHTML = `<span>Transcripción aproximada:</span><p>${esc(t)}</p>`;
-    }
+    // La transcripción final ya se fue mostrando en vivo; la consolidamos.
+    recognizedText = finalTranscript.trim() || recognizedText.trim();
+    updateTranscriptPreview(recognizedText);
   }
 
   function gradeSpeaking() {
     if (mediaRecorder && mediaRecorder.state === "recording") stopRecording();
-    const t = recognizedText.trim();
+    const t = (finalTranscript.trim() || recognizedText || "").trim();
     const w = words(t);
-    // Si hubo transcripción, estimamos por fluidez; si no, band orientativa por participación.
     let band;
     if (w.length === 0) {
       band = 6.0; // sin transcripción disponible: estimación neutra por completar
     } else {
-      band = 5.5;
-      if (w.length >= 30) band += 0.5;
-      if (w.length >= 60) band += 0.5;
-      if (w.length >= 100) band += 0.5;
+      // Escala pensada para respuestas de las 3 preguntas (objetivo: 150-200 palabras)
+      band = 5.0;
+      if (w.length >= 50) band += 0.5;
+      if (w.length >= 90) band += 0.5;
+      if (w.length >= 140) band += 0.5;   // rango objetivo
+      if (w.length >= 190) band += 0.5;
+
+      // Variedad léxica (type-token ratio)
       const uniq = new Set(w.map((x) => x.toLowerCase())).size;
-      if (uniq / Math.max(1, w.length) > 0.55) band += 0.5;
-      band = Math.max(4.5, Math.min(8.0, Math.round(band * 2) / 2));
+      const ttr = uniq / Math.max(1, w.length);
+      if (ttr > 0.5) band += 0.5;
+      if (ttr > 0.62) band += 0.5;
+
+      // Cohesión: conectores propios de banda alta
+      const lower = t.toLowerCase();
+      const connectors = ["however","although","because","for example","whereas",
+        "in addition","on the other hand","therefore","personally","in my opinion","that said"];
+      const used = connectors.filter((c) => lower.includes(c)).length;
+      if (used >= 2) band += 0.5;
+      if (used >= 4) band += 0.5;
+
+      band = Math.max(4.5, Math.min(8.5, Math.round(band * 2) / 2));
     }
     saveScore("Speaking", band);
-    const note = w.length === 0
-      ? "No detectamos transcripción automática (tu navegador puede no soportarla). Band orientativa por completar el módulo."
-      : `Detectamos ~${w.length} palabras habladas. ${band >= 7 ? "Buena fluidez y variedad." : "Intentá extender tus respuestas con ejemplos y conectores."}`;
+
+    let note;
+    if (w.length === 0) {
+      note = "No detectamos transcripción automática (tu navegador puede no soportarla). Band orientativa por completar el módulo.";
+    } else if (w.length < 90) {
+      note = `Detectamos ~${w.length} palabras. Para las 3 preguntas conviene apuntar a 150-200: extendé cada respuesta con un ejemplo o una razón.`;
+    } else if (w.length < 140) {
+      note = `Detectamos ~${w.length} palabras. Vas bien; llegando a 150-200 mostrás más fluidez sostenida.`;
+    } else {
+      note = `Detectamos ~${w.length} palabras. ${band >= 7 ? "Buena fluidez, extensión y variedad léxica." : "Buena extensión; sumá conectores y vocabulario más preciso para subir de banda."}`;
+    }
+
     return {
       band,
-      html: `<div class="express-band"><strong>Band ${band.toFixed(1)}</strong><span>Speaking</span></div>
+      html: `<div class="express-band"><strong>Band ${band.toFixed(1)}</strong><span>Speaking · ${w.length} palabras</span></div>
         <p class="express-result-note">${esc(note)}</p>`
     };
   }
@@ -9934,14 +10188,10 @@ window.addEventListener("load", () => {
       return;
     }
 
-    // Modo individual: mostrar resultado
+    // Modo individual: mostrar resultado (sin botón; se cierra con la X del runner)
     const res = $("expressResult");
     res.hidden = false;
-    res.innerHTML = `${result.html}
-      <div class="express-result-actions">
-        <button id="expressBackBtn" class="primary-btn" type="button">Volver a módulos</button>
-      </div>`;
-    res.querySelector("#expressBackBtn")?.addEventListener("click", showDashboard);
+    res.innerHTML = result.html;
     $("expressSubmitBtn").disabled = true;
     log(`Express ${state.moduleLabel} · Band ${result.band.toFixed(1)}`);
     persistScore(result.band);
@@ -9990,11 +10240,7 @@ window.addEventListener("load", () => {
       <div class="express-band express-band-overall"><strong>Band ${rounded.toFixed(1)}</strong><span>Overall Express</span></div>
       <div class="express-overall-grid">
         ${scores.map((s) => `<div><span>${esc(s.module)}</span><strong>${s.band.toFixed(1)}</strong></div>`).join("")}
-      </div>
-      <div class="express-result-actions">
-        <button id="expressBackBtn" class="primary-btn" type="button">Volver a módulos</button>
       </div>`;
-    $("expressResult").querySelector("#expressBackBtn")?.addEventListener("click", showDashboard);
     $("expressSubmitBtn").disabled = true;
     log(`Full Express completado · Band ${rounded.toFixed(1)}`);
     persistScore(rounded);
@@ -10017,11 +10263,39 @@ window.addEventListener("load", () => {
       btn.addEventListener("click", () => {
         const mod = btn.dataset.expressModule;
         initModuleState(mod.charAt(0).toUpperCase() + mod.slice(1));
+        state.moduleKey = mod;   // recordar para "Nuevo examen"
         ({ listening: startListening, reading: startReading, writing: startWriting, speaking: startSpeaking }[mod])();
       });
     });
 
+    // Genera otra variante del módulo actual (nuevo texto/audio/consigna + preguntas barajadas)
+    $("expressNewTestBtn")?.addEventListener("click", () => {
+      if (!state) return;
+      if (state.sequence) return;              // en el Full Express no aplica
+      const mod = state.moduleKey;
+      if (!mod) return;
+      stopCountdown();
+      const label = mod.charAt(0).toUpperCase() + mod.slice(1);
+      initModuleState(label);
+      state.moduleKey = mod;
+      ({ listening: startListening, reading: startReading, writing: startWriting, speaking: startSpeaking }[mod])();
+    });
+
     $("expressFullBtn")?.addEventListener("click", startFullExpress);
+    // X del runner: única salida hacia el dashboard.
+    // Solo pide confirmación si hay un examen en curso (no si ya se envió).
+    $("expressCloseBtn")?.addEventListener("click", () => {
+      const yaEnviado = $("expressSubmitBtn")?.disabled;
+      const enCurso = !!expressInterval && !yaEnviado;
+      if (enCurso) {
+        const msg = (state && state.sequence)
+          ? "¿Salir del Simulacro Express Completo? Se perderá el progreso."
+          : "¿Salir del examen? Se perderán tus respuestas.";
+        if (!confirm(msg)) return;
+      }
+      showDashboard();
+    });
+
     $("expressExitBtn")?.addEventListener("click", () => {
       if (state && state.sequence) {
         if (!confirm("¿Salir del Simulacro Express Completo? Se perderá el progreso.")) return;
@@ -10188,6 +10462,87 @@ window.addEventListener("load", () => {
     } else {
       positionCursor(canvas, currentHue, currentSat);
     }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+  window.addEventListener("load", () => setTimeout(init, 150));
+})();
+
+
+/* =========================================================
+   V69 — FLASHVOICE: panel de opciones (tuerca) + switch de voz
+   Solo UI: reutiliza los inputs existentes (flashvoiceVolume,
+   flashvoiceWpm, flashvoiceVoice, flashvoiceSource) sin tocar
+   la lógica de reproducción ni de corrección.
+========================================================= */
+(function flashvoiceSettingsV69() {
+  if (window.__flashvoiceSettingsV69) return;
+  window.__flashvoiceSettingsV69 = true;
+
+  function init() {
+    const toggle = document.getElementById("flashvoiceSettingsToggle");
+    const panel = document.getElementById("flashvoiceSettingsPanel");
+    const wrap = document.getElementById("flashvoiceSettings");
+    if (!toggle || !panel || toggle.dataset.fvBound === "true") return;
+    toggle.dataset.fvBound = "true";
+
+    function closePanel() {
+      panel.hidden = true;
+      wrap.classList.remove("open");
+      toggle.setAttribute("aria-expanded", "false");
+    }
+    function openPanel() {
+      panel.hidden = false;
+      wrap.classList.add("open");
+      toggle.setAttribute("aria-expanded", "true");
+    }
+
+    toggle.addEventListener("click", (e) => {
+      e.stopPropagation();
+      panel.hidden ? openPanel() : closePanel();
+    });
+
+    // Cerrar al clickear fuera o con Escape
+    document.addEventListener("click", (e) => {
+      if (!panel.hidden && !wrap.contains(e.target)) closePanel();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !panel.hidden) closePanel();
+    });
+    panel.addEventListener("click", (e) => e.stopPropagation());
+
+    // Switch de voz -> escribe en el <select> oculto y dispara 'change'
+    // para que la lógica original de flashvoice reaccione igual que antes.
+    const select = document.getElementById("flashvoiceVoice");
+    panel.querySelectorAll(".fv-voice-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        panel.querySelectorAll(".fv-voice-btn").forEach((b) => b.classList.remove("is-active"));
+        btn.classList.add("is-active");
+        if (select) {
+          select.value = btn.dataset.voice;
+          select.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+      });
+    });
+
+    // Relleno visual de los sliders (barra del theme)
+    function paintRange(input) {
+      if (!input) return;
+      const min = Number(input.min || 0);
+      const max = Number(input.max || 100);
+      const pct = ((Number(input.value) - min) / (max - min)) * 100;
+      input.style.setProperty("--fv-pct", `${pct}%`);
+    }
+    ["flashvoiceVolume", "flashvoiceWpm"].forEach((id) => {
+      const input = document.getElementById(id);
+      if (!input) return;
+      paintRange(input);
+      input.addEventListener("input", () => paintRange(input));
+    });
   }
 
   if (document.readyState === "loading") {
