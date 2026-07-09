@@ -12090,3 +12090,206 @@ section .eyebrow {
 
 /* El contenedor de acciones del resultado ya no se usa */
 .express-result-actions { display: none !important; }
+
+/* =========================================================
+   V74 — TIPOS DE PREGUNTA NUEVOS (multi, match, ynng, banco)
+========================================================= */
+
+/* Etiqueta que indica el tipo de consigna */
+.express-qtype {
+  display: inline-block;
+  margin-bottom: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(var(--accent-rgb), .1);
+  border: 1px solid rgba(var(--accent-rgb), .22);
+  color: var(--accent-soft);
+  font-size: .62rem;
+  font-weight: 850;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+/* Checkbox de multi-select: cuadrado, no círculo (señal visual del tipo) */
+.express-opt input[type="checkbox"] {
+  accent-color: rgb(var(--accent-rgb));
+  width: 15px; height: 15px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+/* Select de emparejar */
+.express-match-select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 9px 12px;
+  border-radius: 9px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(0,0,0,.26);
+  color: var(--text);
+  font-family: inherit;
+  font-size: .83rem;
+  outline: none;
+  cursor: pointer;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.express-match-select:hover { border-color: rgba(255,255,255,.14); }
+.express-match-select:focus {
+  border-color: rgba(var(--accent-rgb), .5);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), .1);
+}
+
+/* Banco de palabras para completar */
+.express-word-bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 9px;
+  padding: 8px 10px;
+  border-radius: 9px;
+  background: rgba(0,0,0,.22);
+  border: 1px dashed rgba(255,255,255,.09);
+}
+.express-word-bank span {
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.05);
+  color: var(--muted);
+  font-size: .74rem;
+  font-weight: 700;
+  transition: color .15s ease, background .15s ease;
+  cursor: default;
+  user-select: none;
+}
+.express-word-bank span:hover {
+  color: rgb(var(--accent-rgb));
+  background: rgba(var(--accent-rgb), .1);
+}
+
+/* Las de multi-select suelen tener 5 opciones: 1 columna para que se lean */
+.express-question:has(input[type="checkbox"]) .express-options {
+  grid-template-columns: 1fr !important;
+}
+
+/* =========================================================
+   V75 — Input dentro de la oración + stepper del timer
+========================================================= */
+
+/* ---- 1. Hueco para completar, DENTRO de la oración ---- */
+.express-question h5 {
+  line-height: 1.9;              /* aire para que el input no apriete el texto */
+}
+
+.express-gap-inline {
+  display: inline-block;
+  min-width: 78px;
+  max-width: 150px;
+  margin: 0 3px;
+  padding: 2px 8px;
+  vertical-align: baseline;
+  border: none;
+  border-bottom: 1.5px solid rgba(var(--accent-rgb), .45);
+  border-radius: 4px 4px 0 0;
+  background: rgba(var(--accent-rgb), .06);
+  color: rgb(var(--accent-rgb));
+  font-family: inherit;
+  font-size: .86rem;
+  font-weight: 800;
+  text-align: center;
+  outline: none;
+  transition: background .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+.express-gap-inline::placeholder {
+  color: rgba(255,255,255,.25);
+  font-weight: 500;
+}
+.express-gap-inline:hover {
+  background: rgba(var(--accent-rgb), .1);
+}
+.express-gap-inline:focus {
+  background: rgba(var(--accent-rgb), .12);
+  border-bottom-color: rgb(var(--accent-rgb));
+  box-shadow: 0 2px 10px -4px rgba(var(--accent-rgb), .5);
+}
+/* Ocultar spinners si el navegador los agrega */
+.express-gap-inline::-webkit-outer-spin-button,
+.express-gap-inline::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+/* Estados de corrección del hueco inline */
+.express-question.correct .express-gap-inline {
+  border-bottom-color: rgb(34,197,94);
+  background: rgba(34,197,94,.1);
+  color: rgb(134,239,172);
+}
+.express-question.incorrect .express-gap-inline {
+  border-bottom-color: rgb(239,68,68);
+  background: rgba(239,68,68,.08);
+  color: rgb(252,165,165);
+}
+
+/* ---- 2. Stepper del timer: flechas propias, oscuras ---- */
+.timer-stepper {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  width: 130px;
+}
+
+/* Ocultar los spinners nativos (blancos, imposibles de estilar) */
+.timer-stepper input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+  width: 100%;
+  padding-right: 30px !important;   /* espacio para las flechas */
+  box-sizing: border-box;
+}
+.timer-stepper input[type="number"]::-webkit-outer-spin-button,
+.timer-stepper input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+  display: none;
+}
+
+.timer-stepper-arrows {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.timer-step-btn {
+  width: 22px;
+  height: 15px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 5px;
+  background: rgba(255,255,255,.03);
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease;
+}
+.timer-step-btn svg {
+  width: 9px;
+  height: 6px;
+  fill: none;
+  stroke: rgba(255,255,255,.42);      /* gris oscuro, no blanco */
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke .15s ease;
+}
+.timer-step-btn:hover {
+  background: rgba(var(--accent-rgb), .12);
+  border-color: rgba(var(--accent-rgb), .35);
+}
+.timer-step-btn:hover svg { stroke: rgb(var(--accent-rgb)); }
+.timer-step-btn:active {
+  background: rgba(var(--accent-rgb), .2);
+  transform: scale(.94);
+}

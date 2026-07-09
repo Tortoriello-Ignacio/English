@@ -9621,6 +9621,61 @@ window.addEventListener("load", () => {
         { type: "tfng", q: "The council will publish recycling statistics each month.", answer: "not given" }
       ]
     }
+,
+    {
+      minutes: 7,
+      context: "Guía de museo explicando las salas",
+      transcript: `Welcome to the Riverside Museum. Let me explain the layout before you begin. The ground floor houses our Roman collection, including the mosaic discovered during the car park excavation in nineteen eighty-four. Take the stairs, not the lift, if you want to see the temporary exhibition on the mezzanine; the lift only serves the main floors. On the first floor you'll find the maritime gallery, which many visitors say is the highlight. The second floor is currently closed for refurbishment and will reopen in the autumn. Photography is permitted throughout except in the maritime gallery, where flash damages the pigments. The café closes at half past four, half an hour before the museum itself.`,
+      questions: [
+        { type: "mc", q: "The Roman mosaic was found during:", options: ["A building renovation","Work on a car park","A farming project","A road extension"], answer: 1 },
+        { type: "multi", q: "Which TWO statements about access are correct?", pick: 2,
+          options: ["The lift reaches the mezzanine","Stairs lead to the temporary exhibition","The lift serves the main floors","The mezzanine is closed","Photography is banned everywhere"], answer: [1,2] },
+        { type: "gap", q: "The maritime gallery is on the ___ floor.", answer: "first", accepts: ["first","1st"] },
+        { type: "mc", q: "The second floor is unavailable because it is being:", options: ["Used for storage","Refurbished","Rented out","Cleaned"], answer: 1 },
+        { type: "tfng", q: "Flash photography is prohibited in the maritime gallery.", answer: "true" },
+        { type: "gap", q: "The café shuts ___ minutes before the museum.", answer: "30", accepts: ["30","thirty","half an hour"] },
+        { type: "mc", q: "According to the guide, many visitors regard which area as the best?", options: ["The Roman collection","The maritime gallery","The temporary exhibition","The café"], answer: 1 },
+        { type: "tfng", q: "The temporary exhibition is on the ground floor.", answer: "false" },
+        { type: "tfng", q: "The museum charges an entrance fee.", answer: "not given" },
+        { type: "gap", q: "The second floor will reopen in the ___.", answer: "autumn", accepts: ["autumn","fall"] }
+      ]
+    },
+    {
+      minutes: 7,
+      context: "Llamada para reservar un curso de cocina",
+      transcript: `Thanks for calling Harvest Cookery School. Our beginners' course runs over four consecutive Saturdays, starting on the eighth of April. Each session lasts three hours, from ten until one, and the fee is two hundred and forty pounds for the whole course, not per session. That includes all ingredients and an apron you keep. What it does not include is the recipe book, which is an optional fifteen pounds. We ask for a fifty-pound deposit at booking; the balance is due one week before the first class. If you cancel more than fourteen days in advance we refund everything except the deposit. Places are limited to eight students, and I should warn you we usually fill up within a fortnight.`,
+      questions: [
+        { type: "mc", q: "The course takes place over:", options: ["Four consecutive weekends","Four Saturdays in a row","Four evenings","Four full weeks"], answer: 1 },
+        { type: "gap", q: "Each session runs for ___ hours.", answer: "three", accepts: ["3","three"] },
+        { type: "mc", q: "The fee of £240 covers:", options: ["One session","The whole course","The course plus the recipe book","Ingredients only"], answer: 1 },
+        { type: "multi", q: "Which TWO items are included in the fee?", pick: 2,
+          options: ["The recipe book","All ingredients","An apron","Free parking","A certificate"], answer: [1,2] },
+        { type: "gap", q: "The deposit required at booking is ___ pounds.", answer: "50", accepts: ["50","fifty"] },
+        { type: "mc", q: "The remaining balance must be paid:", options: ["On the first day","A week before the course","At booking","After the course"], answer: 1 },
+        { type: "tfng", q: "A cancellation made 20 days ahead results in a full refund.", answer: "false" },
+        { type: "gap", q: "The class size is limited to ___ students.", answer: "eight", accepts: ["8","eight"] },
+        { type: "tfng", q: "Courses tend to sell out quickly.", answer: "true" },
+        { type: "tfng", q: "The school offers an advanced course as well.", answer: "not given" }
+      ]
+    },
+    {
+      minutes: 7,
+      context: "Aviso sobre cambios en el transporte público",
+      transcript: `Attention passengers. From Monday the third, the number twelve bus will no longer stop at Elm Street. Instead, it will terminate at the Central Interchange, where you can connect to the tram. This change affects weekday services only; the weekend timetable remains unchanged. The first bus of the day will now depart at five forty-five rather than six fifteen, and the last service will leave the Interchange at eleven at night. Passengers with monthly passes need do nothing; those with single tickets bought in advance may exchange them at any ticket office until the end of the month. We apologise for the inconvenience, which is due to resurfacing work expected to last ten weeks.`,
+      questions: [
+        { type: "mc", q: "The number twelve bus will now finish its route at:", options: ["Elm Street","The Central Interchange","The tram depot","The ticket office"], answer: 1 },
+        { type: "tfng", q: "The changes apply to Saturday and Sunday services.", answer: "false" },
+        { type: "gap", q: "The first bus will now leave at ___.", answer: "5:45", accepts: ["5:45","545","five forty-five","5.45","quarter to six"] },
+        { type: "mc", q: "How much earlier does the first bus depart?", options: ["15 minutes","30 minutes","45 minutes","An hour"], answer: 1 },
+        { type: "multi", q: "Which TWO things must passengers do?", pick: 2,
+          options: ["Monthly pass holders: nothing","Exchange advance single tickets","Buy a new monthly pass","Register online","Nothing at all"], answer: [0,1] },
+        { type: "gap", q: "Advance single tickets can be exchanged until the end of the ___.", answer: "month", accepts: ["month"] },
+        { type: "mc", q: "The reason given for the disruption is:", options: ["Staff shortages","Road resurfacing","A new timetable","Low passenger numbers"], answer: 1 },
+        { type: "gap", q: "The work is expected to last ___ weeks.", answer: "ten", accepts: ["10","ten"] },
+        { type: "tfng", q: "Passengers can change to a tram at the new terminus.", answer: "true" },
+        { type: "tfng", q: "Bus fares will increase as a result.", answer: "not given" }
+      ]
+    }
   ];
 
   const READING_BANK = [
@@ -9692,30 +9747,106 @@ window.addEventListener("load", () => {
         { type: "gap", q: "Long-term lack of sleep damages memory ___.", answer: "consolidation", accepts: ["consolidation"] }
       ]
     }
+,
+    {
+      minutes: 9,
+      title: "The economics of the second-hand market",
+      text: `For most of the twentieth century, buying used goods carried a stigma: it signalled that one could not afford new. That association has weakened remarkably. Online resale platforms now handle billions of transactions annually, and several studies suggest that younger consumers regard second-hand purchases as a statement of values rather than an admission of poverty. The environmental argument is frequently invoked — extending a garment's life reduces the demand for new production — though the picture is less tidy than campaigners suggest. Cheap resale can encourage people to buy more overall, since the prospect of reselling lowers the perceived cost of an impulsive purchase. Economists call this the rebound effect. Whether resale reduces total consumption therefore depends less on the platform than on the behaviour it induces, a question that remains largely unresolved.`,
+      questions: [
+        { type: "ynng", q: "The writer believes the environmental case for resale is straightforward.", answer: "no" },
+        { type: "ynng", q: "The writer accepts that the stigma around used goods has diminished.", answer: "yes" },
+        { type: "ynng", q: "The writer thinks resale platforms should be regulated.", answer: "not given" },
+        { type: "mc", q: "The 'rebound effect' described in the passage refers to:", options: ["Prices rising after resale","Buying more because reselling seems cheap","Platforms losing customers","Goods returning to sellers"], answer: 1 },
+        { type: "multi", q: "Which TWO points does the writer make about younger consumers?", pick: 2,
+          options: ["They see resale as reflecting their values","They cannot afford new goods","They no longer view used goods as shameful","They avoid online platforms","They buy less overall"], answer: [0,2] },
+        { type: "tfng", q: "Resale platforms process billions of transactions each year.", answer: "true" },
+        { type: "tfng", q: "The passage concludes that resale definitely reduces consumption.", answer: "false" },
+        { type: "gap", q: "Extending a garment's life lowers demand for new ___.", answer: "production", accepts: ["production"], bank: ["production","clothing","factories","stigma"] },
+        { type: "gap", q: "Economists use the term ___ effect for this phenomenon.", answer: "rebound", accepts: ["rebound"], bank: ["rebound","reverse","resale","ripple"] },
+        { type: "mc", q: "The writer's overall attitude towards resale is best described as:", options: ["Enthusiastic","Cautiously sceptical","Openly hostile","Indifferent"], answer: 1 }
+      ]
+    },
+    {
+      minutes: 9,
+      title: "Rewilding: restoration or abandonment?",
+      text: `Rewilding proposes that ecosystems recover best when human management is withdrawn and keystone species are returned. In the Netherlands, the Oostvaardersplassen reserve became the movement's most cited experiment: cattle, deer and horses were introduced and left to regulate their own numbers. For a decade it was hailed as a triumph. Then, in a severe winter, thousands of animals starved, and public outrage forced the authorities to intervene with culling and supplementary feeding. Critics seized on the episode as evidence that rewilding is romantic nonsense; defenders replied that the reserve was too small and lacked predators, and that a genuine test had never been conducted. Both sides, it must be said, drew confident conclusions from a single site. What the controversy did establish is that rewilding is not a retreat from decision-making — deciding not to intervene is itself an intervention.`,
+      questions: [
+        { type: "ynng", q: "The writer regards the criticisms of rewilding as fully justified.", answer: "no" },
+        { type: "ynng", q: "The writer thinks both sides overstated what one site could prove.", answer: "yes" },
+        { type: "ynng", q: "The writer supports reintroducing predators to the reserve.", answer: "not given" },
+        { type: "mc", q: "What prompted the authorities to act at Oostvaardersplassen?", options: ["Scientific advice","Public anger over animal deaths","A change of government","Financial pressure"], answer: 1 },
+        { type: "mc", q: "Defenders of the project argued that the reserve:", options: ["Was correctly designed","Was too small and lacked predators","Had too many species","Was poorly funded"], answer: 1 },
+        { type: "multi", q: "Which TWO animals were introduced to the reserve?", pick: 2,
+          options: ["Wolves","Cattle","Deer","Bears","Lynx"], answer: [1,2] },
+        { type: "tfng", q: "The reserve was praised for around ten years before the crisis.", answer: "true" },
+        { type: "tfng", q: "Rewilding means abandoning all decisions about land.", answer: "false" },
+        { type: "gap", q: "Rewilding involves returning ___ species to an ecosystem.", answer: "keystone", accepts: ["keystone"], bank: ["keystone","native","invasive","domestic"] },
+        { type: "gap", q: "The writer argues that choosing not to intervene is itself an ___.", answer: "intervention", accepts: ["intervention"], bank: ["intervention","abandonment","experiment","error"] }
+      ]
+    },
+    {
+      minutes: 9,
+      title: "How cities cool themselves",
+      text: `Urban areas can be several degrees warmer than the countryside surrounding them, a discrepancy known as the heat island effect. Concrete and asphalt absorb solar radiation during the day and release it slowly after dark, so cities cool more reluctantly at night. Vegetation counteracts this in two ways: leaves cast shade, and transpiration draws heat from the air as water evaporates. A single mature tree can have the cooling effect of several air-conditioning units, though only within a limited radius. Some municipalities have therefore turned to reflective roofing, which bounces sunlight back rather than absorbing it. Results have been mixed. In dense districts, reflected light can raise temperatures at street level even as roof surfaces stay cool, and in colder climates the winter heating penalty may outweigh the summer benefit. Planners increasingly conclude that no single measure suffices, and that the right combination depends heavily on local climate and urban form.`,
+      questions: [
+        { type: "mc", q: "The heat island effect occurs because urban surfaces:", options: ["Reflect sunlight efficiently","Absorb heat and release it slowly","Prevent air circulation","Trap moisture"], answer: 1 },
+        { type: "multi", q: "Which TWO mechanisms allow vegetation to cool a city?", pick: 2,
+          options: ["Providing shade","Absorbing carbon dioxide","Transpiration","Blocking wind","Reflecting sunlight"], answer: [0,2] },
+        { type: "ynng", q: "The writer believes reflective roofing is a reliable universal solution.", answer: "no" },
+        { type: "ynng", q: "The writer accepts that trees have a limited cooling radius.", answer: "yes" },
+        { type: "ynng", q: "The writer recommends banning asphalt in city centres.", answer: "not given" },
+        { type: "tfng", q: "Reflective roofs can make street-level temperatures worse in dense areas.", answer: "true" },
+        { type: "tfng", q: "In cold climates, reflective roofing is always beneficial.", answer: "false" },
+        { type: "mc", q: "The passage concludes that effective cooling strategy depends on:", options: ["Planting more trees only","Local climate and city layout","Government funding","Reflective materials"], answer: 1 },
+        { type: "gap", q: "Heat is drawn from the air when water evaporates during ___.", answer: "transpiration", accepts: ["transpiration"], bank: ["transpiration","condensation","radiation","absorption"] },
+        { type: "gap", q: "Cities cool more slowly at ___ than the surrounding countryside.", answer: "night", accepts: ["night","nighttime"] }
+      ]
+    }
   ];
 
+  // Los 5 tipos de consigna de IELTS Writing Task 2, etiquetados.
   const WRITING_PROMPTS = [
-    "Some people believe that studying a language abroad is the best way to learn it. To what extent do you agree or disagree?",
-    "Many students now prefer online classes to traditional ones. Discuss the main advantage and the main disadvantage, and give your own opinion.",
-    "Technology has changed the way we communicate with friends. Do the advantages outweigh the disadvantages?",
-    "In many countries, the gap between the rich and the poor is widening. What problems does this cause, and what measures could reduce it?",
-    "Some argue that governments should fund the arts; others say public money is better spent on healthcare and education. Discuss both views and give your opinion.",
-    "Working from home has become common. Does this development benefit employees more than employers?",
-    "Some people think children should begin formal education as early as possible. Others believe they should not start before the age of seven. Discuss both views.",
-    "Air travel should be made more expensive in order to reduce pollution. To what extent do you agree or disagree?",
-    "Museums and historical sites are mainly visited by tourists rather than local residents. Why is this the case, and how could it be changed?",
-    "Many people believe that social media has damaged the quality of public debate. What is your view?"
+    { type: "Opinión", text: "Some people believe that studying a language abroad is the best way to learn it. To what extent do you agree or disagree?" },
+    { type: "Opinión", text: "Air travel should be made more expensive in order to reduce pollution. To what extent do you agree or disagree?" },
+    { type: "Opinión", text: "Many people believe that social media has damaged the quality of public debate. To what extent do you agree?" },
+    { type: "Opinión", text: "Universities should accept equal numbers of male and female students in every subject. Do you agree or disagree?" },
+
+    { type: "Discusión", text: "Some argue that governments should fund the arts; others say public money is better spent on healthcare and education. Discuss both views and give your own opinion." },
+    { type: "Discusión", text: "Some people think children should begin formal education as early as possible. Others believe they should not start before the age of seven. Discuss both views and give your opinion." },
+    { type: "Discusión", text: "Some believe that success is determined mainly by hard work; others think luck plays the greater role. Discuss both views and give your opinion." },
+
+    { type: "Ventajas y desventajas", text: "Working from home has become common. Do the advantages of this development outweigh the disadvantages?" },
+    { type: "Ventajas y desventajas", text: "Many students now prefer online classes to traditional ones. Discuss the main advantage and the main disadvantage." },
+    { type: "Ventajas y desventajas", text: "Technology has changed the way we communicate with friends. Do the advantages outweigh the disadvantages?" },
+
+    { type: "Problema y solución", text: "In many countries, the gap between the rich and the poor is widening. What problems does this cause, and what measures could reduce it?" },
+    { type: "Problema y solución", text: "Traffic congestion is worsening in most large cities. What are the causes, and what can be done to address them?" },
+    { type: "Problema y solución", text: "Many young people leave rural areas to work in cities. Why does this happen, and what problems does it create?" },
+
+    { type: "Doble pregunta", text: "Museums and historical sites are mainly visited by tourists rather than local residents. Why is this the case, and how could it be changed?" },
+    { type: "Doble pregunta", text: "Fewer people are reading books for pleasure than in the past. What are the reasons, and is this a negative development?" },
+    { type: "Doble pregunta", text: "Some people never throw anything away. Why might this be, and what problems can it cause?" }
   ];
 
+  // Sets de Speaking cubriendo las 3 partes del examen oficial.
   const SPEAKING_SETS = [
-    ["Describe your hometown. What do you like most about it?","Do you prefer studying in the morning or at night? Why?","Talk about a skill you would like to learn in the future and explain why."],
-    ["What kind of music do you enjoy, and has your taste changed over time?","Describe a memorable journey you have taken. Where did you go and what made it memorable?","Is it better to work alone or in a team? Explain your view with examples."],
-    ["Describe your typical daily routine. Would you change anything about it?","What are the benefits of learning English for you personally?","Talk about a book or film that influenced the way you think."],
-    ["Describe a person who has had a strong influence on you. Who are they and why?","Do people in your country spend enough time outdoors? Why or why not?","Some say technology makes us less patient. Do you agree?"],
-    ["What is your favourite time of year, and what do you do then?","Describe a place you would like to visit but haven't yet. Explain why.","Should governments invest more in public transport than in roads? Why?"],
-    ["Talk about a meal you enjoy cooking or eating. What makes it special?","How has the way people shop changed in your country?","Do you think children today have more or less freedom than in the past?"],
-    ["Describe something you own that is important to you. Why does it matter?","Do you prefer living in a city or in the countryside? Explain your reasons.","Is it important for a country to preserve its traditional buildings?"],
-    ["Describe a time when you learned something the hard way.","What role does sport play in your life?","Some people believe that failure teaches more than success. Do you agree?"]
+    { part: "Parte 1 · Preguntas personales", questions: ["Describe your hometown. What do you like most about it?","Do you prefer studying in the morning or at night? Why?","Talk about a skill you would like to learn in the future and explain why."] },
+    { part: "Parte 1 · Preguntas personales", questions: ["What kind of music do you enjoy, and has your taste changed over time?","Describe a memorable journey you have taken.","Is it better to work alone or in a team? Explain your view with examples."] },
+    { part: "Parte 1 · Preguntas personales", questions: ["Describe your typical daily routine. Would you change anything about it?","What are the benefits of learning English for you personally?","Talk about a book or film that influenced the way you think."] },
+    { part: "Parte 1 · Preguntas personales", questions: ["What is your favourite time of year, and what do you do then?","Do people in your country spend enough time outdoors? Why or why not?","Talk about a meal you enjoy cooking or eating."] },
+
+    { part: "Parte 2 · Cue card (hablá 2 minutos)", questions: ["Describe a place you would like to visit but haven't yet. Say where it is, why you want to go, and what you would do there.","Explain what has prevented you from going so far.","Would you prefer to travel there alone or with others? Why?"] },
+    { part: "Parte 2 · Cue card (hablá 2 minutos)", questions: ["Describe a person who has had a strong influence on you. Say who they are, how you know them, and what they taught you.","Explain how your life would be different without them.","Do you think people are influenced more by family or by friends?"] },
+    { part: "Parte 2 · Cue card (hablá 2 minutos)", questions: ["Describe something you own that is important to you. Say what it is, how you got it, and why it matters.","Explain whether you would ever give it away.","Do people in your country attach much importance to possessions?"] },
+    { part: "Parte 2 · Cue card (hablá 2 minutos)", questions: ["Describe a time when you learned something the hard way. Say what happened, what you learned, and how you felt.","Explain whether you would do anything differently now.","Do you agree that failure teaches more than success?"] },
+
+    { part: "Parte 3 · Discusión abstracta", questions: ["Some say technology makes us less patient. To what extent do you agree?","How has the way people shop changed in your country over the last twenty years?","Should governments invest more in public transport than in roads? Why?"] },
+    { part: "Parte 3 · Discusión abstracta", questions: ["Is it important for a country to preserve its traditional buildings? Why?","Do you think children today have more or less freedom than in the past?","What responsibility do wealthy nations have towards poorer ones?"] },
+    { part: "Parte 3 · Discusión abstracta", questions: ["Do you believe that work is becoming more or less stressful? Explain.","Should universities be free for everyone? Discuss the implications.","How might the role of cities change over the next fifty years?"] },
+    { part: "Parte 3 · Discusión abstracta", questions: ["Is competition in schools beneficial or harmful for children?","Do the media have too much influence on public opinion?","Can economic growth and environmental protection ever be fully compatible?"] },
+
+    { part: "Parte 1 · Preguntas personales", questions: ["Do you prefer living in a city or in the countryside? Explain your reasons.","What role does sport play in your life?","How do you usually relax after a long day?"] },
+    { part: "Parte 3 · Discusión abstracta", questions: ["Some argue that art has no practical value. How would you respond?","Is it possible for a society to be both efficient and equal?","Do you think future generations will judge us harshly? Why?"] }
   ];
 
   // ---- Estado del runner ----------------------------------------------
@@ -9791,17 +9922,61 @@ window.addEventListener("load", () => {
   function questionMarkup(qs) {
     return qs.map((item, i) => {
       let inner = "";
+      let hint = "";
+
       if (item.type === "mc") {
         inner = `<div class="express-options">${item.options.map((o, oi) =>
           `<label class="express-opt"><input type="radio" name="eq-${i}" value="${oi}"><span>${esc(o)}</span></label>`).join("")}</div>`;
+
       } else if (item.type === "tfng") {
         inner = `<div class="express-options express-tfng">${["true","false","not given"].map((o) =>
           `<label class="express-opt"><input type="radio" name="eq-${i}" value="${o}"><span>${o === "not given" ? "Not Given" : o.charAt(0).toUpperCase()+o.slice(1)}</span></label>`).join("")}</div>`;
+
+      } else if (item.type === "ynng") {
+        // Yes / No / Not Given: se usa cuando la consigna evalúa OPINIONES del autor
+        hint = `<span class="express-qtype">Opinión del autor</span>`;
+        inner = `<div class="express-options express-tfng">${["yes","no","not given"].map((o) =>
+          `<label class="express-opt"><input type="radio" name="eq-${i}" value="${o}"><span>${o === "not given" ? "Not Given" : o.charAt(0).toUpperCase()+o.slice(1)}</span></label>`).join("")}</div>`;
+
+      } else if (item.type === "multi") {
+        // Elegir N opciones correctas de una lista
+        hint = `<span class="express-qtype">Elegí ${item.pick} opciones</span>`;
+        inner = `<div class="express-options">${item.options.map((o, oi) =>
+          `<label class="express-opt"><input type="checkbox" name="eq-${i}" value="${oi}"><span>${esc(o)}</span></label>`).join("")}</div>`;
+
+      } else if (item.type === "match") {
+        // Emparejar: un <select> con las opciones disponibles
+        hint = `<span class="express-qtype">Emparejar</span>`;
+        inner = `<select class="express-match-select" name="eq-${i}">
+          <option value="">Elegí una opción...</option>
+          ${item.options.map((o, oi) => `<option value="${oi}">${esc(o)}</option>`).join("")}
+        </select>`;
+
       } else if (item.type === "gap") {
-        inner = `<input type="text" class="express-gap-input" name="eq-${i}" placeholder="Tu respuesta" autocomplete="off">`;
+        const bank = item.bank
+          ? `<div class="express-word-bank">${item.bank.map((w) => `<span>${esc(w)}</span>`).join("")}</div>`
+          : "";
+        if (item.bank) hint = `<span class="express-qtype">Usá el banco de palabras</span>`;
+        inner = bank; // el input va dentro de la oración, no acá
       }
+
+      // Enunciado. En las de completar, el "___" se reemplaza por el input
+      // para que el hueco quede DENTRO de la oración.
+      let heading;
+      if (item.type === "gap" && item.q.includes("___")) {
+        const [before, after] = item.q.split(/_{2,}/);
+        const size = Math.max(6, String(item.answer || "").length + 3);
+        heading = `${i + 1}. ${esc(before)}<input type="text" class="express-gap-inline" name="eq-${i}" size="${size}" placeholder="…" autocomplete="off" spellcheck="false">${esc(after || "")}`;
+      } else if (item.type === "gap") {
+        // Sin marcador: el input va al final del enunciado
+        heading = `${i + 1}. ${esc(item.q)} <input type="text" class="express-gap-inline" name="eq-${i}" size="10" placeholder="…" autocomplete="off" spellcheck="false">`;
+      } else {
+        heading = `${i + 1}. ${esc(item.q)}`;
+      }
+
       return `<article class="express-question" data-eq="${i}">
-        <h5>${i + 1}. ${esc(item.q)}</h5>
+        <h5>${heading}</h5>
+        ${hint}
         ${inner}
       </article>`;
     }).join("");
@@ -9811,14 +9986,29 @@ window.addEventListener("load", () => {
     let correct = 0;
     qs.forEach((item, i) => {
       let ok = false;
+
       if (item.type === "gap") {
         const val = (document.querySelector(`[name="eq-${i}"]`)?.value || "").trim().toLowerCase();
         const accepts = (item.accepts || [item.answer]).map((a) => String(a).toLowerCase());
         ok = accepts.includes(val);
+
+      } else if (item.type === "multi") {
+        // Correcta solo si el conjunto elegido coincide exactamente
+        const checked = [...document.querySelectorAll(`[name="eq-${i}"]:checked`)]
+          .map((el) => Number(el.value)).sort((a, b) => a - b);
+        const expected = [...item.answer].sort((a, b) => a - b);
+        ok = checked.length === expected.length && checked.every((v, k) => v === expected[k]);
+
+      } else if (item.type === "match") {
+        const sel = document.querySelector(`select[name="eq-${i}"]`);
+        ok = sel && sel.value !== "" && Number(sel.value) === item.answer;
+
       } else {
+        // mc, tfng, ynng
         const sel = document.querySelector(`[name="eq-${i}"]:checked`);
         if (sel) ok = String(sel.value) === String(item.answer);
       }
+
       const node = document.querySelector(`.express-question[data-eq="${i}"]`);
       if (node) { node.classList.remove("correct","incorrect"); node.classList.add(ok ? "correct" : "incorrect"); }
       if (ok) correct += 1;
@@ -9841,15 +10031,31 @@ window.addEventListener("load", () => {
   }
 
   // ---- Módulo LISTENING ------------------------------------------------
-  // Mezcla las opciones de una pregunta MC preservando la respuesta correcta.
+  // Mezcla las opciones preservando cuál es la correcta (soporta mc, multi y match).
   function shuffleQuestion(item) {
-    if (item.type !== "mc" || !Array.isArray(item.options)) return { ...item };
-    const pairs = item.options.map((opt, i) => ({ opt, correct: i === item.answer }));
-    for (let i = pairs.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [pairs[i], pairs[j]] = [pairs[j], pairs[i]];
+    if (!Array.isArray(item.options)) return { ...item };
+
+    if (item.type === "mc" || item.type === "match") {
+      const pairs = item.options.map((opt, i) => ({ opt, correct: i === item.answer }));
+      for (let i = pairs.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pairs[i], pairs[j]] = [pairs[j], pairs[i]];
+      }
+      return { ...item, options: pairs.map((p) => p.opt), answer: pairs.findIndex((p) => p.correct) };
     }
-    return { ...item, options: pairs.map((p) => p.opt), answer: pairs.findIndex((p) => p.correct) };
+
+    if (item.type === "multi") {
+      const answers = new Set(item.answer);
+      const pairs = item.options.map((opt, i) => ({ opt, correct: answers.has(i) }));
+      for (let i = pairs.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pairs[i], pairs[j]] = [pairs[j], pairs[i]];
+      }
+      const newAnswer = pairs.reduce((acc, p, i) => (p.correct ? [...acc, i] : acc), []);
+      return { ...item, options: pairs.map((p) => p.opt), answer: newAnswer };
+    }
+
+    return { ...item };
   }
 
   // Prepara un set de preguntas: baraja el orden y las opciones de cada MC,
@@ -9862,9 +10068,9 @@ window.addEventListener("load", () => {
       const j = Math.floor(Math.random() * (i + 1));
       [list[i], list[j]] = [list[j], list[i]];
     }
-    // Orden por altura de tarjeta: MC (alta) -> TFNG (media) -> gap (baja)
-    const rank = { mc: 0, tfng: 1, gap: 2 };
-    return list.sort((a, b) => (rank[a.type] ?? 3) - (rank[b.type] ?? 3));
+    // Orden por altura de tarjeta: las altas primero, las bajas al final.
+    const rank = { multi: 0, mc: 1, match: 2, tfng: 3, ynng: 3, gap: 4 };
+    return list.sort((a, b) => (rank[a.type] ?? 5) - (rank[b.type] ?? 5));
   }
 
   function startListening() {
@@ -9930,13 +10136,13 @@ window.addEventListener("load", () => {
 
   // ---- Módulo WRITING --------------------------------------------------
   function startWriting() {
-    openRunner("Express Writing", "Ensayo corto de opinión");
     const prompt = pick(WRITING_PROMPTS);
+    openRunner("Express Writing", `Task 2 · ${prompt.type}`);
     const body = $("expressRunnerBody");
     body.innerHTML = `
       <div class="express-writing-prompt">
-        <span class="express-hint">Consigna (Task 2 · máx. 150 palabras)</span>
-        <p>${esc(prompt)}</p>
+        <span class="express-hint">Consigna (Task 2 · ${esc(prompt.type)} · máx. 150 palabras)</span>
+        <p>${esc(prompt.text)}</p>
       </div>
       <textarea id="expressWritingInput" class="express-writing-input" placeholder="Escribí tu ensayo en inglés..."></textarea>
       <div class="express-wordcount"><span id="expressWordCount">0</span> palabras</div>
@@ -9985,13 +10191,13 @@ window.addEventListener("load", () => {
   let mediaRecorder = null, recordedChunks = [], recognition = null, recognizedText = "";
 
   function startSpeaking() {
-    openRunner("Express Speaking", "Respondé en voz alta");
     const set = pick(SPEAKING_SETS);
+    openRunner("Express Speaking", set.part);
     const body = $("expressRunnerBody");
     body.innerHTML = `
       <div class="express-speaking">
-        <p class="express-hint">Grabá tus respuestas a estas 3 preguntas. Hablá con naturalidad, como en la Parte 1 del examen.</p>
-        <ol class="express-speaking-list">${set.map((q) => `<li>${esc(q)}</li>`).join("")}</ol>
+        <p class="express-hint">Grabá tus respuestas a estas 3 preguntas. Hablá con naturalidad. Objetivo: 150-200 palabras en total.</p>
+        <ol class="express-speaking-list">${set.questions.map((q) => `<li>${esc(q)}</li>`).join("")}</ol>
         <div class="express-speaking-controls">
           <button id="expressRecBtn" class="primary-btn" type="button">● Grabar</button>
           <button id="expressRecStop" class="secondary-btn" type="button" disabled>■ Detener</button>
@@ -10542,6 +10748,66 @@ window.addEventListener("load", () => {
       if (!input) return;
       paintRange(input);
       input.addEventListener("input", () => paintRange(input));
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+  window.addEventListener("load", () => setTimeout(init, 150));
+})();
+
+
+/* =========================================================
+   V75 — STEPPER DEL TIMER: flechas propias (los spinners
+   nativos de <input type=number> no se pueden estilar en
+   modo oscuro y se veían blancos).
+========================================================= */
+(function timerStepperV75() {
+  if (window.__timerStepperV75) return;
+  window.__timerStepperV75 = true;
+
+  function init() {
+    const input = document.getElementById("customMinutes");
+    const wrap = input?.closest(".timer-stepper");
+    if (!input || !wrap || wrap.dataset.stepperBound === "true") return;
+    wrap.dataset.stepperBound = "true";
+
+    const MIN = Number(input.min) || 1;
+    const MAX = Number(input.max) || 180;
+
+    function step(dir) {
+      const current = Number(input.value) || 0;
+      let next = current + dir;
+      if (next < MIN) next = MIN;
+      if (next > MAX) next = MAX;
+      input.value = String(next);
+      // El timer escucha 'input': lo disparamos para que se reconfigure.
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+
+    wrap.querySelectorAll(".timer-step-btn").forEach((btn) => {
+      const dir = btn.dataset.step === "up" ? 1 : -1;
+      btn.addEventListener("click", (e) => { e.preventDefault(); step(dir); });
+
+      // Mantener presionado: repite (arranca lento, acelera)
+      let holdTimeout = null, holdInterval = null;
+      const startHold = () => {
+        holdTimeout = setTimeout(() => {
+          holdInterval = setInterval(() => step(dir), 80);
+        }, 420);
+      };
+      const endHold = () => {
+        clearTimeout(holdTimeout);
+        clearInterval(holdInterval);
+        holdTimeout = holdInterval = null;
+      };
+      btn.addEventListener("pointerdown", startHold);
+      btn.addEventListener("pointerup", endHold);
+      btn.addEventListener("pointerleave", endHold);
+      window.addEventListener("blur", endHold);
     });
   }
 

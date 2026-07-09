@@ -24,7 +24,17 @@
     </div>
 
     <div class="timer-custom">
-      <input id="customMinutes" type="number" min="1" max="180" placeholder="N minutos" />
+      <div class="timer-stepper">
+        <input id="customMinutes" type="number" min="1" max="180" placeholder="N minutos" />
+        <div class="timer-stepper-arrows">
+          <button type="button" class="timer-step-btn" data-step="up" aria-label="Aumentar minutos" tabindex="-1">
+            <svg viewBox="0 0 12 8" aria-hidden="true"><path d="M1 6.5 6 1.5l5 5"/></svg>
+          </button>
+          <button type="button" class="timer-step-btn" data-step="down" aria-label="Disminuir minutos" tabindex="-1">
+            <svg viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1.5 6 6.5l5-5"/></svg>
+          </button>
+        </div>
+      </div>
     </div>
 
     <div class="timer-actions timer-actions-icons">
